@@ -1,0 +1,158 @@
+#!/bin/bash
+
+set -eo pipefail
+
+export MOUNT_POINT="/mnt/media"
+
+_service_disk_lock() {
+  if mountpoint "${MOUNT_POINT}" >> /dev/null; then
+    echo "Unmounting partition ..."
+    sudo umount /dev/mapper/media_centre
+
+    echo "Sealing disk ..."
+    sudo cryptsetup close /dev/mapper/media_centre
+  fi
+}
+
+_service_disk_unlock() {
+  if ! mountpoint "${MOUNT_POINT}" >> /dev/null; then
+    ENCRYPTED_DISK_UUID="$(_service_read_disk_uuid)"
+
+    echo "Decrypting disk ..."
+    sudo cryptsetup luksOpen "/dev/disk/by-uuid/${ENCRYPTED_DISK_UUID}" media_centre
+
+    echo "Checking data ..."
+    sudo fsck /dev/mapper/media_centre
+
+    echo "Mounting partition ..."
+    sudo mount /dev/mapper/media_centre "${MOUNT_POINT}" -o noatime,rw,errors=remount-ro
+  fi
+}
+
+_service_docker_compose_command() {
+  # $@: The command to pass to docker compose
+  pushd "services" >> /dev/null
+
+  if [[ -z "${SAMBA_USERNAME}" ]]; then
+    SAMBA_USERNAME="null"
+  fi
+  if [[ -z "${SAMBA_PASSWORD}" ]]; then
+    SAMBA_PASSWORD="null"
+  fi
+
+  export SAMBA_USERNAME
+  export SAMBA_PASSWORD
+
+  docker compose "$@"
+
+  if [[ "${_SERVICE_REMOVE_CONTAINERS}" == "1" ]]; then
+    docker compose rm
+  fi
+
+  popd >> /dev/null
+}
+
+_service_help() {
+  echo "-- rpi-media-centre service manager --"
+  echo "Usage:"
+  echo -e "\tpictl\t(help|kill|logs|start|status|stop)\n"
+}
+
+_service_init_mounts() {
+  mkdir -p "${MOUNT_POINT}"/plex/{config,transcode}
+  mkdir -p "${MOUNT_POINT}"/samba/{cache,lib}
+  mkdir -p "${MOUNT_POINT}"/shared/{media,transfer}
+}
+
+_service_prompt() {
+  # 1: the prompt to display
+  # 2: the variable name to save
+  # 3: optionally set to "password" to suppress output
+
+  local FLAGS="-rp"
+
+  if [[ "${3}" == "password" ]]; then
+    FLAGS="-rsp"
+  fi
+
+  while [[ -z "${!2}" ]]; do
+    # shellcheck disable=SC2229,SC2162
+    read "${FLAGS}" "$1" "$2"
+    if [[ "${3}" == "password" ]]; then
+      echo
+    fi
+  done
+}
+
+_service_read_disk_uuid() {
+  if [[ ! -e .disk ]]; then
+    echo "Create a file named '.disk' containing your disk's UUID." >&2
+    exit 127
+  fi
+  tr -d "\n\r" < .disk
+}
+
+_service_server_kill() {
+  echo "Media centre now being killed ..."
+  _SERVICE_REMOVE_CONTAINERS=1
+  _service_docker_compose_command kill
+  _service_disk_lock
+}
+
+_service_server_logs() {
+  _service_docker_compose_command logs -f
+}
+
+_service_server_start() {
+  echo "Media centre now starting ..."
+  _service_disk_unlock
+  _service_init_mounts
+
+  _service_prompt "Enter Samba Username: " "SAMBA_USERNAME"
+  _service_prompt "Enter Samba Password: " "SAMBA_PASSWORD" "password"
+
+  cp -r services/data/* "${MOUNT_POINT}"/samba
+
+  _service_docker_compose_command up -d
+}
+
+_service_server_status() {
+  _service_docker_compose_command ps
+}
+
+_service_server_stop() {
+  echo "Media centre now stopping ..."
+  _SERVICE_REMOVE_CONTAINERS=1
+  _service_docker_compose_command stop
+  _service_disk_lock
+}
+
+main() {
+  local _SERVICE_REMOVE_CONTAINERS=0
+
+  case "${1}" in
+    help)
+      _service_help
+      ;;
+    kill)
+      _service_server_kill
+      ;;
+    logs)
+      _service_server_logs
+      ;;
+    start)
+      _service_server_start
+      ;;
+    status)
+      _service_server_status
+      ;;
+    stop)
+      _service_server_stop
+      ;;
+    *)
+      _service_help
+      ;;
+  esac
+}
+
+main "$@"

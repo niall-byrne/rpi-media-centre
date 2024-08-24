@@ -1,0 +1,31 @@
+---
+
+auth:
+  - user: "${SAMBA_USERNAME}"
+    group: "admin"
+    uid: "1000"
+    gid: "1000"
+    password: "${SAMBA_PASSWORD}"
+
+  - user: "android"
+    group: "android"
+    uid: "1001"
+    gid: "1001"
+    password: "${SAMBA_PASSWORD}"
+
+share:
+  - name: "media"
+    path: "/samba/media"
+    browsable: "${BROWSABLE-no}"
+    readonly: "no"
+    guestok: "no"
+    validusers: "${SAMBA_USERNAME},android"
+    writelist: "${SAMBA_USERNAME}"
+
+  - name: "transfer"
+    path: "/samba/transfer"
+    browsable: "${BROWSABLE-no}"
+    readonly: "no"
+    guestok: "no"
+    validusers: "${SAMBA_USERNAME},android"
+    writelist: "${SAMBA_USERNAME}"

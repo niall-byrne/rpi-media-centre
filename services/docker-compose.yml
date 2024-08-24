@@ -1,0 +1,28 @@
+---
+
+services:
+
+  plex:
+    image: greensheep/plex-server-docker-rpi:latest
+    container_name: plex
+    network_mode: host
+    restart: on-failure
+    volumes:
+      - "${MOUNT_POINT}/plex/config:/config"
+      - "${MOUNT_POINT}/plex/transcode:/transcode"
+      - "${MOUNT_POINT}/shared/media:/data"
+
+  samba:
+    image: crazymax/samba:latest
+    container_name: samba
+    network_mode: host
+    environment:
+      - "BROWSABLE=yes"
+      - "SAMBA_HOSTS_ALLOW=10.99.0.0/24"
+      - "SAMBA_USERNAME=${SAMBA_USERNAME}"
+      - "SAMBA_PASSWORD=${SAMBA_PASSWORD}"
+    restart: always
+    volumes:
+      - "${MOUNT_POINT}/samba:/data"
+      - "${MOUNT_POINT}/shared/media:/samba/media"
+      - "${MOUNT_POINT}/shared/transfer:/samba/transfer"
