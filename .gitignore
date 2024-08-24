@@ -1,1 +1,6 @@
+.cicd-tools/boxes/*
+.cicd-tools/manifest.json
 .disk
+.vale/*
+!.vale/Vocab
+poetry.lock
