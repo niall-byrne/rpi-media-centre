@@ -3,7 +3,7 @@
 services:
 
   plex:
-    image: greensheep/plex-server-docker-rpi:latest
+    image: niallbyrne/plex-server-docker-rpi:latest
     container_name: plex
     network_mode: host
     restart: no
