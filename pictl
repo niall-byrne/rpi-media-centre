@@ -4,8 +4,12 @@ set -eo pipefail
 
 export MOUNT_POINT="/mnt/media"
 
+_is_disk_mounted() {
+  mountpoint "${MOUNT_POINT}" >> /dev/null 2>&1
+}
+
 _service_disk_lock() {
-  if mountpoint "${MOUNT_POINT}" >> /dev/null; then
+  if _is_disk_mounted; then
     echo "Unmounting partition ..."
     sudo umount /dev/mapper/media_centre
 
@@ -15,7 +19,7 @@ _service_disk_lock() {
 }
 
 _service_disk_unlock() {
-  if ! mountpoint "${MOUNT_POINT}" >> /dev/null; then
+  if ! _is_disk_mounted; then
     ENCRYPTED_DISK_UUID="$(_service_disk_uuid_read)"
 
     echo "Decrypting disk ..."
@@ -63,7 +67,7 @@ _service_docker_compose_command() {
 _service_help() {
   echo "-- rpi-media-centre service manager --"
   echo "Usage:"
-  echo -e "\tpictl\t(help|kill|logs|start|status|stop)\n"
+  echo -e "\tpictl\t(help|kill|logs|pause|resume|start|status|stop)\n"
 }
 
 _service_init_mounts() {
@@ -103,6 +107,22 @@ _service_server_logs() {
   _service_docker_compose_command logs -f
 }
 
+_service_server_pause() {
+  echo "Media centre now being paused ..."
+  _SERVICE_REMOVE_CONTAINERS=0
+  _service_docker_compose_command stop
+}
+
+_service_server_resume() {
+  if ! _is_disk_mounted; then
+    echo "The disk is not mounted!"
+    exit 127
+  fi
+
+  echo "Media centre now being resumed ..."
+  _service_docker_compose_command start
+}
+
 _service_server_start() {
   echo "Media centre now starting ..."
   _service_disk_unlock
@@ -139,6 +159,12 @@ main() {
       ;;
     logs)
       _service_server_logs
+      ;;
+    pause)
+      _service_server_pause
+      ;;
+    resume)
+      _service_server_resume
       ;;
     start)
       _service_server_start
