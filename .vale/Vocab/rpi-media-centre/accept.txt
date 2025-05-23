@@ -1,4 +1,5 @@
 Cx
 dockerized
+fstab
 plex
 rpi-media-centre

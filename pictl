@@ -4,40 +4,44 @@ set -eo pipefail
 
 export MOUNT_POINT="/mnt/media"
 
+_is_disk_encrypted() {
+  test -f .disk
+}
+
 _is_disk_mounted() {
   mountpoint "${MOUNT_POINT}" >> /dev/null 2>&1
 }
 
 _service_disk_lock() {
-  if _is_disk_mounted; then
-    echo "Unmounting partition ..."
-    sudo umount /dev/mapper/media_centre
+  if _is_disk_encrypted; then
+    if _is_disk_mounted; then
+      echo "Unmounting partition ..."
+      sudo umount /dev/mapper/media_centre
 
-    echo "Sealing disk ..."
-    sudo cryptsetup close /dev/mapper/media_centre
+      echo "Sealing disk ..."
+      sudo cryptsetup close /dev/mapper/media_centre
+    fi
   fi
 }
 
 _service_disk_unlock() {
-  if ! _is_disk_mounted; then
-    ENCRYPTED_DISK_UUID="$(_service_disk_uuid_read)"
+  if _is_disk_encrypted; then
+    if ! _is_disk_mounted; then
+      ENCRYPTED_DISK_UUID="$(_service_disk_uuid_read)"
 
-    echo "Decrypting disk ..."
-    sudo cryptsetup luksOpen "/dev/disk/by-uuid/${ENCRYPTED_DISK_UUID}" media_centre
+      echo "Decrypting disk ..."
+      sudo cryptsetup luksOpen "/dev/disk/by-uuid/${ENCRYPTED_DISK_UUID}" media_centre
 
-    echo "Checking data ..."
-    sudo fsck /dev/mapper/media_centre
+      echo "Checking data ..."
+      sudo fsck /dev/mapper/media_centre
 
-    echo "Mounting partition ..."
-    sudo mount /dev/mapper/media_centre "${MOUNT_POINT}" -o noatime,rw,errors=remount-ro
+      echo "Mounting partition ..."
+      sudo mount /dev/mapper/media_centre "${MOUNT_POINT}" -o noatime,rw,errors=remount-ro
+    fi
   fi
 }
 
 _service_disk_uuid_read() {
-  if [[ ! -f .disk ]]; then
-    echo "Create a file named '.disk' containing your disk's UUID." >&2
-    exit 127
-  fi
   tr -d "\n\r" < .disk
 }
 

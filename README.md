@@ -3,7 +3,7 @@
 [![cicd-tools](https://img.shields.io/badge/ci/cd:-cicd_tools-blue)](https://github.com/cicd-tools-org/cicd-tools)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 
-Encrypt a disk and connect it to your [Raspberry Pi](https://wikipedia.org/wiki/Raspberry_Pi) to host a [plex](https://www.plex.tv/) media server.
+Connect an external disk to your [Raspberry Pi](https://wikipedia.org/wiki/Raspberry_Pi) to host a [plex](https://www.plex.tv/) media server.
 
 ## Builds
 
@@ -38,23 +38,41 @@ This project combines the following software:
 2. Follow [this guide](https://docs.docker.com/engine/install/raspberry-pi-os/) to install docker on your Pi.
     - Pay close attention to first two paragraphs and make sure you follow the correct guide for your version of the OS.
 3. Clone this repository onto your Pi's flash card.  Make sure it's not on the external hard drive.
-4. Install the software required for disk encryption:
+
+## With Disk Encryption
+1. Install the software required for disk encryption:
     - `$ sudo apt-get install -y cryptsetup`
-5. Connect and encrypt your external hard drive, keeping the password for your disk in a password manager or suitable external location:
+2. Connect and encrypt your external hard drive, keeping the password for your disk in a password manager or suitable external location:
     - `$ sudo cryptsetup luksFormat --type luks2 /dev/DEVICE`
     - `$ sudo cryptsetup luksOpen /dev/DEVICE decrypted_disk`
     - `$ sudo mkfs.ext4 /dev/mapper/decrypted_disk`
     - `$ sudo cryptsetup luksClose /dev/mapper/decrypted_disk`
-6. Determine the UUID of the encrypted partition you created:
+3. Determine the UUID of the encrypted partition you created:
     - `$ sudo blkid`
-7. Create a `.disk` file inside the cloned repository containing this UUID:
+4. Create a `.disk` file inside the cloned repository containing this UUID:
     - `$ echo "my-uuid-value" > .disk`
-8. Start the software:
+5. Start the software:
     - `$ ./pictl start`
-9. Enter the disk encryption password and samba credentials.
-10. Listen to some music already.
+6. Enter the disk encryption password and samba credentials.
+7. Listen to some music already.
 
-## What happens when the power goes out?
+## Without Disk Encryption
+1. Connect and format your external drive:
+   - `$ sudo mkfs.ext4 /dev/DEVICE`
+2. Create the mount-point:
+   - `$ sudo mkdir -p /mnt/media`
+3. Determine the UUID of your newly formatted disk:
+   - `$ sudo blkid`
+4. Add the external hard drive to `/etc/fstab` to that the OS manages mounting it for you:
+   - `$ echo 'UUID="DISK_UUID_FROM_STEP_3">  /mnt/media  ext4  defaults,nofail,noatime,rw,errors=remount-ro  0  1' | sudo tee -a /etc/fstab`
+5. Test your fstab mounts the disk:
+   - `$ sudo mount -a`
+6. Start the software:
+    - `$ ./pictl start`
+7. Since the disk is already mounted at the expected mount-point, there is no decryption prompt.  The service can be used immediately.
+8. Listen to some music already.
+
+## What are the pros and cons to using disk encryption?
 
 If someone swipes your disk it's useless to them.  There is no trace of the credentials on the Pi or disk itself.
 
