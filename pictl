@@ -58,7 +58,7 @@ _service_docker_compose_command() {
   docker compose "$@"
 
   if [[ "${_SERVICE_REMOVE_CONTAINERS}" == "1" ]]; then
-    docker compose rm
+    docker compose rm -f
   fi
 
   popd >> /dev/null
