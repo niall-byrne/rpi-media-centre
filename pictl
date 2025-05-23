@@ -137,7 +137,7 @@ _service_server_start() {
 }
 
 _service_server_status() {
-  _service_docker_compose_command ps
+  _service_docker_compose_command ps -a
 }
 
 _service_server_stop() {
