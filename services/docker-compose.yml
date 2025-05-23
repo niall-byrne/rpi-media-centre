@@ -18,7 +18,7 @@ services:
     network_mode: host
     environment:
       - "BROWSABLE=yes"
-      - "SAMBA_HOSTS_ALLOW=10.99.0.0/24"
+      - "SAMBA_HOSTS_ALLOW=${SAMBA_SUBNET}"
       - "SAMBA_USERNAME=${SAMBA_USERNAME}"
       - "SAMBA_PASSWORD=${SAMBA_PASSWORD}"
     restart: no
