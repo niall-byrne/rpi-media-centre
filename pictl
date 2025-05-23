@@ -67,7 +67,7 @@ _service_docker_compose_command() {
 _service_help() {
   echo "-- rpi-media-centre service manager --"
   echo "Usage:"
-  echo -e "\tpictl\t(help|kill|logs|pause|resume|start|status|stop)\n"
+  echo -e "\tpictl\t(help|kill|logs|pause|resume|start|status|stop|upgrade)\n"
 }
 
 _service_init_mounts() {
@@ -147,6 +147,18 @@ _service_server_stop() {
   _service_disk_lock
 }
 
+_service_server_upgrade() {
+  echo "Media centre now being upgraded ..."
+  _SERVICE_REMOVE_CONTAINERS=1
+  _service_docker_compose_command stop
+  _service_docker_compose_command pull
+
+  unset SAMBA_USERNAME
+  unset SAMBA_PASSWORD
+
+  _service_server_start
+}
+
 main() {
   local _SERVICE_REMOVE_CONTAINERS=0
 
@@ -174,6 +186,9 @@ main() {
       ;;
     stop)
       _service_server_stop
+      ;;
+    upgrade)
+      _service_server_upgrade
       ;;
     *)
       _service_help
