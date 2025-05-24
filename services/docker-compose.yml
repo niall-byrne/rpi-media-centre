@@ -6,11 +6,11 @@ services:
     image: niallbyrne/plex-server-docker-rpi:latest
     container_name: plex
     network_mode: host
-    restart: no
+    restart: "${RPI_RESTART_POLICY}"
     volumes:
-      - "${MOUNT_POINT}/plex/config:/config"
-      - "${MOUNT_POINT}/plex/transcode:/transcode"
-      - "${MOUNT_POINT}/shared/media:/data"
+      - "${RPI_MOUNT_POINT}/plex/config:/config"
+      - "${RPI_MOUNT_POINT}/plex/transcode:/transcode"
+      - "${RPI_MOUNT_POINT}/shared/media:/data"
 
   samba:
     image: crazymax/samba:latest
@@ -21,8 +21,8 @@ services:
       - "SAMBA_HOSTS_ALLOW=${SAMBA_SUBNET:-192.168.0.0/24}"
       - "SAMBA_USERNAME=${SAMBA_USERNAME:-nobody}"
       - "SAMBA_PASSWORD=${SAMBA_PASSWORD:-none}"
-    restart: no
+    restart: "${RPI_RESTART_POLICY}"
     volumes:
-      - "${MOUNT_POINT}/samba:/data"
-      - "${MOUNT_POINT}/shared/media:/samba/media"
-      - "${MOUNT_POINT}/shared/transfer:/samba/transfer"
+      - "${RPI_MOUNT_POINT}/samba:/data"
+      - "${RPI_MOUNT_POINT}/shared/media:/samba/media"
+      - "${RPI_MOUNT_POINT}/shared/transfer:/samba/transfer"

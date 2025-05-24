@@ -97,3 +97,20 @@ The `android` user provides read-only access to your media, just to prevent any 
    - `$ chmod -R g+rX,g-w /mnt/media/shared/media`
 
 To *keep* this user read-only, avoid creating directories with 'other writable' permissions on your USB disk.  (This includes the infamous `777` permission!)
+
+## Advanced Docker Usage
+
+It is possible to customize the container [restart-policy](https://github.com/compose-spec/compose-spec/blob/main/spec.md#restart) and the main disk mount point.
+
+The [docker-compose.yml](services/docker-compose.yml) is configured by series of `RPI` prefixed environment variables:
+  - `RPI_MOUNT_POINT`: defaults to `/mnt/media`
+  - `RPI_RESTART_POLICY`: defaults to `no`
+
+These values can be customized by either:
+  - Passing them through on the command line: `$ RPI_MOUNT_POINT="/mnt/my_custom_name" ./pictl start`
+  - Storing them as successive lines in a `.env` file:
+
+     ```bash
+       RPI_MOUNT_POINT="/mnt/my_custom_name"
+       RPI_RESTART_POLICY="unless-stopped"
+     ```

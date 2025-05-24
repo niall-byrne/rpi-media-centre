@@ -2,14 +2,15 @@
 
 set -eo pipefail
 
-export MOUNT_POINT="/mnt/media"
+export RPI_MOUNT_POINT="${RPI_MOUNT_POINT:-/mnt/media}"
+export RPI_RESTART_POLICY="${RPI_RESTART_POLICY:-no}"
 
 _is_disk_encrypted() {
   test -f .disk
 }
 
 _is_disk_mounted() {
-  mountpoint "${MOUNT_POINT}" >> /dev/null 2>&1
+  mountpoint "${RPI_MOUNT_POINT}" >> /dev/null 2>&1
 }
 
 _service_disk_lock() {
@@ -36,7 +37,7 @@ _service_disk_unlock() {
       sudo fsck /dev/mapper/media_centre
 
       echo "Mounting partition ..."
-      sudo mount /dev/mapper/media_centre "${MOUNT_POINT}" -o noatime,rw,errors=remount-ro
+      sudo mount /dev/mapper/media_centre "${RPI_MOUNT_POINT}" -o noatime,rw,errors=remount-ro
     fi
   fi
 }
@@ -59,6 +60,13 @@ _service_docker_compose_command() {
   popd >> /dev/null
 }
 
+_service_environment_read() {
+  if [[ -e .env ]]; then
+    echo "-- loading .env file ... --"
+    source .env
+  fi
+}
+
 _service_help() {
   echo "-- rpi-media-centre service manager --"
   echo "Usage:"
@@ -66,9 +74,9 @@ _service_help() {
 }
 
 _service_init_mounts() {
-  mkdir -p "${MOUNT_POINT}"/plex/{config,transcode}
-  mkdir -p "${MOUNT_POINT}"/samba/{cache,lib}
-  mkdir -p "${MOUNT_POINT}"/shared/{media,transfer}
+  mkdir -p "${RPI_MOUNT_POINT}"/plex/{config,transcode}
+  mkdir -p "${RPI_MOUNT_POINT}"/samba/{cache,lib}
+  mkdir -p "${RPI_MOUNT_POINT}"/shared/{media,transfer}
 }
 
 _service_prompt() {
@@ -146,7 +154,7 @@ _service_server_start() {
   _service_prompt "Enter Samba Network CIDR: " "SAMBA_SUBNET"
   _service_samba_config_write
 
-  cp -r services/data/* "${MOUNT_POINT}"/samba
+  cp -r services/data/* "${RPI_MOUNT_POINT}"/samba
 
   export SAMBA_USERNAME
   export SAMBA_PASSWORD
@@ -178,6 +186,12 @@ _service_server_upgrade() {
   _service_server_start
 }
 
+_with_environment() {
+  # $1 the command to launch
+  _service_environment_read
+  "${1}"
+}
+
 main() {
   local _SERVICE_REMOVE_CONTAINERS=0
 
@@ -186,28 +200,28 @@ main() {
       _service_help
       ;;
     kill)
-      _service_server_kill
+      _with_environment _service_server_kill
       ;;
     logs)
-      _service_server_logs
+      _with_environment _service_server_logs
       ;;
     pause)
-      _service_server_pause
+      _with_environment _service_server_pause
       ;;
     resume)
-      _service_server_resume
+      _with_environment _service_server_resume
       ;;
     start)
-      _service_server_start
+      _with_environment _service_server_start
       ;;
     status)
-      _service_server_status
+      _with_environment _service_server_status
       ;;
     stop)
-      _service_server_stop
+      _with_environment _service_server_stop
       ;;
     upgrade)
-      _service_server_upgrade
+      _with_environment _service_server_upgrade
       ;;
     *)
       _service_help
