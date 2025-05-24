@@ -109,6 +109,23 @@ _service_prompt() {
   done
 }
 
+_service_samba_config_read() {
+  if [[ -e .samba ]]; then
+    {
+      read -r SAMBA_USERNAME
+      read -r SAMBA_PASSWORD
+      read -r SAMBA_SUBNET
+    } < .samba
+  fi
+}
+
+_service_samba_config_write() {
+  echo "${SAMBA_USERNAME}" > .samba
+  echo "${SAMBA_PASSWORD}" >> .samba
+  echo "${SAMBA_SUBNET}" >> .samba
+  chmod 600 .samba
+}
+
 _service_server_kill() {
   echo "Media centre now being killed ..."
   _SERVICE_REMOVE_CONTAINERS=1
@@ -141,9 +158,11 @@ _service_server_start() {
   _service_disk_unlock
   _service_init_mounts
 
+  _service_samba_config_read
   _service_prompt "Enter Samba Username: " "SAMBA_USERNAME"
   _service_prompt "Enter Samba Password: " "SAMBA_PASSWORD" "password"
   _service_prompt "Enter Samba Network CIDR: " "SAMBA_SUBNET"
+  _service_samba_config_write
 
   cp -r services/data/* "${MOUNT_POINT}"/samba
 
