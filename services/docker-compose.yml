@@ -18,9 +18,9 @@ services:
     network_mode: host
     environment:
       - "BROWSABLE=yes"
-      - "SAMBA_HOSTS_ALLOW=${SAMBA_SUBNET}"
-      - "SAMBA_USERNAME=${SAMBA_USERNAME}"
-      - "SAMBA_PASSWORD=${SAMBA_PASSWORD}"
+      - "SAMBA_HOSTS_ALLOW=${SAMBA_SUBNET:-192.168.0.0/24}"
+      - "SAMBA_USERNAME=${SAMBA_USERNAME:-nobody}"
+      - "SAMBA_PASSWORD=${SAMBA_PASSWORD:-none}"
     restart: no
     volumes:
       - "${MOUNT_POINT}/samba:/data"

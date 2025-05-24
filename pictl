@@ -2,10 +2,6 @@
 
 set -eo pipefail
 
-DEFAULT_SAMBA_USERNAME="nobody"
-DEFAULT_SAMBA_PASSWORD="nobody"
-DEFAULT_SAMBA_SUBNET="192.168.0.0/24"
-
 export MOUNT_POINT="/mnt/media"
 
 _is_disk_encrypted() {
@@ -53,20 +49,6 @@ _service_docker_compose_command() {
   # $@: The command to pass to docker compose
 
   pushd "services" >> /dev/null
-
-  if [[ -z "${SAMBA_USERNAME}" ]]; then
-    SAMBA_USERNAME="${DEFAULT_SAMBA_USERNAME}"
-  fi
-  if [[ -z "${SAMBA_PASSWORD}" ]]; then
-    SAMBA_PASSWORD="${DEFAULT_SAMBA_PASSWORD}"
-  fi
-  if [[ -z "${SAMBA_SUBNET}" ]]; then
-    SAMBA_SUBNET="${DEFAULT_SAMBA_SUBNET}"
-  fi
-
-  export SAMBA_USERNAME
-  export SAMBA_PASSWORD
-  export SAMBA_SUBNET
 
   docker compose "$@"
 
@@ -165,6 +147,10 @@ _service_server_start() {
   _service_samba_config_write
 
   cp -r services/data/* "${MOUNT_POINT}"/samba
+
+  export SAMBA_USERNAME
+  export SAMBA_PASSWORD
+  export SAMBA_SUBNET
 
   _service_docker_compose_command up -d
 }
