@@ -18,9 +18,9 @@ services:
     network_mode: host
     environment:
       - "BROWSABLE=yes"
-      - "SAMBA_HOSTS_ALLOW=${SAMBA_SUBNET:-192.168.0.0/24}"
-      - "SAMBA_USERNAME=${SAMBA_USERNAME:-nobody}"
-      - "SAMBA_PASSWORD=${SAMBA_PASSWORD:-none}"
+      - "SAMBA_HOSTS_ALLOW=${RPI_SAMBA_SUBNET:-192.168.0.0/24}"
+      - "SAMBA_USERNAME=${RPI_SAMBA_CREDENTIALS_USERNAME:-nobody}"
+      - "SAMBA_PASSWORD=${RPI_SAMBA_CREDENTIALS_PASSWORD:-none}"
     restart: "${RPI_RESTART_POLICY}"
     volumes:
       - "${RPI_MOUNT_POINT}/samba:/data"

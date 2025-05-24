@@ -5,6 +5,10 @@ set -eo pipefail
 export RPI_MOUNT_POINT="${RPI_MOUNT_POINT:-/mnt/media}"
 export RPI_RESTART_POLICY="${RPI_RESTART_POLICY:-no}"
 
+export RPI_SAMBA_CREDENTIALS_PASSWORD="${RPI_SAMBA_CREDENTIALS_PASSWORD}"
+export RPI_SAMBA_CREDENTIALS_USERNAME="${RPI_SAMBA_CREDENTIALS_USERNAME}"
+export RPI_SAMBA_SUBNET="${RPI_SAMBA_SUBNET}"
+
 _is_disk_encrypted() {
   test -f .disk
 }
@@ -61,9 +65,16 @@ _service_docker_compose_command() {
 }
 
 _service_environment_read() {
-  if [[ -e .env ]]; then
-    echo "-- loading .env file ... --"
-    source .env
+  if [[ -f .rpi ]]; then
+    echo "-- loading .rpi file ... --"
+
+    if [[ "$(stat -c "%a" .rpi)" != "600" ]]; then
+      echo "The permissions on the .rpi file are not secure!"
+      echo "Please consider running: chmod 600 .rpi"
+      exit 127
+    fi
+
+    source .rpi
   fi
 }
 
@@ -99,23 +110,6 @@ _service_prompt() {
   done
 }
 
-_service_samba_config_read() {
-  if [[ -e .samba ]]; then
-    {
-      read -r SAMBA_USERNAME
-      read -r SAMBA_PASSWORD
-      read -r SAMBA_SUBNET
-    } < .samba
-  fi
-}
-
-_service_samba_config_write() {
-  echo "${SAMBA_USERNAME}" > .samba
-  echo "${SAMBA_PASSWORD}" >> .samba
-  echo "${SAMBA_SUBNET}" >> .samba
-  chmod 600 .samba
-}
-
 _service_server_kill() {
   echo "Media centre now being killed ..."
   _SERVICE_REMOVE_CONTAINERS=1
@@ -148,17 +142,11 @@ _service_server_start() {
   _service_disk_unlock
   _service_init_mounts
 
-  _service_samba_config_read
-  _service_prompt "Enter Samba Username: " "SAMBA_USERNAME"
-  _service_prompt "Enter Samba Password: " "SAMBA_PASSWORD" "password"
-  _service_prompt "Enter Samba Network CIDR: " "SAMBA_SUBNET"
-  _service_samba_config_write
+  _service_prompt "Enter Samba Username: " "RPI_SAMBA_CREDENTIALS_USERNAME"
+  _service_prompt "Enter Samba Password: " "RPI_SAMBA_CREDENTIALS_PASSWORD" "password"
+  _service_prompt "Enter Samba Network CIDR: " "RPI_SAMBA_SUBNET"
 
   cp -r services/data/* "${RPI_MOUNT_POINT}"/samba
-
-  export SAMBA_USERNAME
-  export SAMBA_PASSWORD
-  export SAMBA_SUBNET
 
   _service_docker_compose_command up -d
 }
@@ -179,10 +167,6 @@ _service_server_upgrade() {
   _SERVICE_REMOVE_CONTAINERS=1
   _service_docker_compose_command stop
   _service_docker_compose_command pull
-
-  unset SAMBA_USERNAME
-  unset SAMBA_PASSWORD
-
   _service_server_start
 }
 

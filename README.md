@@ -98,19 +98,29 @@ The `android` user provides read-only access to your media, just to prevent any 
 
 To *keep* this user read-only, avoid creating directories with 'other writable' permissions on your USB disk.  (This includes the infamous `777` permission!)
 
-## Advanced Docker Usage
+## Persistent Custom Configuration
 
-It is possible to customize the container [restart-policy](https://github.com/compose-spec/compose-spec/blob/main/spec.md#restart) and the main disk mount point.
+It is possible to persist and customize the server's configuration.
 
 The [docker-compose.yml](services/docker-compose.yml) is configured by series of `RPI` prefixed environment variables:
-  - `RPI_MOUNT_POINT`: defaults to `/mnt/media`
-  - `RPI_RESTART_POLICY`: defaults to `no`
 
-These values can be customized by either:
-  - Passing them through on the command line: `$ RPI_MOUNT_POINT="/mnt/my_custom_name" ./pictl start`
-  - Storing them as successive lines in a `.env` file:
+| Variable                         | Value                                                                                                                                           |
+|----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| `RPI_MOUNT_POINT`                | defaults to `/mnt/media`                                                                                                                        |
+| `RPI_RESTART_POLICY`             | defaults to `no` (See the [documentation](https://github.com/compose-spec/compose-spec/blob/main/spec.md#restart) for details on this setting.) |
+| `RPI_SAMBA_CREDENTIALS_USERNAME` | managed by `pictl`, but defaults to `nobody` for no-ops                                                                                         |
+| `RPI_SAMBA_CREDENTIALS_PASSWORD` | managed by `pictl`, but defaults to `nobody` for no-ops                                                                                         |
+| `RPI_SAMBA_SUBNET`               | managed by `pictl`, but defaults to `192.168.0.0/24` for no-ops                                                                                 |
 
-     ```bash
-       RPI_MOUNT_POINT="/mnt/my_custom_name"
-       RPI_RESTART_POLICY="unless-stopped"
-     ```
+These values can be customized by storing one or more of them as successive lines in a `.rpi` file:
+
+  ```bash
+  RPI_MOUNT_POINT="/mnt/my_custom_name"
+  RPI_RESTART_POLICY="unless-stopped"
+  RPI_SAMBA_CREDENTIALS_USERNAME="somebody"
+  RPI_SAMBA_CREDENTIALS_PASSWORD="!*secret1234"
+  RPI_SAMBA_SUBNET="172.16.0.0/28"
+  ```
+
+It is imperative to keep this file secure, as it contains your samba password:
+   - `$ chmod 600 .rpi`
