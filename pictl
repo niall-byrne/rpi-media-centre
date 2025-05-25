@@ -71,7 +71,7 @@ _service_environment_read() {
     if [[ "$(stat -c "%a" .rpi)" != "600" ]]; then
       echo "The permissions on the .rpi file are not secure!"
       echo "Please consider running: chmod 600 .rpi"
-      exit 127
+      return 127
     fi
 
     source .rpi
@@ -130,7 +130,7 @@ _service_server_pause() {
 _service_server_resume() {
   if ! _is_disk_mounted; then
     echo "The disk is not mounted!"
-    exit 127
+    return 127
   fi
 
   echo "Media centre now being resumed ..."
@@ -209,6 +209,7 @@ main() {
       ;;
     *)
       _service_help
+      return 127
       ;;
   esac
 }
