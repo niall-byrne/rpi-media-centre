@@ -4,3 +4,4 @@ dockerized
 fstab
 plex
 rpi-media-centre
+syncthing

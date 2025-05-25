@@ -29,3 +29,11 @@ share:
     guestok: "no"
     validusers: "${SAMBA_USERNAME}"
     writelist: "${SAMBA_USERNAME}"
+
+  - name: "syncthing"
+    path: "/samba/syncthing"
+    browsable: "${BROWSABLE-no}"
+    readonly: "no"
+    guestok: "no"
+    validusers: "${SAMBA_USERNAME}"
+    writelist: "${SAMBA_USERNAME}"
