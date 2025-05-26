@@ -1,5 +1,13 @@
 ---
 
+global:
+  - "create mask = 0640"
+  - "force create mode = 0640"
+  - "directory mask = 0750"
+  - "force directory mode = 0750"
+  - "fruit:resource = file"
+  - "fruit:nfs_aces = no"
+
 auth:
   - user: "${SAMBA_USERNAME}"
     group: "media"
