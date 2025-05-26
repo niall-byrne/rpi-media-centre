@@ -1,7 +1,8 @@
 CIDR|cidr
 Cx
+Plex|plex
+Samba|samba
+Syncthing|syncthing
 dockerized
 fstab
-plex
 rpi-media-centre
-syncthing
