@@ -3,7 +3,7 @@
 [![cicd-tools](https://img.shields.io/badge/ci/cd:-cicd_tools-blue)](https://github.com/cicd-tools-org/cicd-tools)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 
-Connect an external disk to your [Raspberry Pi](https://wikipedia.org/wiki/Raspberry_Pi) to host a [plex](https://www.plex.tv/) media server.
+Connect an external disk to your [Raspberry Pi](https://wikipedia.org/wiki/Raspberry_Pi) to host a [Plex](https://www.plex.tv/) media server, and some other useful software/
 
 ## Builds
 
@@ -18,7 +18,7 @@ Connect an external disk to your [Raspberry Pi](https://wikipedia.org/wiki/Raspb
 
 This project requires the following hardware:
 
-1. All documentation seems to suggest a [Raspberry Pi 3](https://wikipedia.org/wiki/Raspberry_Pi) or better to host [plex](https://www.plex.tv/) with decent performance.
+1. All documentation seems to suggest a [Raspberry Pi 3](https://wikipedia.org/wiki/Raspberry_Pi) or better to host [Plex](https://www.plex.tv/) with decent performance.
 2. A USB hard drive works fine.  I've repurposed an old school Western Digital with spinning platters.
 
 ### Software
@@ -26,11 +26,14 @@ This project requires the following hardware:
 This project combines the following software:
 
 1. [greensheep/plex-server-docker-rpi](https://github.com/greensheep/plex-server-docker-rpi)
-    - a dockerized implementation of [plex](https://www.plex.tv/)
-    - facilitates access to your media via the plex family of native and web applications.
+    - a dockerized implementation of [Plex](https://www.plex.tv/)
+    - facilitates access to your media via the Plex family of native and web applications
 2. [crazymax/samba](https://github.com/crazy-max/docker-samba)
-   - a dockerized implementation of [samba](https://www.samba.org/)
+   - a dockerized implementation of [Samba](https://www.samba.org/)
    - facilitates loading and downloading media to/from computers and mobile phones
+3. [syncthing/syncthing](https://github.com/syncthing/syncthing/blob/main/README-Docker.md)
+   - a dockerized implementation of [Syncthing](https://syncthing.net/)
+   - a self-hosted Google Drive or Dropbox type file synchronization solution
 
 ## How to set this up?
 
@@ -53,7 +56,7 @@ This project combines the following software:
     - `$ echo "my-uuid-value" > .disk`
 5. Start the software:
     - `$ ./pictl start`
-6. Enter the disk encryption password and samba credentials.
+6. Enter the disk encryption password and Samba credentials.
 7. Listen to some music already.
 
 ## Without Disk Encryption
@@ -79,18 +82,18 @@ If someone swipes your disk it's useless to them.  There is no trace of the cred
 There's a trade off to this security though …
 
 After a power outage, or if you physically unplug your media centre, you will need to ssh back into your Pi and restart the server:
-- This means re-entering the passwords for the encrypted disk and samba.  Keep these passwords in a safe spot, such as a password manager.
+- This means re-entering the passwords for the encrypted disk and Samba.  Keep these passwords in a safe spot, such as a password manager.
 - Don't use a password to connect to your Pi- do this securely by setting up [ssh keys](https://www.raspberrypi.com/documentation/computers/remote-access.html#ssh).
 
 ## Loading Media onto a Mobile Phone
 
-The created samba shares will be accessible by two users:
+The created Samba shares will be accessible by two users:
   - The user configured by the `pictl` command.
   - A second `android` user, that uses the same password.
 
 This is intended to provide a mechanism for loading media onto a mobile phone.
 
-This requires the installation of a samba compatible app on the phone, but there are several good ones out there.
+This requires the installation of a Samba compatible app on the phone, but there are several good ones out there.
 (I am personally quite found of [Cx File Explorer](https://play.google.com/store/apps/details?id=com.cxinventor.file.explorer) right now.)
 
 The `android` user provides read-only access to your media, just to prevent any accidental deletion.  This works by granting `android` read only access to the media files via the `group` attribute, but this must be enforced on the file system:
@@ -98,29 +101,93 @@ The `android` user provides read-only access to your media, just to prevent any 
 
 To *keep* this user read-only, avoid creating directories with 'other writable' permissions on your USB disk.  (This includes the infamous `777` permission!)
 
-## Persistent Custom Configuration
+## Configuration
 
-It is possible to persist and customize the server's configuration.
+A series `RPI` prefixed environment variables can be used to customize the behaviour of the managed services.  These values can be stored in an `.rpi` file to persist configuration.
+
+It is imperative to keep this file secure, as it generally will contain sensitive values:
+   - `$ chmod 600 .rpi`
+
+### Global Configuration
 
 The [docker-compose.yml](services/docker-compose.yml) is configured by series of `RPI` prefixed environment variables:
 
-| Variable                         | Value                                                                                                                                           |
-|----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
-| `RPI_MOUNT_POINT`                | defaults to `/mnt/media`                                                                                                                        |
-| `RPI_RESTART_POLICY`             | defaults to `no` (See the [documentation](https://github.com/compose-spec/compose-spec/blob/main/spec.md#restart) for details on this setting.) |
-| `RPI_SAMBA_CREDENTIALS_USERNAME` | managed by `pictl`, but defaults to `nobody` for no-ops                                                                                         |
-| `RPI_SAMBA_CREDENTIALS_PASSWORD` | managed by `pictl`, but defaults to `nobody` for no-ops                                                                                         |
-| `RPI_SAMBA_SUBNET`               | managed by `pictl`, but defaults to `192.168.0.0/24` for no-ops                                                                                 |
+| Variable             | Value                                                                                                                                           |
+|----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| `RPI_MOUNT_POINT`    | defaults to `/mnt/media`                                                                                                                        |
+| `RPI_RESTART_POLICY` | defaults to `no` (See the [documentation](https://github.com/compose-spec/compose-spec/blob/main/spec.md#restart) for details on this setting.) |
 
-These values can be customized by storing one or more of them as successive lines in a `.rpi` file:
+Store one or more of these variables as successive lines in the `.rpi` file:
 
   ```bash
   RPI_MOUNT_POINT="/mnt/my_custom_name"
   RPI_RESTART_POLICY="unless-stopped"
+  ```
+
+### Service Selection
+
+The `.rpi` file can also control *which* services `pictl` manages via a bash array named `RPI_SERVICES`.
+
+By default, this array is set to `("plex" "samba")`, meaning it manages only the Plex and Samba services.  It is possible to control the service selection by defining this array manually in the `.rpi` file:
+
+To enable a single service, such as Plex, add a line like following:
+
+  ```bash
+  RPI_SERVICES=("plex")
+  ```
+
+To enable multiple services, add them to the array definition as quoted, space separated, strings:
+
+  ```bash
+  RPI_SERVICES=("plex" "samba" "syncthing")
+  ```
+
+#### Plex Configuration
+
+At this time Plex is configured solely through its web interface.
+
+Plex is an enabled service by default.
+
+#### Samba Configuration
+
+Some Samba settings can be stored in the `.rpi` file to make this service more convenient to use.
+
+| Variable                         | Value                                                           |
+|----------------------------------|-----------------------------------------------------------------|
+| `RPI_SAMBA_CREDENTIALS_PASSWORD` | managed by `pictl`, but defaults to `nobody` for no-ops         |
+| `RPI_SAMBA_CREDENTIALS_USERNAME` | managed by `pictl`, but defaults to `nobody` for no-ops         |
+| `RPI_SAMBA_SUBNET`               | managed by `pictl`, but defaults to `192.168.0.0/24` for no-ops |
+
+These values can be customized by storing one or more of them as successive lines in the `.rpi` file:
+
+  ```bash
   RPI_SAMBA_CREDENTIALS_USERNAME="somebody"
   RPI_SAMBA_CREDENTIALS_PASSWORD="!*secret1234"
   RPI_SAMBA_SUBNET="172.16.0.0/28"
   ```
 
-It is imperative to keep this file secure, as it contains your samba password:
-   - `$ chmod 600 .rpi`
+Samba is an enabled service by default.
+
+#### Syncthing Configuration
+
+Some Syncthing settings can be stored in the `.rpi` file to make this service more convenient to use.
+
+| Variable                             | Value                                                                                              |
+|--------------------------------------|----------------------------------------------------------------------------------------------------|
+| `RPI_SYNCTHING_CREDENTIALS_PASSWORD` | if defined, Syncthing's web GUI password will be set (or reset) to this value on startup           |
+| `RPI_SYNCTHING_CREDENTIALS_USERNAME` | if defined, Syncthing's web GUI username will be set (or reset) to this value on startup           |
+| `RPI_SYNCTHING_HOSTNAME`             | defaults to `syncthing`, controls the device name other Syncthing clients will see when connecting |
+
+These values can be customized by storing one or more of them as successive lines in the `.rpi` file:
+
+  ```bash
+  RPI_SYNCTHING_CREDENTIALS_USERNAME="nobody"
+  RPI_SYNCTHING_CREDENTIALS_PASSWORD="v3ryS3cr3t!"
+  RPI_SYNCTHING_HOSTNAME="KitchenPi"
+  ```
+
+This service is *not* enabled by default.  To use it, add it to an `RPI_SERVICES` array definition in the `.rpi` file
+
+  ```bash
+  RPI_SERVICES=("plex" "samba" "syncthing")
+  ```
