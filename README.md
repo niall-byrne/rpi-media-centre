@@ -146,10 +146,10 @@ To enable multiple services, add them to the array definition as quoted, space s
 
 Plex is generally configured through its web interface, but some settings are able for customization.
 
-| Variable                  | Value                                           |
-|---------------------------|-------------------------------------------------|
-| `RPI_PLEX_PATH_CONFIG`    | defaults to `${RPI_MOUNT_POINT}/plex/config`    |
-| `RPI_PLEX_PATH_TRANSCODE` | defaults to `${RPI_MOUNT_POINT}/plex/transcode` |
+| Variable                  | Value                                          |
+|---------------------------|------------------------------------------------|
+| `RPI_PLEX_PATH_CONFIG`    | default to `${RPI_MOUNT_POINT}/plex/config`    |
+| `RPI_PLEX_PATH_TRANSCODE` | default to `${RPI_MOUNT_POINT}/plex/transcode` |
 
 These values can be customized by storing one or more of them as successive lines in the `.rpi` file:
 
@@ -168,9 +168,9 @@ Some Samba settings can be stored in the `.rpi` file to make this service more c
 
 | Variable                         | Value                                                           |
 |----------------------------------|-----------------------------------------------------------------|
-| `RPI_SAMBA_CREDENTIALS_PASSWORD` | managed by `pictl`, but defaults to "nobody" for no-ops         |
-| `RPI_SAMBA_CREDENTIALS_USERNAME` | managed by `pictl`, but defaults to "nobody" for no-ops         |
-| `RPI_SAMBA_PATH_CONFIG`          | defaults to `${RPI_MOUNT_POINT}/samba`                          |
+| `RPI_SAMBA_CREDENTIALS_PASSWORD` | managed by `pictl`, but defaults to `nobody` for no-ops         |
+| `RPI_SAMBA_CREDENTIALS_USERNAME` | managed by `pictl`, but defaults to `nobody` for no-ops         |
+| `RPI_SAMBA_PATH_CONFIG`          | default to `${RPI_MOUNT_POINT}/samba`                           |
 | `RPI_SAMBA_SUBNET`               | managed by `pictl`, but defaults to `192.168.0.0/24` for no-ops |
 
 These values can be customized by storing one or more of them as successive lines in the `.rpi` file:
@@ -183,6 +183,11 @@ These values can be customized by storing one or more of them as successive line
   RPI_SAMBA_CREDENTIALS_PASSWORD="!*secret1234"
   RPI_SAMBA_SUBNET="172.16.0.0/28"
   ```
+
+It is also possible to create a completely custom Samba configuration.  Using the [existing config](./services/samba/config.yml) as a template, create a `.rpi-samba.yml` file and customize as needed.  Refer to the [crazymax/samba](https://github.com/crazy-max/docker-samba) repository for details.
+
+Although variable interpolation is available, it is still recommended to keep this custom Samba configuration file secure:
+   - `$ chmod 600 .rpi-samba.yml`
 
 Samba is an enabled service by default.
 
