@@ -10,8 +10,8 @@ services:
       - plex
     restart: "${RPI_RESTART_POLICY}"
     volumes:
-      - "${RPI_MOUNT_POINT}/plex/config:/config"
-      - "${RPI_MOUNT_POINT}/plex/transcode:/transcode"
+      - "${RPI_PLEX_PATH_CONFIG}:/config"
+      - "${RPI_PLEX_PATH_TRANSCODE}:/transcode"
       - "${RPI_MOUNT_POINT}/shared/media:/data"
 
   samba:
