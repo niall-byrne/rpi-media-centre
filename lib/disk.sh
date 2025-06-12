@@ -14,7 +14,8 @@ _is_disk_mounted() {
 
 _disk_initialize_mounts() {
   if _is_service_selected "plex"; then
-    mkdir -p "${RPI_MOUNT_POINT}"/plex/{config,transcode}
+    mkdir -p "${RPI_PLEX_PATH_CONFIG}"
+    mkdir -p "${RPI_PLEX_PATH_TRANSCODE}"
     mkdir -p "${RPI_MOUNT_POINT}"/shared/media
   fi
 

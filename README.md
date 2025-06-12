@@ -144,7 +144,21 @@ To enable multiple services, add them to the array definition as quoted, space s
 
 #### Plex Configuration
 
-At this time Plex is configured solely through its web interface.
+Plex is generally configured through its web interface, but some settings are able for customization.
+
+| Variable                  | Value                                          |
+|---------------------------|------------------------------------------------|
+| `RPI_PLEX_PATH_CONFIG`    | default to `${RPI_MOUNT_POINT}/plex/config`    |
+| `RPI_PLEX_PATH_TRANSCODE` | default to `${RPI_MOUNT_POINT}/plex/transcode` |
+
+These values can be customized by storing one or more of them as successive lines in the `.rpi` file:
+
+  ```bash
+  # It may be desirable to move the Plex system files off of your USB drive to allow the disk to sleep.
+  # This comes with a series of tradeoffs, including the performance and speed of the system boot disk.
+  RPI_PLEX_PATH_CONFIG="${HOME}/.rpi/plex/config"
+  RPI_PLEX_PATH_TRANSCODE="${HOME}/.rpi/plex/transcode"
+  ```
 
 Plex is an enabled service by default.
 
