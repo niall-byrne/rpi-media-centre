@@ -168,13 +168,17 @@ Some Samba settings can be stored in the `.rpi` file to make this service more c
 
 | Variable                         | Value                                                           |
 |----------------------------------|-----------------------------------------------------------------|
-| `RPI_SAMBA_CREDENTIALS_PASSWORD` | managed by `pictl`, but defaults to `nobody` for no-ops         |
-| `RPI_SAMBA_CREDENTIALS_USERNAME` | managed by `pictl`, but defaults to `nobody` for no-ops         |
-| `RPI_SAMBA_SUBNET`               | managed by `pictl`, but defaults to `192.168.0.0/24` for no-ops |
+| `RPI_SAMBA_CREDENTIALS_PASSWORD` | managed by `pictl`, but defaults to "nobody" for no-ops         |
+| `RPI_SAMBA_CREDENTIALS_USERNAME` | managed by `pictl`, but defaults to "nobody" for no-ops         |
+| `RPI_SAMBA_PATH_CONFIG`          | defaults to `${RPI_MOUNT_POINT}/samba`                          |
+| `RPI_SAMBA_SUBNET`               | managed by `pictl`, but defaults to "192.168.0.0/24" for no-ops |
 
 These values can be customized by storing one or more of them as successive lines in the `.rpi` file:
 
   ```bash
+  # It may be desirable to move the Samba system files off of your USB drive to allow the disk to sleep.
+  # This comes with a series of tradeoffs, including the performance and speed of the system boot disk.
+  RPI_SAMBA_PATH_CONFIG="${HOME}/.rpi/samba/config"
   RPI_SAMBA_CREDENTIALS_USERNAME="somebody"
   RPI_SAMBA_CREDENTIALS_PASSWORD="!*secret1234"
   RPI_SAMBA_SUBNET="172.16.0.0/28"
