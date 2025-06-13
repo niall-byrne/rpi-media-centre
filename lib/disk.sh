@@ -25,7 +25,7 @@ _disk_initialize_mounts() {
   fi
 
   if _is_service_selected "syncthing"; then
-    mkdir -p "${RPI_MOUNT_POINT}"/syncthing
+    mkdir -p "${RPI_SYNCTHING_PATH_CONFIG}"
     mkdir -p "${RPI_MOUNT_POINT}"/shared/syncthing
   fi
 }

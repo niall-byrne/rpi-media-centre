@@ -146,10 +146,10 @@ To enable multiple services, add them to the array definition as quoted, space s
 
 Plex is generally configured through its web interface, but some settings are able for customization.
 
-| Variable                  | Value                                          |
-|---------------------------|------------------------------------------------|
-| `RPI_PLEX_PATH_CONFIG`    | default to `${RPI_MOUNT_POINT}/plex/config`    |
-| `RPI_PLEX_PATH_TRANSCODE` | default to `${RPI_MOUNT_POINT}/plex/transcode` |
+| Variable                  | Value                                           |
+|---------------------------|-------------------------------------------------|
+| `RPI_PLEX_PATH_CONFIG`    | defaults to `${RPI_MOUNT_POINT}/plex/config`    |
+| `RPI_PLEX_PATH_TRANSCODE` | defaults to `${RPI_MOUNT_POINT}/plex/transcode` |
 
 These values can be customized by storing one or more of them as successive lines in the `.rpi` file:
 
@@ -171,7 +171,7 @@ Some Samba settings can be stored in the `.rpi` file to make this service more c
 | `RPI_SAMBA_CREDENTIALS_PASSWORD` | managed by `pictl`, but defaults to "nobody" for no-ops         |
 | `RPI_SAMBA_CREDENTIALS_USERNAME` | managed by `pictl`, but defaults to "nobody" for no-ops         |
 | `RPI_SAMBA_PATH_CONFIG`          | defaults to `${RPI_MOUNT_POINT}/samba`                          |
-| `RPI_SAMBA_SUBNET`               | managed by `pictl`, but defaults to "192.168.0.0/24" for no-ops |
+| `RPI_SAMBA_SUBNET`               | managed by `pictl`, but defaults to `192.168.0.0/24` for no-ops |
 
 These values can be customized by storing one or more of them as successive lines in the `.rpi` file:
 
@@ -194,11 +194,15 @@ Some Syncthing settings can be stored in the `.rpi` file to make this service mo
 |--------------------------------------|----------------------------------------------------------------------------------------------------|
 | `RPI_SYNCTHING_CREDENTIALS_PASSWORD` | if defined, Syncthing's web GUI password will be set (or reset) to this value on startup           |
 | `RPI_SYNCTHING_CREDENTIALS_USERNAME` | if defined, Syncthing's web GUI username will be set (or reset) to this value on startup           |
+| `RPI_SYNCTHING_PATH_CONFIG`          | default to `${RPI_MOUNT_POINT}/syncthing`                                                          |
 | `RPI_SYNCTHING_HOSTNAME`             | defaults to `syncthing`, controls the device name other Syncthing clients will see when connecting |
 
 These values can be customized by storing one or more of them as successive lines in the `.rpi` file:
 
   ```bash
+  # It may be desirable to move the Syncthing system files off of your USB drive to allow the disk to sleep.
+  # This comes with a series of tradeoffs, including the performance and speed of the system boot disk.
+  RPI_SYNCTHING_PATH_CONFIG="${HOME}/.rpi/syncthing/config"
   RPI_SYNCTHING_CREDENTIALS_USERNAME="nobody"
   RPI_SYNCTHING_CREDENTIALS_PASSWORD="v3ryS3cr3t!"
   RPI_SYNCTHING_HOSTNAME="KitchenPi"
