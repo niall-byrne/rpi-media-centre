@@ -52,8 +52,8 @@ This project combines the following software:
     - `$ sudo cryptsetup luksClose /dev/mapper/decrypted_disk`
 3. Determine the UUID of the encrypted partition you created:
     - `$ sudo blkid`
-4. Create a `.disk` file inside the cloned repository containing this UUID:
-    - `$ echo "my-uuid-value" > .disk`
+4. Create a `.rpi-crypt` file inside the cloned repository containing this UUID:
+    - `$ echo "my-uuid-value,media,/mnt/media" > .rpi-crypt`
 5. Start the software:
     - `$ ./pictl start`
 6. Enter the disk encryption password and Samba credentials.
