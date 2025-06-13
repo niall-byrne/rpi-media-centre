@@ -27,7 +27,7 @@ services:
       - "SAMBA_PASSWORD=${RPI_SAMBA_CREDENTIALS_PASSWORD:-none}"
     restart: "${RPI_RESTART_POLICY}"
     volumes:
-      - "${RPI_MOUNT_POINT}/samba:/data"
+      - "${RPI_SAMBA_PATH_CONFIG}:/data"
       - "${RPI_MOUNT_POINT}/shared/media:/samba/media"
       - "${RPI_MOUNT_POINT}/shared/transfer:/samba/transfer"
       - "${RPI_MOUNT_POINT}/shared/syncthing:/samba/syncthing"

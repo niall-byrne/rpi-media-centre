@@ -20,7 +20,7 @@ _disk_initialize_mounts() {
   fi
 
   if _is_service_selected "samba"; then
-    mkdir -p "${RPI_MOUNT_POINT}"/samba/{cache,lib}
+    mkdir -p "${RPI_SAMBA_PATH_CONFIG}"/{cache,lib}
     mkdir -p "${RPI_MOUNT_POINT}"/shared/{media,transfer}
   fi
 
