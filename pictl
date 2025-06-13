@@ -45,7 +45,7 @@ _service_kill() {
   echo "Media centre now being killed ..."
   _SERVICE_REMOVE_CONTAINERS=1
   _docker_compose_command kill
-  _disk_lock
+  _disk_unmount_all
 }
 
 _service_logs() {
@@ -59,7 +59,7 @@ _service_pause() {
 }
 
 _service_resume() {
-  if ! _is_disk_mounted; then
+  if ! _is_disk_mounted_all; then
     echo "The disk is not mounted!"
     return 127
   fi
@@ -70,7 +70,7 @@ _service_resume() {
 
 _service_start() {
   echo "Media centre now starting ..."
-  _disk_unlock
+  _disk_mount_all
   _disk_initialize_mounts
 
   if _is_service_selected "samba"; then
@@ -92,7 +92,7 @@ _service_stop() {
   echo "Media centre now stopping ..."
   _SERVICE_REMOVE_CONTAINERS=1
   _docker_compose_command stop
-  _disk_lock
+  _disk_unmount_all
 }
 
 _service_upgrade() {
