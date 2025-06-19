@@ -16,6 +16,9 @@ services:
 
   samba:
     image: crazymax/samba:latest
+    cap_add:
+      - CAP_NET_ADMIN
+      - CAP_NET_RAW
     container_name: samba
     network_mode: host
     profiles:
@@ -25,6 +28,9 @@ services:
       - "SAMBA_HOSTS_ALLOW=${RPI_SAMBA_SUBNET:-192.168.0.0/24}"
       - "SAMBA_USERNAME=${RPI_SAMBA_CREDENTIALS_USERNAME:-nobody}"
       - "SAMBA_PASSWORD=${RPI_SAMBA_CREDENTIALS_PASSWORD:-none}"
+      - "WSDD2_ENABLE=${RPI_SAMBA_SERVICE_DISCOVERY}"
+      - "WSDD2_HOSTNAME=${RPI_SAMBA_HOSTNAME}"
+      - "WSDD2_NETBIOS_NAME=${RPI_SAMBA_HOSTNAME}"
     restart: "${RPI_RESTART_POLICY}"
     volumes:
       - "${RPI_SAMBA_PATH_CONFIG}:/data"

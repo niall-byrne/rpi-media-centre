@@ -5,4 +5,5 @@ Samba|samba
 Syncthing|syncthing
 dockerized
 fstab
+hostname
 rpi-media-centre
