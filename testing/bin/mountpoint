@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo "mountpoint: test double script"
+echo "  -- $*"
