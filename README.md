@@ -114,14 +114,14 @@ The [docker-compose.yml](services/docker-compose.yml) is configured by series of
 
 | Variable             | Value                                                                                                                                           |
 |----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
-| `RPI_MOUNT_POINT`    | defaults to `/mnt/media`                                                                                                                        |
 | `RPI_RESTART_POLICY` | defaults to `no` (See the [documentation](https://github.com/compose-spec/compose-spec/blob/main/spec.md#restart) for details on this setting.) |
+| `RPI_ROOT`           | defaults to `/mnt/media`                                                                                                                        |
 
 Store one or more of these variables as successive lines in the `.rpi` file:
 
   ```bash
-  RPI_MOUNT_POINT="/mnt/my_custom_name"
   RPI_RESTART_POLICY="unless-stopped"
+  RPI_ROOT="/mnt/my_custom_name"
   ```
 
 ### Service Selection
@@ -146,10 +146,10 @@ To enable multiple services, add them to the array definition as quoted, space s
 
 Plex is generally configured through its web interface, but some settings are able for customization.
 
-| Variable                  | Value                                          |
-|---------------------------|------------------------------------------------|
-| `RPI_PLEX_PATH_CONFIG`    | default to `${RPI_MOUNT_POINT}/plex/config`    |
-| `RPI_PLEX_PATH_TRANSCODE` | default to `${RPI_MOUNT_POINT}/plex/transcode` |
+| Variable                  | Value                                   |
+|---------------------------|-----------------------------------------|
+| `RPI_PLEX_PATH_CONFIG`    | default to `${RPI_ROOT}/plex/config`    |
+| `RPI_PLEX_PATH_TRANSCODE` | default to `${RPI_ROOT}/plex/transcode` |
 
 These values can be customized by storing one or more of them as successive lines in the `.rpi` file:
 
@@ -168,9 +168,9 @@ Some Samba settings can be stored in the `.rpi` file to make this service more c
 
 | Variable                         | Value                                                           |
 |----------------------------------|-----------------------------------------------------------------|
-| `RPI_SAMBA_CREDENTIALS_PASSWORD` | managed by `pictl`, but defaults to `nobody` for no-ops         |
-| `RPI_SAMBA_CREDENTIALS_USERNAME` | managed by `pictl`, but defaults to `nobody` for no-ops         |
-| `RPI_SAMBA_PATH_CONFIG`          | default to `${RPI_MOUNT_POINT}/samba`                           |
+| `RPI_SAMBA_CREDENTIALS_PASSWORD` | managed by `pictl`, but defaults to "nobody" for no-ops         |
+| `RPI_SAMBA_CREDENTIALS_USERNAME` | managed by `pictl`, but defaults to "nobody" for no-ops         |
+| `RPI_SAMBA_PATH_CONFIG`          | default to `${RPI_ROOT}/samba`                                  |
 | `RPI_SAMBA_SUBNET`               | managed by `pictl`, but defaults to `192.168.0.0/24` for no-ops |
 
 These values can be customized by storing one or more of them as successive lines in the `.rpi` file:
@@ -197,9 +197,9 @@ Some Syncthing settings can be stored in the `.rpi` file to make this service mo
 
 | Variable                             | Value                                                                                              |
 |--------------------------------------|----------------------------------------------------------------------------------------------------|
-| `RPI_SYNCTHING_CREDENTIALS_PASSWORD` | if defined, Syncthing's web GUI password will be set (or reset) to this value on startup           |
 | `RPI_SYNCTHING_CREDENTIALS_USERNAME` | if defined, Syncthing's web GUI username will be set (or reset) to this value on startup           |
-| `RPI_SYNCTHING_PATH_CONFIG`          | default to `${RPI_MOUNT_POINT}/syncthing`                                                          |
+| `RPI_SYNCTHING_CREDENTIALS_PASSWORD` | if defined, Syncthing's web GUI password will be set (or reset) to this value on startup           |
+| `RPI_SYNCTHING_PATH_CONFIG`          | default to `${RPI_ROOT}/syncthing`                                                                 |
 | `RPI_SYNCTHING_HOSTNAME`             | defaults to `syncthing`, controls the device name other Syncthing clients will see when connecting |
 
 These values can be customized by storing one or more of them as successive lines in the `.rpi` file:
