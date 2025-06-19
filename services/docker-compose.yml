@@ -12,7 +12,7 @@ services:
     volumes:
       - "${RPI_PLEX_PATH_CONFIG}:/config"
       - "${RPI_PLEX_PATH_TRANSCODE}:/transcode"
-      - "${RPI_MOUNT_POINT}/shared/media:/data"
+      - "${RPI_ROOT}/shared/media:/data"
 
   samba:
     image: crazymax/samba:latest
@@ -28,9 +28,9 @@ services:
     restart: "${RPI_RESTART_POLICY}"
     volumes:
       - "${RPI_SAMBA_PATH_CONFIG}:/data"
-      - "${RPI_MOUNT_POINT}/shared/media:/samba/media"
-      - "${RPI_MOUNT_POINT}/shared/transfer:/samba/transfer"
-      - "${RPI_MOUNT_POINT}/shared/syncthing:/samba/syncthing"
+      - "${RPI_ROOT}/shared/media:/samba/media"
+      - "${RPI_ROOT}/shared/transfer:/samba/transfer"
+      - "${RPI_ROOT}/shared/syncthing:/samba/syncthing"
 
   syncthing:
     image: syncthing/syncthing
@@ -42,7 +42,7 @@ services:
       - STHOMEDIR=/config
     volumes:
       - "${RPI_SYNCTHING_PATH_CONFIG}:/config"
-      - "${RPI_MOUNT_POINT}/shared/syncthing:/var/syncthing"
+      - "${RPI_ROOT}/shared/syncthing:/var/syncthing"
     ports:
       - 8384:8384 # Web UI
       - 22000:22000/tcp # TCP file transfers

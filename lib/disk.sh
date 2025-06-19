@@ -42,17 +42,17 @@ _disk_initialize_mounts() {
   if _is_service_selected "plex"; then
     mkdir -p "${RPI_PLEX_PATH_CONFIG}"
     mkdir -p "${RPI_PLEX_PATH_TRANSCODE}"
-    mkdir -p "${RPI_MOUNT_POINT}"/shared/media
+    mkdir -p "${RPI_ROOT}"/shared/media
   fi
 
   if _is_service_selected "samba"; then
     mkdir -p "${RPI_SAMBA_PATH_CONFIG}"/{cache,lib}
-    mkdir -p "${RPI_MOUNT_POINT}"/shared/{media,transfer}
+    mkdir -p "${RPI_ROOT}"/shared/{media,transfer}
   fi
 
   if _is_service_selected "syncthing"; then
     mkdir -p "${RPI_SYNCTHING_PATH_CONFIG}"
-    mkdir -p "${RPI_MOUNT_POINT}"/shared/syncthing
+    mkdir -p "${RPI_ROOT}"/shared/syncthing
   fi
 }
 
