@@ -2,6 +2,10 @@
 
 set -eo pipefail
 
+if [[ -n "${RPI_DEBUG}" ]]; then
+  trap error_handler ERR
+fi
+
 RPI_WORKING_DIRECTORY="$(dirname "$0")"
 
 # Global Environment Variable Defaults
@@ -28,6 +32,8 @@ RPI_SERVICES=("${RPI_SERVICES[@]:-plex}" "${RPI_SERVICES[@]:-samba}")
 
 # shellcheck source=lib/configuration.sh
 source "${RPI_WORKING_DIRECTORY}/lib/configuration.sh"
+# shellcheck source=lib/debug.sh
+source "${RPI_WORKING_DIRECTORY}/lib/debug.sh"
 # shellcheck source=lib/disk.sh
 source "${RPI_WORKING_DIRECTORY}/lib/disk.sh"
 # shellcheck source=lib/docker.sh
