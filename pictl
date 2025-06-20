@@ -43,6 +43,10 @@ source "${RPI_WORKING_DIRECTORY}/lib/debug.sh"
 source "${RPI_WORKING_DIRECTORY}/lib/disk.sh"
 # shellcheck source=lib/docker.sh
 source "${RPI_WORKING_DIRECTORY}/lib/docker.sh"
+# shellcheck source=lib/event.sh
+source "${RPI_WORKING_DIRECTORY}/lib/event.sh"
+# shellcheck source=lib/filesystem.sh
+source "${RPI_WORKING_DIRECTORY}/lib/filesystem.sh"
 # shellcheck source=lib/io.sh
 source "${RPI_WORKING_DIRECTORY}/lib/io.sh"
 

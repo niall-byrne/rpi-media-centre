@@ -145,6 +145,31 @@ To enable multiple services, add them to the array definition as quoted, space s
   RPI_SERVICES=("plex" "samba" "syncthing")
   ```
 
+#### Event Scripts
+
+There are optional shell scripts that can be created and executed when `pictl` encounters specific events.
+
+| Script Path                    | Event                                         |
+|--------------------------------|-----------------------------------------------|
+| `.rpi/event-disk-mounted.sh`   | executed after an encrypted disk is mounted   |
+| `.rpi/event-disk-unmounted.sh` | executed after an encrypted disk is unmounted |
+
+This is particularly useful for maintaining specific file permissions on the shared media.
+
+If one wanted to ensure the Samba permissions were correct on `/mnt/media/shared` this `.rpi/event-disk-mounted.sh` script could be useful:
+
+   ```bash
+   #!/bin/bash
+   chmod -R u+rwX,g+rX,g-w,o-rwx /mnt/media/shared/media
+   ```
+
+This grants full read and write access to all shared media files to the owner, read only access to the group, and no access to other users.
+
+This would work in tandem with the default Samba configuration to ensure the `android` user has read only access, and deny access to other users.  Permissions might change when loading files over `rsync` or methods other than Samba, so the periodic execution of this script could be useful during disk mounts.
+
+It is recommended to keep these event scripts secure and executable:
+   - `$ chmod 700 .rpi/event-disk-mounted.sh`
+
 #### Plex Configuration
 
 Plex is generally configured through its web interface, but some settings are able for customization.

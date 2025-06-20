@@ -72,6 +72,7 @@ _disk_lock() {
 
 _disk_mount_all() {
   _disk_all_command "_disk_unlock"
+  _event_script "event-disk-mounted.sh"
 }
 
 _disk_read_crypt_file() {
@@ -82,7 +83,7 @@ _disk_read_crypt_file() {
 
   echo "-- loading .rpi/crypt file ... --"
 
-  _check_permissions .rpi/crypt
+  _filesystem_check_permissions .rpi/crypt "600"
 
   while IFS= read -r FILE_LINE; do
     IFS="," read -r ENCRYPTED_DISK_UUID ENCRYPTED_DISK_NAME ENCRYPTED_DISK_MOUNT_POINT <<< "$FILE_LINE"
@@ -122,5 +123,5 @@ _disk_unlock() {
 
 _disk_unmount_all() {
   _disk_all_command "_disk_lock"
+  _event_script "event-disk-unmounted.sh"
 }
-
