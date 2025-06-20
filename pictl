@@ -7,7 +7,7 @@ if [[ -n "${RPI_DEBUG}" ]]; then
 fi
 
 RPI_HOSTNAME="$(hostname)"
-RPI_WORKING_DIRECTORY="$(dirname "$0")"
+RPI_WORKING_DIRECTORY="$(realpath "$(dirname "$0")")"
 
 # Global Environment Variable Defaults
 export RPI_PATH_BACKUP="${RPI_PATH_BACKUP}"
@@ -53,7 +53,7 @@ source "${RPI_WORKING_DIRECTORY}/lib/io.sh"
 _help() {
   echo "-- rpi-media-centre service manager --"
   echo "Usage:"
-  echo -e "\tpictl\t(backup|help|kill|logs|pause|resume|start|status|stop|upgrade)\n"
+  echo -e "\tpictl\t(backup|help|kill|logs|pause|resume|shim|start|status|stop|upgrade)\n"
 }
 
 _service_backup() {
@@ -96,6 +96,16 @@ _service_resume() {
 
   echo "Media centre now being resumed ..."
   _docker_compose_command start
+}
+
+_service_shim() {
+  echo "Installing service shim ..."
+  export RPI_WORKING_DIRECTORY
+  # shellcheck disable=SC2016
+  envsubst '${RPI_WORKING_DIRECTORY}' < services/cli/shim.sh | sudo tee /usr/local/bin/pictl > /dev/null
+  sudo chown "${USER}":"${USER}" /usr/local/bin/pictl
+  sudo chmod 500 /usr/local/bin/pictl
+  echo "Service shim installed!"
 }
 
 _service_start() {
@@ -160,6 +170,9 @@ main() {
       ;;
     resume)
       _with_configuration _service_resume
+      ;;
+    shim)
+      _with_configuration _service_shim
       ;;
     start)
       _with_configuration _service_start
