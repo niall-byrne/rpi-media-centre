@@ -52,8 +52,9 @@ This project combines the following software:
     - `$ sudo cryptsetup luksClose /dev/mapper/decrypted_disk`
 3. Determine the UUID of the encrypted partition you created:
     - `$ sudo blkid`
-4. Create a `.rpi-crypt` file inside the cloned repository containing this UUID:
-    - `$ echo "my-uuid-value,media,/mnt/media" > .rpi-crypt`
+4. Create a `.rpi/crypt` file inside the cloned repository containing this UUID:
+    - `$ mkdir .rpi`
+    - `$ echo "my-uuid-value,media,/mnt/media" > .rpi/crypt`
 5. Start the software:
     - `$ ./pictl start`
 6. Enter the disk encryption password and Samba credentials.
@@ -103,10 +104,10 @@ To *keep* this user read-only, avoid creating directories with 'other writable' 
 
 ## Configuration
 
-A series `RPI` prefixed environment variables can be used to customize the behaviour of the managed services.  These values can be stored in an `.rpi` file to persist configuration.
+A series `RPI` prefixed environment variables can be used to customize the behaviour of the managed services.  These values can be stored in an `.rpi/config` file to persist configuration.
 
 It is imperative to keep this file secure, as it generally will contain sensitive values:
-   - `$ chmod 600 .rpi`
+   - `$ chmod 600 .rpi/config`
 
 ### Global Configuration
 
@@ -118,7 +119,7 @@ The [docker-compose.yml](services/docker-compose.yml) is configured by series of
 | `RPI_RESTART_POLICY` | defaults to `no` (See the [documentation](https://github.com/compose-spec/compose-spec/blob/main/spec.md#restart) for details on this setting.) |
 | `RPI_ROOT`           | defaults to `/mnt/media`                                                                                                                        |
 
-Store one or more of these variables as successive lines in the `.rpi` file:
+Store one or more of these variables as successive lines in the `.rpi/config` file:
 
   ```bash
   RPI_PATH_BACKUP="/mnt/my_custom_name/rpi_backup"
@@ -128,9 +129,9 @@ Store one or more of these variables as successive lines in the `.rpi` file:
 
 ### Service Selection
 
-The `.rpi` file can also control *which* services `pictl` manages via a bash array named `RPI_SERVICES`.
+The `.rpi/config` file can also control *which* services `pictl` manages via a bash array named `RPI_SERVICES`.
 
-By default, this array is set to `("plex" "samba")`, meaning it manages only the Plex and Samba services.  It is possible to control the service selection by defining this array manually in the `.rpi` file:
+By default, this array is set to `("plex" "samba")`, meaning it manages only the Plex and Samba services.  It is possible to control the service selection by defining this array manually in the `.rpi/config` file:
 
 To enable a single service, such as Plex, add a line like following:
 
@@ -153,7 +154,7 @@ Plex is generally configured through its web interface, but some settings are ab
 | `RPI_PLEX_PATH_CONFIG`    | default to `${RPI_ROOT}/plex/config`    |
 | `RPI_PLEX_PATH_TRANSCODE` | default to `${RPI_ROOT}/plex/transcode` |
 
-These values can be customized by storing one or more of them as successive lines in the `.rpi` file:
+These values can be customized by storing one or more of them as successive lines in the `.rpi/config` file:
 
   ```bash
   # It may be desirable to move the Plex system files off of your USB drive to allow the disk to sleep.
@@ -166,7 +167,7 @@ Plex is an enabled service by default.
 
 #### Samba Configuration
 
-Some Samba settings can be stored in the `.rpi` file to make this service more convenient to use.
+Some Samba settings can be stored in the `.rpi/config` file to make this service more convenient to use.
 
 | Variable                         | Value                                                             |
 |----------------------------------|-------------------------------------------------------------------|
@@ -178,7 +179,7 @@ Some Samba settings can be stored in the `.rpi` file to make this service more c
 | `RPI_SAMBA_SUBNET`               | managed by `pictl`, but defaults to `192.168.0.0/24` for no-ops   |
 | `RPI_SAMBA_WORKGROUP`            | defaults to `WORKGROUP`                                           |
 
-These values can be customized by storing one or more of them as successive lines in the `.rpi` file:
+These values can be customized by storing one or more of them as successive lines in the `.rpi/config` file:
 
   ```bash
   # It may be desirable to move the Samba system files off of your USB drive to allow the disk to sleep.
@@ -191,16 +192,16 @@ These values can be customized by storing one or more of them as successive line
   RPI_SAMBA_WORKGROUP="MY_WORKGROUP"
   ```
 
-It is also possible to create a completely custom Samba configuration.  Using the [existing config](./services/samba/config.yml) as a template, create a `.rpi-samba.yml` file and customize as needed.  Refer to the [crazymax/samba](https://github.com/crazy-max/docker-samba) repository for details.
+It is also possible to create a completely custom Samba configuration.  Using the [existing config](./services/samba/config.yml) as a template, create a `.rpi/samba.yml` file and customize as needed.  Refer to the [crazymax/samba](https://github.com/crazy-max/docker-samba) repository for details.
 
 Although variable interpolation is available, it is still recommended to keep this custom Samba configuration file secure:
-   - `$ chmod 600 .rpi-samba.yml`
+   - `$ chmod 600 .rpi/samba.yml`
 
 Samba is an enabled service by default.
 
 #### Syncthing Configuration
 
-Some Syncthing settings can be stored in the `.rpi` file to make this service more convenient to use.
+Some Syncthing settings can be stored in the `.rpi/config` file to make this service more convenient to use.
 
 | Variable                             | Value                                                                                              |
 |--------------------------------------|----------------------------------------------------------------------------------------------------|
@@ -209,7 +210,7 @@ Some Syncthing settings can be stored in the `.rpi` file to make this service mo
 | `RPI_SYNCTHING_PATH_CONFIG`          | default to `${RPI_ROOT}/syncthing`                                                                 |
 | `RPI_SYNCTHING_HOSTNAME`             | defaults to `syncthing`, controls the device name other Syncthing clients will see when connecting |
 
-These values can be customized by storing one or more of them as successive lines in the `.rpi` file:
+These values can be customized by storing one or more of them as successive lines in the `.rpi/config` file:
 
   ```bash
   # It may be desirable to move the Syncthing system files off of your USB drive to allow the disk to sleep.
@@ -220,7 +221,7 @@ These values can be customized by storing one or more of them as successive line
   RPI_SYNCTHING_HOSTNAME="KitchenPi"
   ```
 
-This service is *not* enabled by default.  To use it, add it to an `RPI_SERVICES` array definition in the `.rpi` file
+This service is *not* enabled by default.  To use it, add it to an `RPI_SERVICES` array definition in the `.rpi/config` file
 
   ```bash
   RPI_SERVICES=("plex" "samba" "syncthing")

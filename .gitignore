@@ -1,8 +1,8 @@
 .cicd-tools/boxes/*
 .cicd-tools/manifest.json
-.rpi
-.rpi-crypt
-.rpi-samba.yml
+.rpi/config
+.rpi/crypt
+.rpi/samba.yml
 .vale/*
 !.vale/Vocab
 poetry.lock

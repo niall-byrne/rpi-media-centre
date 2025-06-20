@@ -19,7 +19,7 @@ _configure_backup() {
   # 2: Backup Target
 
   if [[ -z "${RPI_PATH_BACKUP}" ]]; then
-    echo "Please configure a value for RPI_PATH_BACKUP in the .rpi configuration file."
+    echo "Please configure a value for RPI_PATH_BACKUP in the .rpi/config file."
     return 127
   fi
 
@@ -38,13 +38,13 @@ _configure_backup() {
 }
 
 _configure_pictl() {
-  if [[ -f .rpi ]]; then
-    echo "-- loading .rpi file ... --"
+  if [[ -f .rpi/config ]]; then
+    echo "-- loading .rpi/config file ... --"
 
-    _check_permissions .rpi
+    _check_permissions .rpi/config
 
     # shellcheck source=/dev/null
-    source .rpi
+    source .rpi/config
   fi
 }
 
