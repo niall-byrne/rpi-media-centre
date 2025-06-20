@@ -2,6 +2,8 @@
 
 set -eo pipefail
 
+RPI_WORKING_DIRECTORY="$(dirname "$0")"
+
 export RPI_MOUNT_POINT="${RPI_MOUNT_POINT:-/mnt/media}"
 export RPI_RESTART_POLICY="${RPI_RESTART_POLICY:-no}"
 
@@ -9,170 +11,80 @@ export RPI_SAMBA_CREDENTIALS_PASSWORD="${RPI_SAMBA_CREDENTIALS_PASSWORD}"
 export RPI_SAMBA_CREDENTIALS_USERNAME="${RPI_SAMBA_CREDENTIALS_USERNAME}"
 export RPI_SAMBA_SUBNET="${RPI_SAMBA_SUBNET}"
 
-_is_disk_encrypted() {
-  test -f .disk
-}
+# shellcheck source=lib/configuration.sh
+source "${RPI_WORKING_DIRECTORY}/lib/configuration.sh"
+# shellcheck source=lib/disk.sh
+source "${RPI_WORKING_DIRECTORY}/lib/disk.sh"
+# shellcheck source=lib/docker.sh
+source "${RPI_WORKING_DIRECTORY}/lib/docker.sh"
+# shellcheck source=lib/io.sh
+source "${RPI_WORKING_DIRECTORY}/lib/io.sh"
 
-_is_disk_mounted() {
-  mountpoint "${RPI_MOUNT_POINT}" >> /dev/null 2>&1
-}
-
-_service_disk_lock() {
-  if _is_disk_encrypted; then
-    if _is_disk_mounted; then
-      echo "Unmounting partition ..."
-      sudo umount /dev/mapper/media_centre
-
-      echo "Sealing disk ..."
-      sudo cryptsetup close /dev/mapper/media_centre
-    fi
-  fi
-}
-
-_service_disk_unlock() {
-  if _is_disk_encrypted; then
-    if ! _is_disk_mounted; then
-      ENCRYPTED_DISK_UUID="$(_service_disk_uuid_read)"
-
-      echo "Decrypting disk ..."
-      sudo cryptsetup luksOpen "/dev/disk/by-uuid/${ENCRYPTED_DISK_UUID}" media_centre
-
-      echo "Checking data ..."
-      sudo fsck /dev/mapper/media_centre
-
-      echo "Mounting partition ..."
-      sudo mount /dev/mapper/media_centre "${RPI_MOUNT_POINT}" -o noatime,rw,errors=remount-ro
-    fi
-  fi
-}
-
-_service_disk_uuid_read() {
-  tr -d "\n\r" < .disk
-}
-
-_service_docker_compose_command() {
-  # $@: The command to pass to docker compose
-
-  pushd "services" >> /dev/null
-
-  docker compose "$@"
-
-  if [[ "${_SERVICE_REMOVE_CONTAINERS}" == "1" ]]; then
-    docker compose rm -f
-  fi
-
-  popd >> /dev/null
-}
-
-_service_environment_read() {
-  if [[ -f .rpi ]]; then
-    echo "-- loading .rpi file ... --"
-
-    if [[ "$(stat -c "%a" .rpi)" != "600" ]]; then
-      echo "The permissions on the .rpi file are not secure!"
-      echo "Please consider running: chmod 600 .rpi"
-      return 127
-    fi
-
-    source .rpi
-  fi
-}
-
-_service_help() {
+_help() {
   echo "-- rpi-media-centre service manager --"
   echo "Usage:"
   echo -e "\tpictl\t(help|kill|logs|pause|resume|start|status|stop|upgrade)\n"
 }
 
-_service_init_mounts() {
-  mkdir -p "${RPI_MOUNT_POINT}"/plex/{config,transcode}
-  mkdir -p "${RPI_MOUNT_POINT}"/samba/{cache,lib}
-  mkdir -p "${RPI_MOUNT_POINT}"/shared/{media,transfer}
-}
-
-_service_prompt() {
-  # 1: the prompt to display
-  # 2: the variable name to save
-  # 3: optionally set to "password" to suppress output
-
-  local FLAGS="-rp"
-
-  if [[ "${3}" == "password" ]]; then
-    FLAGS="-rsp"
-  fi
-
-  while [[ -z "${!2}" ]]; do
-    # shellcheck disable=SC2229,SC2162
-    read "${FLAGS}" "$1" "$2"
-    if [[ "${3}" == "password" ]]; then
-      echo
-    fi
-  done
-}
-
-_service_server_kill() {
+_service_kill() {
   echo "Media centre now being killed ..."
   _SERVICE_REMOVE_CONTAINERS=1
-  _service_docker_compose_command kill
-  _service_disk_lock
+  _docker_compose_command kill
+  _disk_lock
 }
 
-_service_server_logs() {
-  _service_docker_compose_command logs -f
+_service_logs() {
+  _docker_compose_command logs -f
 }
 
-_service_server_pause() {
+_service_pause() {
   echo "Media centre now being paused ..."
   _SERVICE_REMOVE_CONTAINERS=0
-  _service_docker_compose_command stop
+  _docker_compose_command stop
 }
 
-_service_server_resume() {
+_service_resume() {
   if ! _is_disk_mounted; then
     echo "The disk is not mounted!"
     return 127
   fi
 
   echo "Media centre now being resumed ..."
-  _service_docker_compose_command start
+  _docker_compose_command start
 }
 
-_service_server_start() {
+_service_start() {
   echo "Media centre now starting ..."
-  _service_disk_unlock
-  _service_init_mounts
+  _disk_unlock
+  _disk_initialize_mounts
 
-  _service_prompt "Enter Samba Username: " "RPI_SAMBA_CREDENTIALS_USERNAME"
-  _service_prompt "Enter Samba Password: " "RPI_SAMBA_CREDENTIALS_PASSWORD" "password"
-  _service_prompt "Enter Samba Network CIDR: " "RPI_SAMBA_SUBNET"
+  _configure_samba
 
-  cp -r services/data/* "${RPI_MOUNT_POINT}"/samba
-
-  _service_docker_compose_command up -d
+  _docker_compose_command up -d
 }
 
-_service_server_status() {
-  _service_docker_compose_command ps -a
+_service_status() {
+  _docker_compose_command ps -a
 }
 
-_service_server_stop() {
+_service_stop() {
   echo "Media centre now stopping ..."
   _SERVICE_REMOVE_CONTAINERS=1
-  _service_docker_compose_command stop
-  _service_disk_lock
+  _docker_compose_command stop
+  _disk_lock
 }
 
-_service_server_upgrade() {
+_service_upgrade() {
   echo "Media centre now being upgraded ..."
   _SERVICE_REMOVE_CONTAINERS=1
-  _service_docker_compose_command stop
-  _service_docker_compose_command pull
-  _service_server_start
+  _docker_compose_command stop
+  _docker_compose_command pull
+  _service_start
 }
 
-_with_environment() {
+_with_configuration() {
   # $1 the command to launch
-  _service_environment_read
+  _configure_pictl
   "${1}"
 }
 
@@ -181,34 +93,34 @@ main() {
 
   case "${1}" in
     help)
-      _service_help
+      _help
       ;;
     kill)
-      _with_environment _service_server_kill
+      _with_configuration _service_kill
       ;;
     logs)
-      _with_environment _service_server_logs
+      _with_configuration _service_logs
       ;;
     pause)
-      _with_environment _service_server_pause
+      _with_configuration _service_pause
       ;;
     resume)
-      _with_environment _service_server_resume
+      _with_configuration _service_resume
       ;;
     start)
-      _with_environment _service_server_start
+      _with_configuration _service_start
       ;;
     status)
-      _with_environment _service_server_status
+      _with_configuration _service_status
       ;;
     stop)
-      _with_environment _service_server_stop
+      _with_configuration _service_stop
       ;;
     upgrade)
-      _with_environment _service_server_upgrade
+      _with_configuration _service_upgrade
       ;;
     *)
-      _service_help
+      _help
       return 127
       ;;
   esac
