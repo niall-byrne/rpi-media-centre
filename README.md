@@ -114,12 +114,14 @@ The [docker-compose.yml](services/docker-compose.yml) is configured by series of
 
 | Variable             | Value                                                                                                                                           |
 |----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| `RPI_PATH_BACKUP`    | unset by default, specifies a configuration backup path                                                                                         |
 | `RPI_RESTART_POLICY` | defaults to `no` (See the [documentation](https://github.com/compose-spec/compose-spec/blob/main/spec.md#restart) for details on this setting.) |
 | `RPI_ROOT`           | defaults to `/mnt/media`                                                                                                                        |
 
 Store one or more of these variables as successive lines in the `.rpi` file:
 
   ```bash
+  RPI_PATH_BACKUP="/mnt/my_custom_name/rpi_backup"
   RPI_RESTART_POLICY="unless-stopped"
   RPI_ROOT="/mnt/my_custom_name"
   ```
