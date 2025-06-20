@@ -5,7 +5,7 @@
 set -eo pipefail
 
 _is_disk_encrypted() {
-  test -f .rpi-crypt
+  test -f .rpi/crypt
 }
 
 _is_disk_mounted() {
@@ -80,9 +80,9 @@ _disk_read_crypt_file() {
   local ENCRYPTED_DISK_NAME
   local ENCRYPTED_DISK_MOUNT_POINT
 
-  echo "-- loading .rpi-crypt file ... --"
+  echo "-- loading .rpi/crypt file ... --"
 
-  _check_permissions .rpi-crypt
+  _check_permissions .rpi/crypt
 
   while IFS= read -r FILE_LINE; do
     IFS="," read -r ENCRYPTED_DISK_UUID ENCRYPTED_DISK_NAME ENCRYPTED_DISK_MOUNT_POINT <<< "$FILE_LINE"
@@ -90,7 +90,7 @@ _disk_read_crypt_file() {
       continue
     fi
     if [[ -z "${ENCRYPTED_DISK_UUID}" ]] || [[ -z "${ENCRYPTED_DISK_NAME}" ]] || [[ -z "${ENCRYPTED_DISK_MOUNT_POINT}" ]]; then
-      echo "The .rpi-crypt file is improperly formatted!"
+      echo "The .rpi/crypt file is improperly formatted!"
       echo "Each line should be a comma separated series of: ENCRYPTED_DISK_UUID,ENCRYPTED_DISK_NAME,ENCRYPTED_DISK_MOUNT_POINT"
     fi
 
@@ -98,7 +98,7 @@ _disk_read_crypt_file() {
     ENCRYPTED_DISK_NAME_SET+=("${ENCRYPTED_DISK_NAME}")
     ENCRYPTED_DISK_MOUNT_POINT_SET+=("${ENCRYPTED_DISK_MOUNT_POINT}")
 
-  done < .rpi-crypt
+  done < .rpi/crypt
 }
 
 _disk_unlock() {
