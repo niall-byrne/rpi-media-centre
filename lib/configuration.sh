@@ -4,16 +4,6 @@
 
 set -eo pipefail
 
-_check_permissions() {
-  # $1: the file to check
-
-  if [[ "$(stat -c "%a" "${1}")" != "600" ]]; then
-    echo "The permissions on the file ${1} are not secure!"
-    echo "Please consider running: chmod 600 ${1}"
-    return 127
-  fi
-}
-
 _configure_backup() {
   # 1: Backup Source
   # 2: Backup Target
@@ -40,9 +30,7 @@ _configure_backup() {
 _configure_pictl() {
   if [[ -f .rpi/config ]]; then
     echo "-- loading .rpi/config file ... --"
-
-    _check_permissions .rpi/config
-
+    _filesystem_check_permissions .rpi/config "600"
     # shellcheck source=/dev/null
     source .rpi/config
   fi
@@ -51,7 +39,7 @@ _configure_pictl() {
 _configure_samba() {
   if [[ -f .rpi/samba.yml ]]; then
     echo "-- loading .rpi/samba.yml file ... --"
-    _check_permissions .rpi/samba.yml
+    _filesystem_check_permissions .rpi/samba.yml "600"
     cp .rpi/samba.yml "${RPI_SAMBA_PATH_CONFIG}"/config.yml
   else
     cp ./services/samba/config.yml "${RPI_SAMBA_PATH_CONFIG}"/config.yml
