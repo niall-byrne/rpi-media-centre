@@ -10,6 +10,7 @@ RPI_HOSTNAME="$(hostname)"
 RPI_WORKING_DIRECTORY="$(dirname "$0")"
 
 # Global Environment Variable Defaults
+export RPI_PATH_BACKUP="${RPI_PATH_BACKUP}"
 export RPI_RESTART_POLICY="${RPI_RESTART_POLICY:-no}"
 export RPI_ROOT="${RPI_ROOT:-/mnt/media}"
 
@@ -47,7 +48,22 @@ source "${RPI_WORKING_DIRECTORY}/lib/io.sh"
 _help() {
   echo "-- rpi-media-centre service manager --"
   echo "Usage:"
-  echo -e "\tpictl\t(help|kill|logs|pause|resume|start|status|stop|upgrade)\n"
+  echo -e "\tpictl\t(backup|help|kill|logs|pause|resume|start|status|stop|upgrade)\n"
+}
+
+_service_backup() {
+  if [[ -e /etc/fstab ]]; then
+    _configure_backup /etc/fstab "fstab"
+  fi
+  if [[ -d .rpi ]]; then
+    _configure_backup ".rpi" "rpi-media-centre"
+  fi
+  if _is_service_selected "plex"; then
+    _configure_backup "${RPI_PLEX_PATH_CONFIG}" "plex"
+  fi
+  if _is_service_selected "syncthing"; then
+    _configure_backup "${RPI_SYNCTHING_PATH_CONFIG}" "syncthing"
+  fi
 }
 
 _service_kill() {
@@ -122,6 +138,9 @@ main() {
   local _SERVICE_REMOVE_CONTAINERS=0
 
   case "${1}" in
+    backup)
+      _with_configuration _service_backup
+      ;;
     help)
       _help
       ;;
