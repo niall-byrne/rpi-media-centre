@@ -10,6 +10,9 @@ RPI_HOSTNAME="$(hostname)"
 RPI_WORKING_DIRECTORY="$(realpath "$(dirname "$0")")"
 
 # Global Environment Variable Defaults
+export RPI_CONTAINER_GID="${RPI_CONTAINER_GID:-$(id -g)}"
+export RPI_CONTAINER_UID="${RPI_CONTAINER_UID:-$(id -u)}"
+export RPI_CONTAINER_UID_RO="${RPI_CONTAINER_UID_RO:-$(($(id -u) + 1))}"
 export RPI_PATH_BACKUP="${RPI_PATH_BACKUP}"
 export RPI_RESTART_POLICY="${RPI_RESTART_POLICY:-no}"
 export RPI_ROOT="${RPI_ROOT:-/mnt/media}"

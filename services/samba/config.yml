@@ -11,14 +11,14 @@ global:
 auth:
   - user: "${SAMBA_USERNAME}"
     group: "media"
-    uid: "1000"
-    gid: "1000"
+    uid: "${SAMBA_UID_RW}"
+    gid: "${SAMBA_GID_RO}"
     password: "${SAMBA_PASSWORD}"
 
   - user: "android"
     group: "media"
-    uid: "1001"
-    gid: "1000"
+    uid: "${SAMBA_UID_RO}"
+    gid: "${SAMBA_GID_RO}"
     password: "${SAMBA_PASSWORD}"
 
 share:
