@@ -8,6 +8,9 @@ services:
     network_mode: host
     profiles:
       - plex
+    environment:
+      - "SET_PLEX_UID=${RPI_CONTAINER_UID}"
+      - "SET_PLEX_GID=${RPI_CONTAINER_GID}"
     restart: "${RPI_RESTART_POLICY}"
     volumes:
       - "${RPI_PLEX_PATH_CONFIG}:/config"
@@ -28,6 +31,9 @@ services:
       - "SAMBA_HOSTS_ALLOW=${RPI_SAMBA_SUBNET:-192.168.0.0/24}"
       - "SAMBA_USERNAME=${RPI_SAMBA_CREDENTIALS_USERNAME:-nobody}"
       - "SAMBA_PASSWORD=${RPI_SAMBA_CREDENTIALS_PASSWORD:-none}"
+      - "SAMBA_UID_RW=${RPI_CONTAINER_UID}"
+      - "SAMBA_UID_RO=${RPI_CONTAINER_UID_RO}"
+      - "SAMBA_GID_RO=${RPI_CONTAINER_GID}"
       - "WSDD2_ENABLE=${RPI_SAMBA_SERVICE_DISCOVERY}"
       - "WSDD2_HOSTNAME=${RPI_SAMBA_HOSTNAME}"
       - "WSDD2_NETBIOS_NAME=${RPI_SAMBA_HOSTNAME}"
@@ -43,9 +49,9 @@ services:
     container_name: syncthing
     hostname: "${RPI_SYNCTHING_HOSTNAME:-syncthing}"
     environment:
-      - PUID=1000
-      - PGID=1000
-      - STHOMEDIR=/config
+      - "PUID=${RPI_CONTAINER_UID}"
+      - "PGID=${RPI_CONTAINER_GID}"
+      - "STHOMEDIR=/config"
     volumes:
       - "${RPI_SYNCTHING_PATH_CONFIG}:/config"
       - "${RPI_ROOT}/shared/syncthing:/var/syncthing"
