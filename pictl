@@ -121,6 +121,8 @@ _service_start() {
 
   _docker_compose_command up -d
 
+  _docker_secure_bind_mounts
+
   if _is_service_selected "syncthing"; then
     _configure_syncthing
   fi
