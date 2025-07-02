@@ -2,56 +2,12 @@
 
 set -eo pipefail
 
-if [[ -n "${RPI_DEBUG}" ]]; then
-  trap error_handler ERR
-fi
-
+# shellcheck disable=SC2034
 RPI_HOSTNAME="$(hostname)"
 RPI_WORKING_DIRECTORY="$(realpath "$(dirname "$0")")"
 
-# Global Environment Variable Defaults
-export RPI_CONTAINER_GID="${RPI_CONTAINER_GID:-$(id -g)}"
-export RPI_CONTAINER_UID="${RPI_CONTAINER_UID:-$(id -u)}"
-export RPI_CONTAINER_UID_RO="${RPI_CONTAINER_UID_RO:-$(($(id -u) + 1))}"
-export RPI_PATH_BACKUP="${RPI_PATH_BACKUP}"
-export RPI_RESTART_POLICY="${RPI_RESTART_POLICY:-no}"
-export RPI_ROOT="${RPI_ROOT:-/mnt/media}"
-
-# Plex Environment Variable Defaults
-export RPI_PLEX_PATH_CONFIG="${RPI_PLEX_PATH_CONFIG:-${RPI_ROOT}/plex/config}"
-export RPI_PLEX_PATH_TRANSCODE="${RPI_PLEX_PATH_TRANSCODE:-${RPI_ROOT}/plex/transcode}"
-
-# Samba Environment Variable Defaults
-export RPI_SAMBA_CREDENTIALS_PASSWORD="${RPI_SAMBA_CREDENTIALS_PASSWORD}"
-export RPI_SAMBA_CREDENTIALS_USERNAME="${RPI_SAMBA_CREDENTIALS_USERNAME}"
-export RPI_SAMBA_HOSTNAME="${RPI_SAMBA_HOSTNAME:-${RPI_HOSTNAME}}"
-export RPI_SAMBA_PATH_CONFIG="${RPI_SAMBA_PATH_CONFIG:-${RPI_ROOT}/samba}"
-export RPI_SAMBA_SERVICE_DISCOVERY="${RPI_SAMBA_SERVICE_DISCOVERY:-1}"
-export RPI_SAMBA_SUBNET="${RPI_SAMBA_SUBNET}"
-export RPI_SAMBA_WORKGROUP="${RPI_SAMBA_WORKGROUP:-"WORKGROUP"}"
-
-# Syncthing Environment Variable Defaults
-export RPI_SYNCTHING_CREDENTIALS_PASSWORD="${RPI_SYNCTHING_CREDENTIALS_PASSWORD}"
-export RPI_SYNCTHING_CREDENTIALS_USERNAME"${RPI_SYNCTHING_CREDENTIALS_USERNAME}"
-export RPI_SYNCTHING_PATH_CONFIG="${RPI_SYNCTHING_PATH_CONFIG:-${RPI_ROOT}/syncthing}"
-
-# Service Selection Defaults
-RPI_SERVICES=("${RPI_SERVICES[@]:-plex}" "${RPI_SERVICES[@]:-samba}")
-
-# shellcheck source=lib/configuration.sh
-source "${RPI_WORKING_DIRECTORY}/lib/configuration.sh"
-# shellcheck source=lib/debug.sh
-source "${RPI_WORKING_DIRECTORY}/lib/debug.sh"
-# shellcheck source=lib/disk.sh
-source "${RPI_WORKING_DIRECTORY}/lib/disk.sh"
-# shellcheck source=lib/docker.sh
-source "${RPI_WORKING_DIRECTORY}/lib/docker.sh"
-# shellcheck source=lib/event.sh
-source "${RPI_WORKING_DIRECTORY}/lib/event.sh"
-# shellcheck source=lib/filesystem.sh
-source "${RPI_WORKING_DIRECTORY}/lib/filesystem.sh"
-# shellcheck source=lib/io.sh
-source "${RPI_WORKING_DIRECTORY}/lib/io.sh"
+# shellcheck source=lib/__all__.sh
+source "${RPI_WORKING_DIRECTORY}/lib/__all__.sh"
 
 _help() {
   echo "-- rpi-media-centre service manager --"
@@ -192,7 +148,7 @@ main() {
       _with_configuration _service_upgrade
       ;;
     *)
-      _help
+      _help >&2
       return 127
       ;;
   esac
