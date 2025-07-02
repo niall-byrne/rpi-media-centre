@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -eo pipefail
+
+if [[ -n "${RPI_DEBUG}" ]]; then
+  trap error_handler ERR
+fi
+
+# shellcheck source=lib/defaults.sh
+source "${RPI_WORKING_DIRECTORY}/lib/defaults.sh"
+# shellcheck source=lib/configuration.sh
+source "${RPI_WORKING_DIRECTORY}/lib/configuration.sh"
+# shellcheck source=lib/debug.sh
+source "${RPI_WORKING_DIRECTORY}/lib/debug.sh"
+# shellcheck source=lib/disk.sh
+source "${RPI_WORKING_DIRECTORY}/lib/disk.sh"
+# shellcheck source=lib/docker.sh
+source "${RPI_WORKING_DIRECTORY}/lib/docker.sh"
+# shellcheck source=lib/event.sh
+source "${RPI_WORKING_DIRECTORY}/lib/event.sh"
+# shellcheck source=lib/filesystem.sh
+source "${RPI_WORKING_DIRECTORY}/lib/filesystem.sh"
+# shellcheck source=lib/io.sh
+source "${RPI_WORKING_DIRECTORY}/lib/io.sh"

@@ -91,8 +91,10 @@ _disk_read_crypt_file() {
       continue
     fi
     if [[ -z "${ENCRYPTED_DISK_UUID}" ]] || [[ -z "${ENCRYPTED_DISK_NAME}" ]] || [[ -z "${ENCRYPTED_DISK_MOUNT_POINT}" ]]; then
-      echo "The .rpi/crypt file is improperly formatted!"
-      echo "Each line should be a comma separated series of: ENCRYPTED_DISK_UUID,ENCRYPTED_DISK_NAME,ENCRYPTED_DISK_MOUNT_POINT"
+      {
+        echo "The .rpi/crypt file is improperly formatted!"
+        echo "Each line should be a comma separated series of: ENCRYPTED_DISK_UUID,ENCRYPTED_DISK_NAME,ENCRYPTED_DISK_MOUNT_POINT"
+      } >&2
     fi
 
     ENCRYPTED_DISK_UUID_SET+=("${ENCRYPTED_DISK_UUID}")

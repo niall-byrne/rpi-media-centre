@@ -9,7 +9,9 @@ _configure_backup() {
   # 2: Backup Target
 
   if [[ -z "${RPI_PATH_BACKUP}" ]]; then
-    echo "Please configure a value for RPI_PATH_BACKUP in the .rpi/config file."
+    {
+      echo "Please configure a value for RPI_PATH_BACKUP in the .rpi/config file."
+    } >&2
     return 127
   fi
 
