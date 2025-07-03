@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo "systemctl: test double script"
+echo "  -- $*"

@@ -1,0 +1,20 @@
+# /etc/cron.d/rpi-backups: crontab entries for backup jobs
+
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+0  ${RPI_BACKUP_SCHEDULING_HOUR} * * *     ${RPI_CONTAINER_USERNAME}  pictl backup schedule daily
+0  ${RPI_BACKUP_SCHEDULING_HOUR} * * *     ${RPI_CONTAINER_USERNAME}  [[ "$(("$(date +%j)"" % 0))" ]] && pictl backup schedule even
+0  ${RPI_BACKUP_SCHEDULING_HOUR} * * *     ${RPI_CONTAINER_USERNAME}  [[ "$(("$(date +%j)"" % 1))" ]] && pictl backup schedule odd
+1  ${RPI_BACKUP_SCHEDULING_HOUR} * * SUN   ${RPI_CONTAINER_USERNAME}  pictl backup schedule sunday
+2  ${RPI_BACKUP_SCHEDULING_HOUR} * * MON   ${RPI_CONTAINER_USERNAME}  pictl backup schedule monday
+3  ${RPI_BACKUP_SCHEDULING_HOUR} * * TUE   ${RPI_CONTAINER_USERNAME}  pictl backup schedule tuesday
+4  ${RPI_BACKUP_SCHEDULING_HOUR} * * WED   ${RPI_CONTAINER_USERNAME}  pictl backup schedule wednesday
+5  ${RPI_BACKUP_SCHEDULING_HOUR} * * THU   ${RPI_CONTAINER_USERNAME}  pictl backup schedule thursday
+6  ${RPI_BACKUP_SCHEDULING_HOUR} * * FRI   ${RPI_CONTAINER_USERNAME}  pictl backup schedule friday
+7  ${RPI_BACKUP_SCHEDULING_HOUR} * * SAT   ${RPI_CONTAINER_USERNAME}  pictl backup schedule saturday
+8  ${RPI_BACKUP_SCHEDULING_HOUR} */2 * *   ${RPI_CONTAINER_USERNAME}  pictl backup schedule biweekly
+9  ${RPI_BACKUP_SCHEDULING_HOUR} 1 * *     ${RPI_CONTAINER_USERNAME}  pictl backup schedule monthly
+10 ${RPI_BACKUP_SCHEDULING_HOUR} 1,15 * *  ${RPI_CONTAINER_USERNAME}  pictl backup schedule bimonthly
+11 ${RPI_BACKUP_SCHEDULING_HOUR} 1 */3 *   ${RPI_CONTAINER_USERNAME}  pictl backup schedule quarterly
+12 ${RPI_BACKUP_SCHEDULING_HOUR} 1 */6 *   ${RPI_CONTAINER_USERNAME}  pictl backup schedule biannually

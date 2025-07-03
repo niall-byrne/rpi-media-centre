@@ -1,9 +1,8 @@
+.backups
 .cicd-tools/boxes/*
 .cicd-tools/manifest.json
-.rpi/config
-.rpi/crypt
-.rpi/event-*.sh
-.rpi/samba.yml
+.rpi
 .vale/*
 !.vale/Vocab
+*.key
 poetry.lock

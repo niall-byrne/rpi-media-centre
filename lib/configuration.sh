@@ -4,31 +4,6 @@
 
 set -eo pipefail
 
-_configure_backup() {
-  # 1: Backup Source
-  # 2: Backup Target
-
-  if [[ -z "${RPI_PATH_BACKUP}" ]]; then
-    {
-      echo "Please configure a value for RPI_PATH_BACKUP in the .rpi/config file."
-    } >&2
-    return 127
-  fi
-
-  echo "Backing up ${2} ..."
-  mkdir -p "${RPI_PATH_BACKUP}/${2}"
-  echo "  ${1} -> ${RPI_PATH_BACKUP}/${2} ..."
-  if [[ -f ${1} ]]; then
-    sudo rsync -ah "${1}" "${RPI_PATH_BACKUP}/${2}"
-  else
-    sudo rsync -ah --delete "${1}/" "${RPI_PATH_BACKUP}/${2}"
-  fi
-
-  chmod 700 "${RPI_PATH_BACKUP}/${2}"
-
-  echo "Backup of ${2} is complete!"
-}
-
 _configure_pictl() {
   if [[ -f .rpi/config ]]; then
     echo "-- loading .rpi/config file ... --"
