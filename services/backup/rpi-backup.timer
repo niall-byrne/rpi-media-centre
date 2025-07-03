@@ -1,0 +1,11 @@
+[Unit]
+Description="The rpi-media-centre backup service."
+After=network.target local-fs.target
+RequiresMountsFor=${RPI_ROOT}
+
+[Timer]
+OnCalendar=*-*-* ${RPI_BACKUP_SCHEDULER_START_TIME}
+AccuracySec=30
+
+[Install]
+WantedBy=timers.target

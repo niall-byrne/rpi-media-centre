@@ -2,9 +2,17 @@
 
 # pictl debug library
 
-set -Eeo pipefail
+set -eo pipefail
 
-error_handler() {
+_debug_with() {
+  # $@: the command to execute
+
+  if _debug_is_enabled; then
+    "$@"
+  fi
+}
+
+_debug_error_handler() {
   local COMMAND="${BASH_COMMAND}"
   local EXIT_CODE="$?"
   local SCRIPT_FILE="${BASH_SOURCE[1]}"
@@ -15,4 +23,8 @@ error_handler() {
   } >&2
 
   exit "${EXIT_CODE}"
+}
+
+_debug_is_enabled() {
+  [[ -n "${RPI_DEBUG}" ]]
 }
