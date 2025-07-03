@@ -2,7 +2,7 @@
 
 # pictl debug library
 
-set -Eeo pipefail
+set -eo pipefail
 
 error_handler() {
   local COMMAND="${BASH_COMMAND}"

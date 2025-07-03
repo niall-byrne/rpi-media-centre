@@ -12,22 +12,18 @@ source "${RPI_WORKING_DIRECTORY}/lib/__all__.sh"
 _help() {
   echo "-- rpi-media-centre service manager --"
   echo "Usage:"
-  echo -e "\tpictl\t(backup|help|kill|logs|pause|resume|shim|start|status|stop|upgrade)\n"
+  echo -e "\tpictl\t(backup|help|install|kill|logs|manifest|pause|resume|start|status|stop|upgrade)\n"
 }
 
 _service_backup() {
-  if [[ -e /etc/fstab ]]; then
-    _configure_backup /etc/fstab "fstab"
-  fi
-  if [[ -d .rpi ]]; then
-    _configure_backup ".rpi" "rpi-media-centre"
-  fi
-  if _is_service_selected "plex"; then
-    _configure_backup "${RPI_PLEX_PATH_CONFIG}" "plex"
-  fi
-  if _is_service_selected "syncthing"; then
-    _configure_backup "${RPI_SYNCTHING_PATH_CONFIG}" "syncthing"
-  fi
+  # $1: the backup group to target
+  _disk_ensure_mounted
+  _backup_cli "$@"
+}
+
+_service_install() {
+  _installer_service_shim
+  _installer_service_backup
 }
 
 _service_kill() {
@@ -41,6 +37,11 @@ _service_logs() {
   _docker_compose_command logs -f
 }
 
+_service_manifest() {
+  # $1: the manifest to check
+  _manifest_cli "$@"
+}
+
 _service_pause() {
   echo "Media centre now being paused ..."
   _SERVICE_REMOVE_CONTAINERS=0
@@ -48,23 +49,10 @@ _service_pause() {
 }
 
 _service_resume() {
-  if ! _is_disk_mounted_all; then
-    echo "The disk is not mounted!"
-    return 127
-  fi
+  _disk_ensure_mounted
 
   echo "Media centre now being resumed ..."
   _docker_compose_command start
-}
-
-_service_shim() {
-  echo "Installing service shim ..."
-  export RPI_WORKING_DIRECTORY
-  # shellcheck disable=SC2016
-  envsubst '${RPI_WORKING_DIRECTORY}' < services/cli/shim.sh | sudo tee /usr/local/bin/pictl > /dev/null
-  sudo chown "${USER}":"${USER}" /usr/local/bin/pictl
-  sudo chmod 500 /usr/local/bin/pictl
-  echo "Service shim installed!"
 }
 
 _service_start() {
@@ -107,7 +95,7 @@ _service_upgrade() {
 _with_configuration() {
   # $1 the command to launch
   _configure_pictl
-  "${1}"
+  "$@"
 }
 
 main() {
@@ -115,13 +103,21 @@ main() {
 
   case "${1}" in
     backup)
-      _with_configuration _service_backup
+      shift
+      _with_configuration _service_backup "$@"
       ;;
     help)
       _help
       ;;
+    install)
+      _with_configuration _service_install
+      ;;
     kill)
       _with_configuration _service_kill
+      ;;
+    manifest)
+      shift
+      _with_configuration _service_manifest "$@"
       ;;
     logs)
       _with_configuration _service_logs
@@ -131,9 +127,6 @@ main() {
       ;;
     resume)
       _with_configuration _service_resume
-      ;;
-    shim)
-      _with_configuration _service_shim
       ;;
     start)
       _with_configuration _service_start
