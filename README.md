@@ -118,7 +118,6 @@ The [docker-compose.yml](services/docker-compose.yml) is configured by series of
 | `RPI_CONTAINER_GID`    | defaults to the current user's `gid`, if customizing consider what `gid` your disk is mounted with                                              |
 | `RPI_CONTAINER_UID`    | defaults to the current user's `uid`, if customizing consider what `uid` your disk is mounted with                                              |
 | `RPI_CONTAINER_UID_RO` | defaults to the current user's `uid` incremented by 1, used by Samba as the `uid` of the read-only `android` user                               |
-| `RPI_PATH_BACKUP`      | unset by default, specifies a configuration backup path                                                                                         |
 | `RPI_RESTART_POLICY`   | defaults to `no` (See the [documentation](https://github.com/compose-spec/compose-spec/blob/main/spec.md#restart) for details on this setting.) |
 | `RPI_ROOT`             | defaults to `/mnt/media`                                                                                                                        |
 
@@ -128,7 +127,6 @@ Store one or more of these variables as successive lines in the `.rpi/config` fi
   RPI_CONTAINER_GID="1005"
   RPI_CONTAINER_UID="1005"
   RPI_CONTAINER_UID_RO="1001"
-  RPI_PATH_BACKUP="/mnt/my_custom_name/rpi_backup"
   RPI_RESTART_POLICY="unless-stopped"
   RPI_ROOT="/mnt/my_custom_name"
   ```

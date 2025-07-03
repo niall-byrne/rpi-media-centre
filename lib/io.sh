@@ -23,3 +23,22 @@ _io_prompt() {
     fi
   done
 }
+
+_io_prompt_confirmation() {
+
+  local RPI_IO_CONFIRMATION
+
+  echo -n "Are you sure you wish to proceed (Y/n) ? "
+
+  while true; do
+    read -rs -n 1 RPI_IO_CONFIRMATION
+    if [[ "${RPI_IO_CONFIRMATION}" == "n" ]]; then
+      echo ""
+      return 127
+    fi
+    if [[ "${RPI_IO_CONFIRMATION}" == "Y" ]]; then
+      echo ""
+      return 0
+    fi
+  done
+}

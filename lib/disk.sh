@@ -38,6 +38,13 @@ _disk_all_command() {
   fi
 }
 
+_disk_ensure_mounted() {
+  if ! _is_disk_mounted_all; then
+    echo "The disk is not mounted!"
+    return 127
+  fi
+}
+
 _disk_initialize_mounts() {
   if _is_service_selected "plex"; then
     mkdir -p "${RPI_PLEX_PATH_CONFIG}"
