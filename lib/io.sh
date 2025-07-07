@@ -4,6 +4,23 @@
 
 set -eo pipefail
 
+_io_append_newline_stdin() {
+  local FILE_LINE
+
+  echo ""
+  while IFS= read -r FILE_LINE; do
+    echo "${FILE_LINE}"
+  done
+}
+
+_io_comment_lines_stdin() {
+  local FILE_LINE
+
+  while IFS= read -r FILE_LINE; do
+    echo "# ${FILE_LINE}"
+  done
+}
+
 _io_prompt() {
   # 1: the prompt to display
   # 2: the variable name to save
