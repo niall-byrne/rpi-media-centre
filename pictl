@@ -62,7 +62,7 @@ _service_start() {
   _disk_initialize_mounts
 
   if _is_service_selected "samba"; then
-    _configure_samba
+    _configuration_samba
   fi
 
   _docker_compose_command up -d
@@ -70,7 +70,7 @@ _service_start() {
   _docker_secure_bind_mounts
 
   if _is_service_selected "syncthing"; then
-    _configure_syncthing
+    _configuration_syncthing
   fi
 }
 
@@ -95,7 +95,7 @@ _service_upgrade() {
 
 _with_configuration() {
   # $1 the command to launch
-  _configure_pictl
+  _configuration_pictl
   "$@"
 }
 
