@@ -137,7 +137,7 @@ _backup_cli_schedule_jobs() {
     _backup_cli_usage_error "_backup_cli_usage"
   fi
 
-  _disk_ensure_mounted
+  _is_disk_mounted_all
 
   _control_lock "rpi-backup-scheduler.pid" "15"
 
@@ -153,12 +153,12 @@ _backup_cli_service_cli() {
 
   case "${1}" in
     job)
-      _disk_ensure_mounted
+      _is_disk_mounted_all
       _backup_scheduler_make_queues
       _backup_job "${@:2}"
       ;;
     start)
-      _disk_ensure_mounted
+      _is_disk_mounted_all
       _backup_scheduler_make_queues
       _backup_cli_start_service
       ;;
