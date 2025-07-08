@@ -15,7 +15,15 @@ services:
     volumes:
       - "${RPI_PLEX_PATH_CONFIG}:/config"
       - "${RPI_PLEX_PATH_TRANSCODE}:/transcode"
-      - "${RPI_ROOT}/shared/media:/data"
+      - "${RPI_PLEX_PATH_DATA_MOUNT_1}"
+      - "${RPI_PLEX_PATH_DATA_MOUNT_2}"
+      - "${RPI_PLEX_PATH_DATA_MOUNT_3}"
+      - "${RPI_PLEX_PATH_DATA_MOUNT_4}"
+      - "${RPI_PLEX_PATH_DATA_MOUNT_5}"
+      - "${RPI_PLEX_PATH_DATA_MOUNT_6}"
+      - "${RPI_PLEX_PATH_DATA_MOUNT_7}"
+      - "${RPI_PLEX_PATH_DATA_MOUNT_8}"
+      - "${RPI_PLEX_PATH_DATA_MOUNT_9}"
 
   samba:
     image: crazymax/samba:latest
@@ -41,9 +49,15 @@ services:
     restart: "${RPI_RESTART_POLICY}"
     volumes:
       - "${RPI_SAMBA_PATH_CONFIG}:/data"
-      - "${RPI_ROOT}/shared/media:/samba/media"
-      - "${RPI_ROOT}/shared/transfer:/samba/transfer"
-      - "${RPI_ROOT}/shared/syncthing:/samba/syncthing"
+      - "${RPI_SAMBA_PATH_DATA_MOUNT_1}"
+      - "${RPI_SAMBA_PATH_DATA_MOUNT_2}"
+      - "${RPI_SAMBA_PATH_DATA_MOUNT_3}"
+      - "${RPI_SAMBA_PATH_DATA_MOUNT_4}"
+      - "${RPI_SAMBA_PATH_DATA_MOUNT_5}"
+      - "${RPI_SAMBA_PATH_DATA_MOUNT_6}"
+      - "${RPI_SAMBA_PATH_DATA_MOUNT_7}"
+      - "${RPI_SAMBA_PATH_DATA_MOUNT_8}"
+      - "${RPI_SAMBA_PATH_DATA_MOUNT_9}"
 
   syncthing:
     image: syncthing/syncthing
@@ -55,7 +69,15 @@ services:
       - "STHOMEDIR=/config"
     volumes:
       - "${RPI_SYNCTHING_PATH_CONFIG}:/config"
-      - "${RPI_ROOT}/shared/syncthing:/var/syncthing"
+      - "${RPI_SYNCTHING_PATH_DATA_MOUNT_1}"
+      - "${RPI_SYNCTHING_PATH_DATA_MOUNT_2}"
+      - "${RPI_SYNCTHING_PATH_DATA_MOUNT_3}"
+      - "${RPI_SYNCTHING_PATH_DATA_MOUNT_4}"
+      - "${RPI_SYNCTHING_PATH_DATA_MOUNT_5}"
+      - "${RPI_SYNCTHING_PATH_DATA_MOUNT_6}"
+      - "${RPI_SYNCTHING_PATH_DATA_MOUNT_7}"
+      - "${RPI_SYNCTHING_PATH_DATA_MOUNT_8}"
+      - "${RPI_SYNCTHING_PATH_DATA_MOUNT_9}"
     ports:
       - 8384:8384 # Web UI
       - 22000:22000/tcp # TCP file transfers
