@@ -182,10 +182,12 @@ It is recommended to keep these event scripts secure and executable:
 
 Plex is generally configured through its web interface, but some settings are able for customization.
 
-| Variable                  | Value                                   |
-|---------------------------|-----------------------------------------|
-| `RPI_PLEX_PATH_CONFIG`    | default to `${RPI_ROOT}/plex/config`    |
-| `RPI_PLEX_PATH_TRANSCODE` | default to `${RPI_ROOT}/plex/transcode` |
+| Variable                         | Value                                        |
+|----------------------------------|----------------------------------------------|
+| `RPI_PLEX_PATH_CONFIG`           | default to `${RPI_ROOT}/plex/config`         |
+| `RPI_PLEX_PATH_DATA_MOUNT_1`     | defaults to `${RPI_ROOT}/shared/media:/data` |
+| `RPI_PLEX_PATH_DATA_MOUNT_[2-9]` | defaults to null mounts                      |
+| `RPI_PLEX_PATH_TRANSCODE`        | default to `${RPI_ROOT}/plex/transcode`      |
 
 These values can be customized by storing one or more of them as successive lines in the `.rpi/config` file:
 
@@ -193,6 +195,7 @@ These values can be customized by storing one or more of them as successive line
   # It may be desirable to move the Plex system files off of your USB drive to allow the disk to sleep.
   # This comes with a series of tradeoffs, including the performance and speed of the system boot disk.
   RPI_PLEX_PATH_CONFIG="${HOME}/.rpi/plex/config"
+  RPI_PLEX_PATH_DATA_MOUNT_2="/mnt/disk2:/disk2"  # Exposes a second disk to Plex
   RPI_PLEX_PATH_TRANSCODE="${HOME}/.rpi/plex/transcode"
   ```
 
@@ -202,15 +205,19 @@ Plex is an enabled service by default.
 
 Some Samba settings can be stored in the `.rpi/config` file to make this service more convenient to use.
 
-| Variable                         | Value                                                             |
-|----------------------------------|-------------------------------------------------------------------|
-| `RPI_SAMBA_CREDENTIALS_PASSWORD` | managed by `pictl`, but defaults to `nobody` for no-ops           |
-| `RPI_SAMBA_CREDENTIALS_USERNAME` | managed by `pictl`, but defaults to `nobody` for no-ops           |
-| `RPI_SAMBA_HOSTNAME`             | defaults to the hostname of the Raspberry Pi                      |
-| `RPI_SAMBA_PATH_CONFIG`          | default to `${RPI_ROOT}/samba`                                    |
-| `RPI_SAMBA_SERVICE_DISCOVERY`    | defaults `1`, but set to `0` to disable Windows service discovery |
-| `RPI_SAMBA_SUBNET`               | managed by `pictl`, but defaults to `192.168.0.0/24` for no-ops   |
-| `RPI_SAMBA_WORKGROUP`            | defaults to `WORKGROUP`                                           |
+| Variable                          | Value                                                             |
+|-----------------------------------|-------------------------------------------------------------------|
+| `RPI_SAMBA_CREDENTIALS_PASSWORD`  | managed by `pictl`, but defaults to `nobody` for no-ops           |
+| `RPI_SAMBA_CREDENTIALS_USERNAME`  | managed by `pictl`, but defaults to `nobody` for no-ops           |
+| `RPI_SAMBA_PATH_DATA_MOUNT_1`     | defaults to `${RPI_ROOT}/shared/media:/samba/media`               |
+| `RPI_SAMBA_PATH_DATA_MOUNT_2`     | defaults to `${RPI_ROOT}/shared/transfer:/samba/transfer`         |
+| `RPI_SAMBA_PATH_DATA_MOUNT_3`     | defaults to `${RPI_ROOT}/shared/syncthing:/samba/syncthing`       |
+| `RPI_SAMBA_PATH_DATA_MOUNT_[4-9]` | defaults to null mounts                                           |
+| `RPI_SAMBA_HOSTNAME`              | defaults to the hostname of the Raspberry Pi                      |
+| `RPI_SAMBA_PATH_CONFIG`           | default to `${RPI_ROOT}/samba`                                    |
+| `RPI_SAMBA_SERVICE_DISCOVERY`     | defaults `1`, but set to `0` to disable Windows service discovery |
+| `RPI_SAMBA_SUBNET`                | managed by `pictl`, but defaults to `192.168.0.0/24` for no-ops   |
+| `RPI_SAMBA_WORKGROUP`             | defaults to `WORKGROUP`                                           |
 
 These values can be customized by storing one or more of them as successive lines in the `.rpi/config` file:
 
@@ -220,9 +227,9 @@ These values can be customized by storing one or more of them as successive line
   RPI_SAMBA_PATH_CONFIG="${HOME}/.rpi/samba/config"
   RPI_SAMBA_CREDENTIALS_USERNAME="somebody"
   RPI_SAMBA_CREDENTIALS_PASSWORD="!*secret1234"
+  RPI_SAMBA_PATH_DATA_MOUNT_4="/mnt/disk2:/disk2"  # Exposes a second disk to Samba
   RPI_SAMBA_SERVICE_DISCOVERY="0"
   RPI_SAMBA_SUBNET="172.16.0.0/28"
-  RPI_SAMBA_WORKGROUP="MY_WORKGROUP"
   ```
 
 It is also possible to create a completely custom Samba configuration.  Using the [existing config](./services/samba/config.yml) as a template, create a `.rpi/samba.yml` file and customize as needed.  Refer to the [crazymax/samba](https://github.com/crazy-max/docker-samba) repository for details.
@@ -236,12 +243,14 @@ Samba is an enabled service by default.
 
 Some Syncthing settings can be stored in the `.rpi/config` file to make this service more convenient to use.
 
-| Variable                             | Value                                                                                              |
-|--------------------------------------|----------------------------------------------------------------------------------------------------|
-| `RPI_SYNCTHING_CREDENTIALS_USERNAME` | if defined, Syncthing's web GUI username will be set (or reset) to this value on startup           |
-| `RPI_SYNCTHING_CREDENTIALS_PASSWORD` | if defined, Syncthing's web GUI password will be set (or reset) to this value on startup           |
-| `RPI_SYNCTHING_PATH_CONFIG`          | default to `${RPI_ROOT}/syncthing`                                                                 |
-| `RPI_SYNCTHING_HOSTNAME`             | defaults to `syncthing`, controls the device name other Syncthing clients will see when connecting |
+| Variable                              | Value                                                                                              |
+|---------------------------------------|----------------------------------------------------------------------------------------------------|
+| `RPI_SYNCTHING_CREDENTIALS_USERNAME`  | if defined, Syncthing's web GUI username will be set (or reset) to this value on startup           |
+| `RPI_SYNCTHING_CREDENTIALS_PASSWORD`  | if defined, Syncthing's web GUI password will be set (or reset) to this value on startup           |
+| `RPI_SYNCTHING_PATH_DATA_MOUNT_1`     | defaults to `${RPI_ROOT}/shared/syncthing:/var/syncthing`                                          |
+| `RPI_SYNCTHING_PATH_DATA_MOUNT_[2-9]` | defaults to null mounts                                                                            |
+| `RPI_SYNCTHING_PATH_CONFIG`           | default to `${RPI_ROOT}/syncthing`                                                                 |
+| `RPI_SYNCTHING_HOSTNAME`              | defaults to `syncthing`, controls the device name other Syncthing clients will see when connecting |
 
 These values can be customized by storing one or more of them as successive lines in the `.rpi/config` file:
 
@@ -251,6 +260,7 @@ These values can be customized by storing one or more of them as successive line
   RPI_SYNCTHING_PATH_CONFIG="${HOME}/.rpi/syncthing/config"
   RPI_SYNCTHING_CREDENTIALS_USERNAME="nobody"
   RPI_SYNCTHING_CREDENTIALS_PASSWORD="v3ryS3cr3t!"
+  RPI_SYNCTHING_PATH_DATA_MOUNT_2="/mnt/disk2:/disk2"  # Exposes a second disk to Syncthing
   RPI_SYNCTHING_HOSTNAME="KitchenPi"
   ```
 
