@@ -155,14 +155,16 @@ To enable multiple services, add them to the array definition as quoted, space s
 
 There are optional shell scripts that can be created and executed when `pictl` encounters specific events.
 
-| Script Path                    | Event                                         |
-|--------------------------------|-----------------------------------------------|
-| `.rpi/event-disk-mounted.sh`   | executed after an encrypted disk is mounted   |
-| `.rpi/event-disk-unmounted.sh` | executed after an encrypted disk is unmounted |
+| Script Path                           | Event                                             |
+|---------------------------------------|---------------------------------------------------|
+| `.rpi/event-disk-after-mounted.sh`    | executed after all encrypted disks are mounted    |
+| `.rpi/event-disk-before-mounted.sh`   | executed before all encrypted disks are mounted   |
+| `.rpi/event-disk-after-unmounted.sh`  | executed after all encrypted disks are unmounted  |
+| `.rpi/event-disk-before-unmounted.sh` | executed before all encrypted disks are unmounted |
 
 This is particularly useful for maintaining specific file permissions on the shared media.
 
-If one wanted to ensure the Samba permissions were correct on `/mnt/media/shared` this `.rpi/event-disk-mounted.sh` script could be useful:
+If one wanted to ensure the Samba permissions were correct on `/mnt/media/shared` this `.rpi/event-disk-after-mounted.sh` script could be useful:
 
    ```bash
    #!/bin/bash
@@ -174,7 +176,7 @@ This grants full read and write access to all shared media files to the owner, r
 This would work in tandem with the default Samba configuration to ensure the `android` user has read only access, and deny access to other users.  Permissions might change when loading files over `rsync` or methods other than Samba, so the periodic execution of this script could be useful during disk mounts.
 
 It is recommended to keep these event scripts secure and executable:
-   - `$ chmod 700 .rpi/event-disk-mounted.sh`
+   - `$ chmod 700 .rpi/event-disk-after-mounted.sh`
 
 #### Plex Configuration
 
