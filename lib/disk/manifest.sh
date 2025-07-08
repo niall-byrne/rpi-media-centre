@@ -125,11 +125,13 @@ _disk_manifest_load() {
 }
 
 _disk_manifest_mount_all() {
+  _event_script "event-disk-before-mounted.sh"
   _disk_manifest_all_command "_disk_unlock"
-  _event_script "event-disk-mounted.sh"
+  _event_script "event-disk-after-mounted.sh"
 }
 
 _disk_manifest_unmount_all() {
+  _event_script "event-disk-before-unmounted.sh"
   _disk_manifest_all_command "_disk_lock"
-  _event_script "event-disk-unmounted.sh"
+  _event_script "event-disk-after-unmounted.sh"
 }
