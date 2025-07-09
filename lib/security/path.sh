@@ -10,10 +10,8 @@ _security_path_check() {
   # $3: the required group name
   # $4: the permission octal value required
 
-  if ! _security_path_check_ownership "${1}" "${2}" "${3}"; then
-    return 127
-  fi
-  if ! _security_path_check_permissions "${1}" "${4}"; then
+  if ! _security_path_check_ownership "${1}" "${2}" "${3}" ||
+    ! _security_path_check_permissions "${1}" "${4}"; then
     return 127
   fi
 }
