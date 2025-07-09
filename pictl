@@ -12,7 +12,7 @@ source "${RPI_WORKING_DIRECTORY}/lib/__all__.sh"
 _help() {
   echo "-- rpi-media-centre service manager --"
   echo "Usage:"
-  echo -e "\tpictl\t(account|backup|help|install|kill|logs|manifest|pause|resume|start|status|stop|upgrade)\n"
+  echo -e "\tpictl\t(account|backup|disk|help|install|kill|logs|manifest|pause|resume|start|status|stop|upgrade)\n"
 }
 
 _service_account() {
@@ -23,6 +23,12 @@ _service_backup() {
   # $@: the backup cli args
 
   _backup_cli "$@"
+}
+
+_service_disk() {
+  # $@: the disk cli args
+
+  _disk_cli "$@"
 }
 
 _service_install() {
@@ -120,6 +126,10 @@ main() {
     backup)
       shift
       _service_backup "$@"
+      ;;
+    disk)
+      shift
+      _service_disk "$@"
       ;;
     debug)
       _configuration_pictl_debug
