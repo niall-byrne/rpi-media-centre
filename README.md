@@ -44,6 +44,8 @@ This project combines the following software:
 2. Follow [this guide](https://docs.docker.com/engine/install/raspberry-pi-os/) to install docker on your Pi.
     - Pay close attention to first two paragraphs and make sure you follow the correct guide for your version of the OS.
 3. Clone this repository onto your Pi's flash card.  Make sure it's not on the external hard drive.
+4. Optionally, there are a few binaries you can install to extend the functionality of this project, most are likely already installed:
+   - "$ sudo apt-get install rsync tree vim"
 
 ## With Disk Encryption
 1. Install the software required for disk encryption:
@@ -57,7 +59,9 @@ This project combines the following software:
     - `$ sudo blkid`
 4. Create a `/etc/rpi/crypt` file inside the cloned repository containing this UUID:
     - `$ sudo mkdir -p /etc/rpi`
-    - `$ echo "my-uuid-value,media,/mnt/media" | sudo tee /etc/rpi/crypt`
+    - `$ sudo ./pictl manifest edit crypt`
+    - Create a line in the file that looks something like:
+       >  uuid_value_from_blkid,media_disk,media_disk_group,/mnt/media
 5. Start the software:
     - `$ sudo ./pictl start`
 6. Enter the disk encryption password and Samba credentials.
@@ -71,13 +75,33 @@ This project combines the following software:
 3. Determine the UUID of your newly formatted disk:
    - `$ sudo blkid`
 4. Add the external hard drive to `/etc/fstab` to that the OS manages mounting it for you:
-   - `$ echo 'UUID="DISK_UUID_FROM_STEP_3">  /mnt/media  ext4  defaults,nofail,noatime,rw,errors=remount-ro  0  1' | sudo tee -a /etc/fstab`
+   - `$ echo 'UUID="DISK_UUID_FROM_STEP_3"  /mnt/media  ext4  defaults,nofail,noatime,rw,errors=remount-ro  0  1' | sudo tee -a /etc/fstab`
 5. Test your fstab mounts the disk:
    - `$ sudo mount -a`
 6. Start the software:
    - `$ sudo ./pictl start`
 7. Since the disk is already mounted at the expected mount-point, there is no decryption prompt.  The service can be used immediately.
 8. Listen to some music already.
+
+## What is "Single User Mode"?
+
+Cloning this repository to your home folder and running it violates a few best-practices for managing a linux system.  System-wide software generally isn't meant to run this way, it *can* work, but it isn't recommended.
+
+If you are the only administrator of your Raspberry Pi, then is likely *not* going to be a problem, and you can safely [disable this warning](#global-configuration) and enjoy your media centre.  However, you may want to read on first.
+
+### Setting up a Service Account
+
+The alternative to this type of setup is to use a [service account](https://unix.stackexchange.com/questions/314725/what-is-the-difference-between-user-and-service-account) to provide separation between yourself as an administrator of the Raspberry Pi, and the data and services your media centre provides.  This separation provides greater security, and allows multiple administrative accounts to interact with `pictl` without creating conflicts.
+
+There are two requirements for setting up a service account with `pictl`:
+
+1. There is some extra [global configuration](#global-configuration) required have `pictl` provision a service account for you. This is fairly straightforward, and the bare minimum needed is just to supply a value for the `RPI_SVC_USERNAME` configuration variable.  If you do this, `pictl` will create the service account for you-- even if you just execute `$ ./pictl help`.
+2. You need to have you media files owned by this new service account, and not by your Raspberry Pi user: If your disk is mounted at `/mnt/media`, then this could be done with the command:
+   - `$ chown <service_account_username>:<service_account_groupname> -R /mnt/media/shared`
+
+You can still interact with your media as an administrator by using `sudo` to:
+  - Assume the service accounts identity `sudo -u <service_account_username> bash`.
+  - To copy or move files, while retaining their service account ownership.
 
 ## What are the pros and cons to using disk encryption?
 
@@ -101,33 +125,38 @@ This requires the installation of a Samba compatible app on the phone, but there
 (I am personally quite found of [Cx File Explorer](https://play.google.com/store/apps/details?id=com.cxinventor.file.explorer) right now.)
 
 The `android` user provides read-only access to your media, just to prevent any accidental deletion.  This works by granting `android` read only access to the media files via the `group` attribute, but this must be enforced on the file system:
-   - `$ chmod -R g+rX,g-w /mnt/media/shared/media`
+   - `$ chmod -R g+rX,g-w,o-rwx /mnt/media/shared/media`
 
 To *keep* this user read-only, avoid creating directories with 'other writable' permissions on your USB disk.  (This includes the infamous `777` permission!)
+
+## The Backup System
+
+TODO
 
 ## Configuration
 
 A series `RPI` prefixed environment variables can be used to customize the behaviour of the managed services.  These values can be stored in an `/etc/rpi/config` file to persist configuration.
 
 It is imperative to keep this file secure, as it generally will contain sensitive values:
-   - `$ chmod 600 /etc/rpi/config`
+   - `$ sudo chmod 600 /etc/rpi/config`
 
 ### Global Configuration
 
 The [docker-compose.yml](services/docker-compose.yml) is configured by series of `RPI` prefixed environment variables:
 
-| Variable              | Value                                                                                                                                                                           |
-|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `RPI_HOST_IP`         | defaults to the first ip address found with `hostname -I` or will fallback to `127.0.0.1`                                                                                       |
-| `RPI_HOST_TZ`         | defaults to the contents of `/etc/timezone` or will fallback to `UTC` (See this [article](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for a list of options.) |
-| `RPI_MANIFEST_EDITOR` | defaults to `/usr/bin/vi`                                                                                                                                                       |
-| `RPI_RESTART_POLICY`  | defaults to `no` (See the [documentation](https://github.com/compose-spec/compose-spec/blob/main/spec.md#restart) for details on this setting.)                                 |
-| `RPI_ROOT`            | defaults to `/mnt/media`                                                                                                                                                        |
-| `RPI_SVC_GID`         | defaults to the current user's `gid`, if customizing consider what `gid` your disk is mounted with or accessible by                                                             |
-| `RPI_SVC_GROUPNAME`   | defaults to the group associated with `RPI_SVC_GID` or create a new group `nas` with this `gid`                                                                                 |
-| `RPI_SVC_UID`         | defaults to the current user's `uid`, if customizing consider what `uid` your disk is mounted with or accessible by                                                             |
-| `RPI_SVC_USERNAME`    | defaults the user associated with `RPI_SVC_UID` or create a new user `nas` with this `uid`                                                                                      |
-| `RPI_SVC_UID_RO`      | defaults to the current user's `uid` incremented by 1, used by Samba as the `uid` of the read-only `android` user                                                               |
+| Variable                                       | Value                                                                                                                                                                           |
+|------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `RPI_DISABLE_SINGLE_USER_MODE_WARNING_BOOLEAN` | unset by default, this can be configured to `1` to disable the [single user mode](#what-is-single-user-mode) warning                                                            |
+| `RPI_HOST_IP`                                  | defaults to the first ip address found with `hostname -I` or will fallback to `127.0.0.1`                                                                                       |
+| `RPI_HOST_TZ`                                  | defaults to the contents of `/etc/timezone` or will fallback to `UTC` (See this [article](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for a list of options.) |
+| `RPI_MANIFEST_EDITOR`                          | defaults to `/usr/bin/vi`                                                                                                                                                       |
+| `RPI_RESTART_POLICY`                           | defaults to `no` (See the [documentation](https://github.com/compose-spec/compose-spec/blob/main/spec.md#restart) for details on this setting.)                                 |
+| `RPI_ROOT`                                     | defaults to `/mnt/media`                                                                                                                                                        |
+| `RPI_SVC_GID`                                  | defaults to the `gid` associated with `RPI_SVC_GROUPNAME`                                                                                                                       |                                                                                      |
+| `RPI_SVC_GROUPNAME`                            | defaults to the group of the current user                                                                                                                                       |
+| `RPI_SVC_UID`                                  | defaults to the `uid` associated with `RPI_SVC_USERNAME`                                                                                                                        |
+| `RPI_SVC_USERNAME`                             | defaults to the current user's username                                                                                                                                         |
+| `RPI_SVC_UID_RO`                               | defaults to the first unused `uid` on your Raspberry Pi, used by Samba as the `uid` of the read-only `android` user                                                             |
 
 Store one or more of these variables as successive lines in the `/etc/rpi/config` file:
 
@@ -138,10 +167,10 @@ Store one or more of these variables as successive lines in the `/etc/rpi/config
   RPI_RESTART_POLICY="unless-stopped"
   RPI_ROOT="/mnt/my_custom_name"
   RPI_SVC_GID="1005"
-  RPI_SVC_GROUPNAME="custom_group"
+  RPI_SVC_GROUPNAME="nas"
   RPI_SVC_UID="1005"
   RPI_SVC_UID_RO="1001"
-  RPI_SVC_USERNAME="custom_user"
+  RPI_SVC_USERNAME="nas"
   ```
 
 ### Service Selection
@@ -168,12 +197,18 @@ All services can be enabled with the following:
 
 There are optional shell scripts that can be created and executed when `pictl` encounters specific events.
 
-| Script Path                                      | Event                                             |
-|--------------------------------------------------|---------------------------------------------------|
-| `/etc/rpi/events/event-disk-after-mounted.sh`    | executed after all encrypted disks are mounted    |
-| `/etc/rpi/events/event-disk-before-mounted.sh`   | executed before all encrypted disks are mounted   |
-| `/etc/rpi/events/event-disk-after-unmounted.sh`  | executed after all encrypted disks are unmounted  |
-| `/etc/rpi/events/event-disk-before-unmounted.sh` | executed before all encrypted disks are unmounted |
+| Script Path                                        | Event                                             |
+|----------------------------------------------------|---------------------------------------------------|
+| `/etc/rpi/events/event-backup-scheduler-after.sh`  | executed after the backup scheduler finishes      |
+| `/etc/rpi/events/event-backup-scheduler-before.sh` | executed before the backup scheduler starts       |
+| `/etc/rpi/events/event-backup-scheduler-error.sh`  | executed on a fatal scheduler error               |
+| `/etc/rpi/events/event-backup-job-task-after.sh`   | executed after a backup job task finishes         |
+| `/etc/rpi/events/event-backup-job-task-before.sh`  | executed before a backup job task starts          |
+| `/etc/rpi/events/event-backup-job-task-error.sh`   | executed on a backup job task error               |
+| `/etc/rpi/events/event-disk-after-mounted.sh`      | executed after all encrypted disks are mounted    |
+| `/etc/rpi/events/event-disk-before-mounted.sh`     | executed before all encrypted disks are mounted   |
+| `/etc/rpi/events/event-disk-after-unmounted.sh`    | executed after all encrypted disks are unmounted  |
+| `/etc/rpi/events/event-disk-before-unmounted.sh`   | executed before all encrypted disks are unmounted |
 
 This is particularly useful for maintaining specific file permissions on the shared media.
 
@@ -214,6 +249,10 @@ This service is *not* enabled by default.  To use it, add it to an `RPI_SERVICES
   ```bash
   RPI_SERVICES=("pihole" "plex" "samba")
   ```
+
+#### Backup Service Configuration
+
+TODO
 
 #### Plex Configuration
 
