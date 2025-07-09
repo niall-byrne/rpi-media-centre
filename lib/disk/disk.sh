@@ -36,11 +36,18 @@ _disk_lock() {
 }
 
 _disk_unlock() {
+  local RPI_DISK_CRYPT_PASSWORD
+
   if ! _is_disk_mounted "${RPI_DISK_UUID}" "${RPI_DISK_NAME}" "${RPI_DISK_MOUNT_POINT}"; then
     _security_path_mkdir "${RPI_DISK_MOUNT_POINT}" "${RPI_SVC_USERNAME}" "${RPI_SVC_GROUP}" "700"
 
     echo "Decrypting disk '${RPI_DISK_NAME}' ..."
-    cryptsetup luksOpen "/dev/disk/by-uuid/${RPI_DISK_UUID}" "${RPI_DISK_NAME}"
+
+    if [[ -n "${RPI_DISK_CRYPT_GROUP}" ]]; then
+      _disk_unlock_with_crypt_group
+    else
+      cryptsetup luksOpen "/dev/disk/by-uuid/${RPI_DISK_UUID}" "${RPI_DISK_NAME}"
+    fi
 
     echo "Checking data on disk '${RPI_DISK_NAME}' ..."
     fsck "/dev/mapper/${RPI_DISK_NAME}"
@@ -48,4 +55,24 @@ _disk_unlock() {
     echo "Mounting disk '${RPI_DISK_NAME}' ..."
     mount "/dev/mapper/${RPI_DISK_NAME}" "${RPI_DISK_MOUNT_POINT}" -o noatime,rw,errors=remount-ro
   fi
+}
+
+_disk_unlock_with_crypt_group() {
+  local RPI_DISK_INDEX
+
+  for ((RPI_DISK_INDEX = 0; RPI_DISK_INDEX < "${#RPI_DISK_CRYPT_GROUP_SET[@]}"; RPI_DISK_INDEX++)); do
+    if [[ "${RPI_DISK_CRYPT_GROUP}" == "${RPI_DISK_CRYPT_GROUP_SET["${RPI_DISK_INDEX}"]}" ]]; then
+      RPI_DISK_CRYPT_PASSWORD="${RPI_DISK_CRYPT_PASSWORD_SET["${RPI_DISK_INDEX}"]}"
+      break
+    fi
+  done
+
+  if [[ "${RPI_DISK_CRYPT_PASSWORD}" == $'\\0' ]]; then
+    RPI_DISK_CRYPT_PASSWORD=""
+    _io_prompt "Enter the password for disk group '${RPI_DISK_CRYPT_GROUP}': " "RPI_DISK_CRYPT_PASSWORD" "password"
+    RPI_DISK_CRYPT_PASSWORD_SET["${RPI_DISK_INDEX}"]="${RPI_DISK_CRYPT_PASSWORD}"
+  fi
+
+  echo "${RPI_DISK_CRYPT_PASSWORD}" |
+    cryptsetup luksOpen "/dev/disk/by-uuid/${RPI_DISK_UUID}" "${RPI_DISK_NAME}"
 }

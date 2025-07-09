@@ -66,7 +66,7 @@ _backup_manifest_all_command_wrapper() {
 
 _backup_manifest_help() {
   echo "Each line should be a comma separated series of: "
-  echo "  RPI_BACKUP_JOB_NAME                         - a name for the backup job"
+  echo "  RPI_BACKUP_JOB_NAME                         - a unique name for the backup job"
   echo "  RPI_BACKUP_JOB_GROUP                        - a group for the backup job (daily, weekly, monthly)"
   echo "  RPI_BACKUP_JOB_LOCAL_SOURCE                 - the local path to the backup source"
   echo "  RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER           - an optional local path to rsync the data to (--delete is used)"
@@ -104,6 +104,7 @@ _backup_manifest_line_log_all() {
 
 _backup_manifest_load() {
   local FILE_LINE
+  local RPI_BACKUP_JOB_INDEX
   local RPI_BACKUP_JOB_NAME
   local RPI_BACKUP_JOB_GROUP
   local RPI_BACKUP_JOB_LOCAL_SOURCE
@@ -151,6 +152,13 @@ _backup_manifest_load() {
       <<< "$FILE_LINE"
 
     _backup_job_validation "_backup_manifest_line_invalid"
+
+    for ((RPI_BACKUP_JOB_INDEX = 0; RPI_BACKUP_JOB_INDEX < "${#RPI_BACKUP_JOBS_NAMES[@]}"; RPI_BACKUP_JOB_INDEX++)); do
+      if [[ "${RPI_BACKUP_JOBS_NAMES["${RPI_BACKUP_JOB_INDEX}"]}" == "${RPI_BACKUP_JOB_NAME}" ]]; then
+        echo "The backup job name '${RPI_BACKUP_JOB_NAME}' is used multiple times, this value must be unique."
+        _backup_manifest_line_invalid
+      fi
+    done
 
     RPI_BACKUP_JOBS_NAMES+=("${RPI_BACKUP_JOB_NAME}")
     RPI_BACKUP_JOBS_GROUPS+=("${RPI_BACKUP_JOB_GROUP}")

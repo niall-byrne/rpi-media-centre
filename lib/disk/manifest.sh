@@ -10,7 +10,9 @@ _disk_manifest_all_command() {
   local RPI_DISK_INDEX
   local RPI_DISK_UUID_SET=()
   local RPI_DISK_NAME_SET=()
+  local RPI_DISK_CRYPT_GROUP_SET=()
   local RPI_DISK_MOUNT_POINT_SET=()
+  local RPI_DISK_CRYPT_PASSWORD_SET=()
 
   if _is_disk_encrypted; then
     _disk_manifest_load
@@ -19,6 +21,7 @@ _disk_manifest_all_command() {
         "${1}" \
         "${RPI_DISK_UUID_SET[RPI_DISK_INDEX]}" \
         "${RPI_DISK_NAME_SET[RPI_DISK_INDEX]}" \
+        "${RPI_DISK_CRYPT_GROUP_SET[RPI_DISK_INDEX]}" \
         "${RPI_DISK_MOUNT_POINT_SET[RPI_DISK_INDEX]}"
     done
   fi
@@ -28,7 +31,8 @@ _disk_manifest_all_command_wrapper() {
   local RPI_DISK_MANIFEST_ALL_COMMAND="${1}"
   local RPI_DISK_UUID="${2}"
   local RPI_DISK_NAME="${3}"
-  local RPI_DISK_MOUNT_POINT="${4}"
+  local RPI_DISK_CRYPT_GROUP="${4}"
+  local RPI_DISK_MOUNT_POINT="${5}"
 
   "${RPI_DISK_MANIFEST_ALL_COMMAND}"
 }
@@ -37,6 +41,7 @@ _disk_manifest_help() {
   echo "Each line should be a comma separated series of:"
   echo "  RPI_DISK_UUID                               - the UUID of the disk (find with: sudo blkid)"
   echo "  RPI_DISK_NAME                               - a unique name for this disk"
+  echo "  RPI_DISK_CRYPT_GROUP                        - an optional identifier for disks that share a luks password"
   echo "  RPI_DISK_MOUNT_POINT                        - a valid mount point for this disk on the filesystem"
 }
 
@@ -53,6 +58,7 @@ _disk_manifest_line_invalid() {
 _disk_manifest_line_log() {
   echo "RPI_DISK_UUID='${RPI_DISK_UUID}'"
   echo "RPI_DISK_NAME='${RPI_DISK_NAME}'"
+  echo "RPI_DISK_CRYPT_GROUP='${RPI_DISK_CRYPT_GROUP}'"
   echo "RPI_DISK_MOUNT_POINT='${RPI_DISK_MOUNT_POINT}'"
 }
 
@@ -89,6 +95,7 @@ _disk_manifest_load() {
   local RPI_DISK_INDEX
   local RPI_DISK_UUID
   local RPI_DISK_NAME
+  local RPI_DISK_CRYPT_GROUP
   local RPI_DISK_MOUNT_POINT
 
   echo "-- loading /etc/rpi/crypt file ... --"
@@ -96,7 +103,12 @@ _disk_manifest_load() {
   _security_path_check /etc/rpi/crypt "root" "root" "600"
 
   while IFS= read -r FILE_LINE; do
-    IFS="," read -r RPI_DISK_UUID RPI_DISK_NAME RPI_DISK_MOUNT_POINT <<< "$FILE_LINE"
+    IFS="," read -r \
+      RPI_DISK_UUID \
+      RPI_DISK_NAME \
+      RPI_DISK_CRYPT_GROUP \
+      RPI_DISK_MOUNT_POINT \
+      <<< "$FILE_LINE"
 
     # Ignore comments
     if [[ "${FILE_LINE:0:1}" == "#" ]]; then
@@ -119,7 +131,9 @@ _disk_manifest_load() {
 
     RPI_DISK_UUID_SET+=("${RPI_DISK_UUID}")
     RPI_DISK_NAME_SET+=("${RPI_DISK_NAME}")
+    RPI_DISK_CRYPT_GROUP_SET+=("${RPI_DISK_CRYPT_GROUP}")
     RPI_DISK_MOUNT_POINT_SET+=("${RPI_DISK_MOUNT_POINT}")
+    RPI_DISK_CRYPT_PASSWORD_SET+=($'\\0')
 
   done < /etc/rpi/crypt
 }
