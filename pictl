@@ -11,6 +11,11 @@ export RPI_SAMBA_CREDENTIALS_PASSWORD="${RPI_SAMBA_CREDENTIALS_PASSWORD}"
 export RPI_SAMBA_CREDENTIALS_USERNAME="${RPI_SAMBA_CREDENTIALS_USERNAME}"
 export RPI_SAMBA_SUBNET="${RPI_SAMBA_SUBNET}"
 
+export RPI_SYNCTHING_CREDENTIALS_PASSWORD="${RPI_SYNCTHING_CREDENTIALS_PASSWORD}"
+export RPI_SYNCTHING_CREDENTIALS_USERNAME"${RPI_SYNCTHING_CREDENTIALS_USERNAME}"
+
+RPI_SERVICES=("${RPI_SERVICES[@]:-plex}" "${RPI_SERVICES[@]:-samba}")
+
 # shellcheck source=lib/configuration.sh
 source "${RPI_WORKING_DIRECTORY}/lib/configuration.sh"
 # shellcheck source=lib/disk.sh
@@ -58,9 +63,15 @@ _service_start() {
   _disk_unlock
   _disk_initialize_mounts
 
-  _configure_samba
+  if _is_service_selected "samba"; then
+    _configure_samba
+  fi
 
   _docker_compose_command up -d
+
+  if _is_service_selected "syncthing"; then
+    _configure_syncthing
+  fi
 }
 
 _service_status() {

@@ -13,9 +13,20 @@ _is_disk_mounted() {
 }
 
 _disk_initialize_mounts() {
-  mkdir -p "${RPI_MOUNT_POINT}"/plex/{config,transcode}
-  mkdir -p "${RPI_MOUNT_POINT}"/samba/{cache,lib}
-  mkdir -p "${RPI_MOUNT_POINT}"/shared/{media,transfer}
+  if _is_service_selected "plex"; then
+    mkdir -p "${RPI_MOUNT_POINT}"/plex/{config,transcode}
+    mkdir -p "${RPI_MOUNT_POINT}"/shared/media
+  fi
+
+  if _is_service_selected "samba"; then
+    mkdir -p "${RPI_MOUNT_POINT}"/samba/{cache,lib}
+    mkdir -p "${RPI_MOUNT_POINT}"/shared/{media,transfer}
+  fi
+
+  if _is_service_selected "syncthing"; then
+    mkdir -p "${RPI_MOUNT_POINT}"/syncthing
+    mkdir -p "${RPI_MOUNT_POINT}"/shared/syncthing
+  fi
 }
 
 _disk_lock() {
