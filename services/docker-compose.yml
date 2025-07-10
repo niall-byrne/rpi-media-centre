@@ -34,6 +34,9 @@ services:
     network_mode: host
     profiles:
       - samba
+    env_file:
+      - path: /var/run/rpi/samba.env
+        required: false
     environment:
       - "BROWSABLE=yes"
       - "SAMBA_HOSTS_ALLOW=${RPI_SAMBA_SUBNET:-192.168.0.0/24}"
