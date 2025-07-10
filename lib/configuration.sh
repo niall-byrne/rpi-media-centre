@@ -74,6 +74,9 @@ _configuration_samba() {
   _io_prompt "Enter Samba Username: " "RPI_SAMBA_CREDENTIALS_USERNAME"
   _io_prompt "Enter Samba Password: " "RPI_SAMBA_CREDENTIALS_PASSWORD" "password"
   _io_prompt "Enter Samba Network CIDR: " "RPI_SAMBA_SUBNET"
+
+  _security_path_mkdir "/var/run/rpi" "root" "root" "700"
+  _docker_create_filtered_env "SAMBA_" "/var/run/rpi/samba.env"
 }
 
 _configuration_syncthing() {
