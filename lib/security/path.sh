@@ -30,7 +30,7 @@ _security_path_check_ownership() {
   if [[ "$(stat -c "%u" "${1}")" != "${RPI_SECURITY_REQUIRED_UID}" ]]; then
     {
       echo "SECURITY: The permissions on '${1}' are not secure!"
-      echo "Please consider running: chown ${2}:${3} ${1}"
+      echo "Please consider running: sudo chown ${2}:${3} ${1}"
     } >&2
     return 127
   fi
@@ -38,7 +38,7 @@ _security_path_check_ownership() {
   if [[ "$(stat -c "%g" "${1}")" != "${RPI_SECURITY_REQUIRED_GID}" ]]; then
     {
       echo "SECURITY: The permissions on '${1}' are not secure!"
-      echo "Please consider running: chgrp ${3} ${1}"
+      echo "Please consider running: sudo chgrp ${3} ${1}"
     } >&2
     return 127
   fi
@@ -51,7 +51,7 @@ _security_path_check_permissions() {
   if [[ "$(stat -c "%a" "${1}")" != "${2}" ]]; then
     {
       echo "SECURITY: The permissions on '${1}' are not secure!"
-      echo "Please consider running: chmod ${2} ${1}"
+      echo "Please consider running: sudo chmod ${2} ${1}"
     } >&2
     return 127
   fi
