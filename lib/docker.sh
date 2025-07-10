@@ -23,7 +23,9 @@ _docker_compose_command() {
   # set _SERVICE_REMOVE_CONTAINERS to 1 to ensure containers are removed
 
   local SERVICE
-  SELECTED_SERVICES=()
+  local SELECTED_SERVICES=()
+
+  _dependencies_group_containers
 
   for SERVICE in "${RPI_SERVICES[@]}"; do
     SELECTED_SERVICES+=("--profile")
@@ -44,6 +46,8 @@ _docker_compose_exec() {
   # $@: the command to pass to docker compose run
 
   local SERVICE="${1}"
+
+  _dependencies_group_containers
 
   shift
 

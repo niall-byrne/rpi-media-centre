@@ -103,6 +103,8 @@ _service_upgrade() {
 }
 
 _configuration_and_security() {
+  _dependencies_group_cli
+
   _security_root_require
   _configuration_pictl
   _security_validate

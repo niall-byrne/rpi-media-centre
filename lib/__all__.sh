@@ -12,6 +12,8 @@ source "${RPI_WORKING_DIRECTORY}/lib/configuration.sh"
 source "${RPI_WORKING_DIRECTORY}/lib/control.sh"
 # shellcheck source=lib/debug.sh
 source "${RPI_WORKING_DIRECTORY}/lib/debug.sh"
+# shellcheck source=lib/dependencies/__all__.sh
+source "${RPI_WORKING_DIRECTORY}/lib/dependencies/__all__.sh"
 # shellcheck source=lib/disk/__all__.sh
 source "${RPI_WORKING_DIRECTORY}/lib/disk/__all__.sh"
 # shellcheck source=lib/docker.sh

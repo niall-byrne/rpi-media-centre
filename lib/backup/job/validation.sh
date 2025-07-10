@@ -34,11 +34,13 @@ _backup_job_validation() {
 
   if [[ -n "${RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER}" ]]; then
     _backup_job_validation_path "${RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER}"
+    _dependencies_group_backups_rsync
   fi
 
   if [[ -n "${RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER}" ]]; then
     _backup_job_validation_path "${RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER}"
     _backup_job_validation_tarball_versions "${RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS}"
+    _dependencies_group_backups_tarball
   fi
 
   _backup_job_validation_source "${RPI_BACKUP_JOB_LOCAL_SOURCE}"
@@ -116,16 +118,8 @@ _backup_job_validation_remote_target() {
   case "${1}" in
     "") ;;
     "s3://"*)
-      if command -v aws > /dev/null; then
-        return 0
-      fi
-      {
-        echo " -- BACKUP JOB: The aws cli is required for this job, but it is not installed."
-        _backup_job_log
-        echo " -- BACKUP JOB: Please see https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html"
-      } >&2
       _backup_job_validation_remote_parameters_s3 "${2}"
-      return 127
+      _dependencies_group_backups_aws
       ;;
     *)
       {
