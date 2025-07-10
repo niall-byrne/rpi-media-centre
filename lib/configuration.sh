@@ -47,7 +47,7 @@ _configuration_pictl_help() {
     sed 's/the \[documentation\](\(.*\)) for/\1 for/g' |
     sort
 
-  echo "Please see https://github.com/niall-byrne/rpi-media-centre for further details."
+  echo "Please see ${RPI_PROJECT_REPOSITORY} for further details."
 }
 
 _configuration_pictl_secure_load() {
