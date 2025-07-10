@@ -18,6 +18,20 @@ _is_service_selected() {
   return 1
 }
 
+_docker_create_filtered_env() {
+  # $1: the variable prefix to filter
+  # $2: the path to save as
+
+  declare -p |
+    grep "^declare -. ${1}" |
+    sed 's/^declare -. //g' \
+      > "${2}" || true
+
+  _security_path_secure "${2}" "root" "root" "600"
+
+  RPI_EXIT_CLEANUP_PATHS+=("${2}")
+}
+
 _docker_compose_command() {
   # $@: the command to pass to docker compose
   # set _SERVICE_REMOVE_CONTAINERS to 1 to ensure containers are removed
