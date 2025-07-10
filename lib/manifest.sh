@@ -68,12 +68,15 @@ _manifest_cli_edit() {
 
   case "${1}" in
     backup)
+      _dependencies_requirement_manifest_editor
       _manifest_cli_edit_backup
       ;;
     config)
+      _dependencies_requirement_manifest_editor
       _manifest_cli_edit_config
       ;;
     crypt)
+      _dependencies_requirement_manifest_editor
       _manifest_cli_edit_crypt
       ;;
     *)

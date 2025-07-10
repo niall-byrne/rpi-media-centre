@@ -40,6 +40,8 @@ _backup_cli_keyfile_s3() {
     _backup_cli_usage_error "_backup_cli_usage"
   fi
 
+  _dependencies_group_backups_cli_keyfile
+
   echo "BACKUP SCHEDULER: Generating a new AWS S3 encryption key ..."
 
   _filesystem_check_does_not_exist "${1}"
@@ -118,6 +120,7 @@ _backup_cli_queue_cli_show() {
 
   _backup_scheduler_make_queues
 
+  _dependencies_group_backups_cli_queue
   tree "${RPI_BACKUP_PATH_QUEUE_ROOT}"
 }
 

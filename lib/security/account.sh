@@ -33,7 +33,7 @@ _security_account_provision_service_account() {
 
   echo "SECURITY: The service account has been successfully provisioned."
   echo "If this is the service account you wish to use consider changing the ownership of your media files:"
-  echo "  $ chown -R ${RPI_SVC_USERNAME}:${RPI_SVC_GROUPNAME} ${RPI_ROOT}/shared/media"
+  echo "  $ sudo chown -R ${RPI_SVC_USERNAME}:${RPI_SVC_GROUPNAME} ${RPI_ROOT}/shared/media"
 }
 
 _security_account_provision_service_account_group() {

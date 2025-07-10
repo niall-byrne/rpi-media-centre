@@ -21,15 +21,19 @@ _disk_cli() {
 }
 
 _disk_cli_status_filesystem() {
+  _dependencies_group_disks_cli_filesystem
+
   echo "-- rpi-media-centre disk filesystem status --"
 
   lsblk -f
 }
 
 _disk_cli_status_hardware() {
+  local RPI_DISK_DEVICE
+
   echo "-- rpi-media-centre disk hardware status --"
 
-  local RPI_DISK_DEVICE
+  _dependencies_group_disks_cli_hardware
 
   while read -r RPI_DISK_DEVICE; do
 

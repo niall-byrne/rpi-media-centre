@@ -3,6 +3,10 @@
 set -eo pipefail
 
 # Global Environment Variable Defaults
+
+# shellcheck disable=SC2034
+RPI_PROJECT_REPOSITORY="https://github.com/niall-byrne/rpi-media-centre"
+
 export RPI_EXECUTION_DIRECTORY="${RPI_EXECUTION_DIRECTORY:-"${PWD}"}"
 export RPI_MANIFEST_EDITOR="${RPI_MANIFEST_EDITOR:-"/usr/bin/vi"}"
 export RPI_PATH_BACKUP="${RPI_PATH_BACKUP}"

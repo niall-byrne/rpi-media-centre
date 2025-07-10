@@ -15,7 +15,10 @@ _disk_manifest_all_command() {
   local RPI_DISK_CRYPT_PASSWORD_SET=()
 
   if _is_disk_encrypted; then
+
     _disk_manifest_load
+    _dependencies_group_disks_crypt
+
     for ((RPI_DISK_INDEX = 0; RPI_DISK_INDEX < "${#RPI_DISK_UUID_SET[@]}"; RPI_DISK_INDEX++)); do
       _disk_manifest_all_command_wrapper \
         "${1}" \
