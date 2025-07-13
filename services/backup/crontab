@@ -2,19 +2,20 @@
 
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+RPI_SVC_USERNAME="${RPI_SVC_USERNAME}"
 
-0  ${RPI_BACKUP_SCHEDULING_HOUR} * * *     ${RPI_CONTAINER_USERNAME}  pictl backup schedule daily
-0  ${RPI_BACKUP_SCHEDULING_HOUR} * * *     ${RPI_CONTAINER_USERNAME}  [[ "$(("$(date +%j)"" % 0))" ]] && pictl backup schedule even
-0  ${RPI_BACKUP_SCHEDULING_HOUR} * * *     ${RPI_CONTAINER_USERNAME}  [[ "$(("$(date +%j)"" % 1))" ]] && pictl backup schedule odd
-1  ${RPI_BACKUP_SCHEDULING_HOUR} * * SUN   ${RPI_CONTAINER_USERNAME}  pictl backup schedule sunday
-2  ${RPI_BACKUP_SCHEDULING_HOUR} * * MON   ${RPI_CONTAINER_USERNAME}  pictl backup schedule monday
-3  ${RPI_BACKUP_SCHEDULING_HOUR} * * TUE   ${RPI_CONTAINER_USERNAME}  pictl backup schedule tuesday
-4  ${RPI_BACKUP_SCHEDULING_HOUR} * * WED   ${RPI_CONTAINER_USERNAME}  pictl backup schedule wednesday
-5  ${RPI_BACKUP_SCHEDULING_HOUR} * * THU   ${RPI_CONTAINER_USERNAME}  pictl backup schedule thursday
-6  ${RPI_BACKUP_SCHEDULING_HOUR} * * FRI   ${RPI_CONTAINER_USERNAME}  pictl backup schedule friday
-7  ${RPI_BACKUP_SCHEDULING_HOUR} * * SAT   ${RPI_CONTAINER_USERNAME}  pictl backup schedule saturday
-8  ${RPI_BACKUP_SCHEDULING_HOUR} */2 * *   ${RPI_CONTAINER_USERNAME}  pictl backup schedule biweekly
-9  ${RPI_BACKUP_SCHEDULING_HOUR} 1 * *     ${RPI_CONTAINER_USERNAME}  pictl backup schedule monthly
-10 ${RPI_BACKUP_SCHEDULING_HOUR} 1,15 * *  ${RPI_CONTAINER_USERNAME}  pictl backup schedule bimonthly
-11 ${RPI_BACKUP_SCHEDULING_HOUR} 1 */3 *   ${RPI_CONTAINER_USERNAME}  pictl backup schedule quarterly
-12 ${RPI_BACKUP_SCHEDULING_HOUR} 1 */6 *   ${RPI_CONTAINER_USERNAME}  pictl backup schedule biannually
+0  ${RPI_BACKUP_SCHEDULING_HOUR} * * *     root  pictl backup schedule daily
+0  ${RPI_BACKUP_SCHEDULING_HOUR} * * *     root  [[ "$(("$(date +%j)"" % 0))" ]] && pictl backup schedule even
+0  ${RPI_BACKUP_SCHEDULING_HOUR} * * *     root  [[ "$(("$(date +%j)"" % 1))" ]] && pictl backup schedule odd
+1  ${RPI_BACKUP_SCHEDULING_HOUR} * * SUN   root  pictl backup schedule sunday
+2  ${RPI_BACKUP_SCHEDULING_HOUR} * * MON   root  pictl backup schedule monday
+3  ${RPI_BACKUP_SCHEDULING_HOUR} * * TUE   root  pictl backup schedule tuesday
+4  ${RPI_BACKUP_SCHEDULING_HOUR} * * WED   root  pictl backup schedule wednesday
+5  ${RPI_BACKUP_SCHEDULING_HOUR} * * THU   root  pictl backup schedule thursday
+6  ${RPI_BACKUP_SCHEDULING_HOUR} * * FRI   root  pictl backup schedule friday
+7  ${RPI_BACKUP_SCHEDULING_HOUR} * * SAT   root  pictl backup schedule saturday
+8  ${RPI_BACKUP_SCHEDULING_HOUR} */2 * *   root  pictl backup schedule biweekly
+9  ${RPI_BACKUP_SCHEDULING_HOUR} 1 * *     root  pictl backup schedule monthly
+10 ${RPI_BACKUP_SCHEDULING_HOUR} 1,15 * *  root  pictl backup schedule bimonthly
+11 ${RPI_BACKUP_SCHEDULING_HOUR} 1 */3 *   root  pictl backup schedule quarterly
+12 ${RPI_BACKUP_SCHEDULING_HOUR} 1 */6 *   root  pictl backup schedule biannually

@@ -53,16 +53,3 @@ _docker_compose_exec() {
 
   popd >> /dev/null
 }
-
-_docker_secure_bind_mounts() {
-  if _is_service_selected "plex"; then
-    chmod 700 "${RPI_PLEX_PATH_CONFIG}"
-    chmod 700 "${RPI_PLEX_PATH_TRANSCODE}"
-  fi
-  if _is_service_selected "samba"; then
-    chmod 700 "${RPI_SAMBA_PATH_CONFIG}"
-  fi
-  if _is_service_selected "syncthing"; then
-    chmod 700 "${RPI_SYNCTHING_PATH_CONFIG}"
-  fi
-}

@@ -12,7 +12,11 @@ source "${RPI_WORKING_DIRECTORY}/lib/__all__.sh"
 _help() {
   echo "-- rpi-media-centre service manager --"
   echo "Usage:"
-  echo -e "\tpictl\t(backup|help|install|kill|logs|manifest|pause|resume|start|status|stop|upgrade)\n"
+  echo -e "\tpictl\t(account|backup|help|install|kill|logs|manifest|pause|resume|start|status|stop|upgrade)\n"
+}
+
+_service_account() {
+  _security_account_provision_service_account
 }
 
 _service_backup() {
@@ -22,8 +26,9 @@ _service_backup() {
 }
 
 _service_install() {
-  _installer_service_shim
-  _installer_service_backup
+  # $@: the installer cli args
+
+  _installer_cli "$@"
 }
 
 _service_kill() {
@@ -67,8 +72,6 @@ _service_start() {
 
   _docker_compose_command up -d
 
-  _docker_secure_bind_mounts
-
   if _is_service_selected "syncthing"; then
     _configuration_syncthing
   fi
@@ -93,53 +96,68 @@ _service_upgrade() {
   _service_start
 }
 
-_with_configuration() {
-  # $1 the command to launch
+_configuration_and_security() {
+  _security_root_require
   _configuration_pictl
-  "$@"
+  _security_validate
+
+  if [[ "${1}" != "account" ]]; then
+    _security_defaults_set
+    _security_warning_single_user_mode
+  fi
 }
 
 main() {
   local _SERVICE_REMOVE_CONTAINERS=0
 
+  _configuration_and_security "$@"
+
   case "${1}" in
+    account)
+      shift
+      _service_account
+      ;;
     backup)
       shift
-      _with_configuration _service_backup "$@"
+      _service_backup "$@"
+      ;;
+    debug)
+      _configuration_pictl_debug
       ;;
     help)
       _help
       ;;
     install)
-      _with_configuration _service_install
+      shift
+      _service_install "$@"
       ;;
     kill)
-      _with_configuration _service_kill
+      _service_kill
       ;;
     manifest)
       shift
-      _with_configuration _service_manifest "$@"
+      _service_manifest "$@"
       ;;
     logs)
-      _with_configuration _service_logs
+      _service_logs
       ;;
     pause)
-      _with_configuration _service_pause
+      _service_pause
       ;;
     resume)
-      _with_configuration _service_resume
+      _service_resume
       ;;
     start)
-      _with_configuration _service_start
+      _service_start
       ;;
     status)
-      _with_configuration _service_status
+      _service_status
       ;;
     stop)
-      _with_configuration _service_stop
+      _service_stop
       ;;
     upgrade)
-      _with_configuration _service_upgrade
+      _service_upgrade
       ;;
     *)
       _help >&2

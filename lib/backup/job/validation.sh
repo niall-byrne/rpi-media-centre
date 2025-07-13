@@ -54,14 +54,14 @@ _backup_job_validation_key_file() {
   # $1: the path to check
 
   _filesystem_check_exists "${1}"
-  _filesystem_check_permissions "${1}" "400"
+  _security_path_check "${1}" "root" "root" "400"
 }
 
 _backup_job_validation_path() {
   # $1: the path to check
 
   _filesystem_check_is_folder "${1}"
-  _filesystem_check_permissions "${1}" "700"
+  _security_path_check "${1}" "${RPI_SVC_USERNAME}" "${RPI_SVC_GROUPNAME}" "700"
 }
 
 _backup_job_validation_queue() {

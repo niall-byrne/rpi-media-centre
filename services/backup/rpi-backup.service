@@ -6,10 +6,12 @@ RequiresMountsFor=${RPI_ROOT}
 [Service]
 Type=oneshot
 Environment="RPI_RUNTIME_ENVIRONMENT=service"
-ExecStart=/usr/local/bin/pictl backup service start
+Environment="RPI_SVC_GROUPNAME=${RPI_SVC_GROUPNAME}"
+Environment="RPI_SVC_USERNAME=${RPI_SVC_USERNAME}"
+ExecStart=/usr/local/sbin/pictl backup service start
 Nice=10
-User=${RPI_CONTAINER_UID}
-Group=${RPI_CONTAINER_GID}
+User=root
+Group=root
 UMask=077
 
 [Install]

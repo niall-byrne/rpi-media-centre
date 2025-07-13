@@ -7,15 +7,16 @@ set -eo pipefail
 _event_script() {
   # $1: the event script to execute
 
-  if [[ -f ".rpi/${1}" ]]; then
-    echo "-- loading .rpi/${1} file ... --"
+  if [[ -f "/etc/rpi/events/${1}" ]]; then
+    echo "-- loading /etc/rpi/events/${1} file ... --"
 
     # Don't halt execution if the event script fails.
 
-    if ! _filesystem_check_permissions ".rpi/${1}" "700"; then
+    if ! _security_path_check "/etc/rpi/events" "root" "root" "700" ||
+      ! _security_path_check "/etc/rpi/events/${1}" "root" "root" "700"; then
       return 0
     fi
 
-    ".rpi/${1}" || return 0
+    "/etc/rpi/events/${1}" || return 0
   fi
 }
