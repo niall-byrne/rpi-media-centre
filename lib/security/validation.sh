@@ -12,11 +12,8 @@ _security_validate() {
 _security_validate_ids() {
   if [[ "${RPI_SVC_GID}" == "0" ]] ||
     [[ "${RPI_SVC_UID}" == "0" ]]; then
-    {
-      echo "-- ERROR --"
-      echo "SECURITY: invalid configuration!"
-      echo "Neither the 'RPI_SVC_GID' or 'RPI_SVC_UID' can be zero."
-    }
+    _cli_log_error "SECURITY: invalid configuration!"
+    _cli_log_error "Neither the 'RPI_SVC_GID' or 'RPI_SVC_UID' can be zero."
     return 127
   fi
 
@@ -31,13 +28,10 @@ _security_validate_ids_relationship() {
 
   if [[ -n "${!1}" ]] &&
     [[ -z "${!2}" ]]; then
-    {
-      echo "-- ERROR --"
-      echo "SECURITY: invalid configuration!"
-      echo "The config cannot specify ${1} without a value for ${2}:"
-      echo " - ${1} may be used with the 'account' command to provision a new ${3}"
-      echo " - ${2} may be used to specify an existing ${3}"
-    }
+    _cli_log_error "SECURITY: invalid configuration!"
+    _cli_log_error "The config cannot specify ${1} without a value for ${2}:"
+    echo " - ${1} may be used with the 'account' command to provision a new ${3}"
+    echo " - ${2} may be used to specify an existing ${3}"
     return 127
   fi
 
@@ -46,11 +40,8 @@ _security_validate_ids_relationship() {
 _security_validate_names() {
   if [[ "${RPI_SVC_USERNAME}" == "root" ]] ||
     [[ "${RPI_SVC_GROUPNAME}" == "root" ]]; then
-    {
-      echo "-- ERROR --"
-      echo "SECURITY: invalid configuration!"
-      echo "Neither the 'RPI_SVC_GROUPNAME' or 'RPI_SVC_USERNAME' can be root."
-    }
+    _cli_log_error "SECURITY: invalid configuration!"
+    _cli_log_error "Neither the 'RPI_SVC_GROUPNAME' or 'RPI_SVC_USERNAME' can be root."
     return 127
   fi
 }

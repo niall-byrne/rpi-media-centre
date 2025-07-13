@@ -10,7 +10,7 @@ _is_disk_encrypted() {
 
 _is_disk_mounted() {
   if ! mountpoint "${RPI_DISK_MOUNT_POINT}" >> /dev/null 2>&1; then
-    echo "The disk with UUID '${RPI_DISK_UUID}' is not mounted !"
+    _cli_log_error "The disk with UUID '${RPI_DISK_UUID}' is not mounted !"
     return 127
   fi
 }

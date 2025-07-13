@@ -15,7 +15,7 @@ _installer() {
 }
 
 _installer_service_backup() {
-  echo "INSTALLER: Installing backup systemd service ..."
+  _cli_log_warning "INSTALLER: Installing backup systemd service ..."
 
   # shellcheck disable=SC2016
   envsubst \
@@ -38,7 +38,7 @@ _installer_service_backup() {
   systemctl daemon-reload
   systemctl enable rpi-backup.timer
 
-  echo "INSTALLER: Service backup systemd service installed!"
+  _cli_log_success "INSTALLER: Service backup systemd service installed!"
 }
 
 _installer_service_repository() {
@@ -47,7 +47,7 @@ _installer_service_repository() {
   local RPI_REPOSITORY_SHA="${1:-"origin/main"}"
   local RPI_REPOSITORY_SOURCE="https://github.com/niall-byrne/rpi-media-centre.git"
 
-  echo "INSTALLER: Installing repository to ${RPI_REPOSITORY_LOCATION} ..."
+  _cli_log_warning "INSTALLER: Installing repository to ${RPI_REPOSITORY_LOCATION} ..."
 
   _security_path_mkdir "${RPI_REPOSITORY_LOCATION}" "${RPI_SVC_USERNAME}" "${RPI_SVC_GROUPNAME}" "700"
 
@@ -58,6 +58,7 @@ _installer_service_repository() {
       git fetch &&
       git reset --hard '${RPI_REPOSITORY_SHA}'
     "
+    rm -f "${RPI_REPOSITORY_LOCATION}/source/${RPI_PATH_COMPILED_ROOT}/"*
   else
     sudo -u "${RPI_SVC_USERNAME}" bash -c "
       cd '${RPI_REPOSITORY_LOCATION}' &&
@@ -67,11 +68,11 @@ _installer_service_repository() {
     "
   fi
 
-  echo "INSTALLER: Repository has been installed to ${RPI_REPOSITORY_LOCATION} !"
+  _cli_log_success "INSTALLER: Repository has been installed to ${RPI_REPOSITORY_LOCATION} !"
 }
 
 _installer_service_shim() {
-  echo "INSTALLER: Installing service shim ..."
+  _cli_log_warning "INSTALLER: Installing service shim ..."
 
   # shellcheck disable=SC2016
   envsubst \
@@ -80,5 +81,5 @@ _installer_service_shim() {
 
   _security_path_secure /usr/local/sbin/pictl "root" "root" "755"
 
-  echo "INSTALLER: Service shim installed!"
+  _cli_log_success "INSTALLER: Service shim installed!"
 }

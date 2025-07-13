@@ -4,56 +4,39 @@
 
 set -eo pipefail
 
-_disk_cli() {
-  # $1: the subcommand to execute
-
-  case "${1}" in
-    filesystem)
-      _disk_cli_status_filesystem
-      ;;
-    hardware)
-      _disk_cli_status_hardware
-      ;;
-    *)
-      _disk_cli_usage_error
-      ;;
-  esac
-}
-
-_disk_cli_status_filesystem() {
+_disk_cli_filesystem() {
   _dependencies_group_disks_cli_filesystem
 
-  echo "-- rpi-media-centre disk filesystem status --"
+  _cli_pretty_title "-- rpi-media-centre disk filesystem status --"
 
-  lsblk -f
+  lsblk -f |
+    _cli_pretty_block_devices_mappings
 }
 
-_disk_cli_status_hardware() {
+_disk_cli_hardware() {
   local RPI_DISK_DEVICE
+  local RPI_DISK_DETAILS
 
-  echo "-- rpi-media-centre disk hardware status --"
+  _cli_pretty_title "-- rpi-media-centre disk hardware status --"
 
   _dependencies_group_disks_cli_hardware
 
   while read -r RPI_DISK_DEVICE; do
 
     if [[ -e "/dev/${RPI_DISK_DEVICE}" ]]; then
-      hdparm -C "/dev/${RPI_DISK_DEVICE}" || continue
+      RPI_DISK_DETAILS="$(
+        hdparm -C "/dev/${RPI_DISK_DEVICE}" |
+          awk 'NR > 1'
+      )" || continue
+
+      _cli_pretty_block_devices "${RPI_DISK_DETAILS}" |
+        _cli_pretty_block_devices_status
+
     fi
-  done <<< "$(lsblk | grep disk | grep -v "mmc" | cut -d ' ' -f 1)"
-}
-
-_disk_cli_usage() {
-  echo "-- rpi-media-centre disk manager --"
-  echo "Usage:"
-  echo -e "\tpictl disk [SUBCOMMAND]"
-  echo -e "\t      filesystem             - display filesystem details"
-  echo -e "\t      hardware               - display hardware details"
-}
-
-_disk_cli_usage_error() {
-  {
-    _disk_cli_usage
-  } >&2
-  return 127
+  done <<< "$(
+    lsblk |
+      grep disk |
+      grep -v "mmc" |
+      cut -d ' ' -f 1
+  )"
 }

@@ -9,66 +9,32 @@ RPI_WORKING_DIRECTORY="$(realpath "$(dirname "$0")")"
 # shellcheck source=lib/__all__.sh
 source "${RPI_WORKING_DIRECTORY}/lib/__all__.sh"
 
-_help() {
-  echo "-- rpi-media-centre service manager --"
-  echo "Usage:"
-  echo -e "\tpictl\t(account|backup|disk|help|install|kill|logs|manifest|pause|resume|start|status|stop|upgrade)\n"
-}
-
-_service_account() {
-  _security_account_provision_service_account
-}
-
-_service_backup() {
-  # $@: the backup cli args
-
-  _backup_cli "$@"
-}
-
-_service_disk() {
-  # $@: the disk cli args
-
-  _disk_cli "$@"
-}
-
-_service_install() {
-  # $@: the installer cli args
-
-  _installer_cli "$@"
-}
-
-_service_kill() {
-  echo "Media centre now being killed ..."
+_pictl_cli_kill() {
+  _cli_log_warning "Media centre now being killed ..."
   _SERVICE_REMOVE_CONTAINERS=1
   _docker_compose_command kill
   _disk_manifest_unmount_all
 }
 
-_service_logs() {
+_pictl_cli_logs() {
   _docker_compose_command logs -f
 }
 
-_service_manifest() {
-  # $@: the manifest cli args
-
-  _manifest_cli "$@"
-}
-
-_service_pause() {
-  echo "Media centre now being paused ..."
+_pictl_cli_pause() {
+  _cli_log_warning "Media centre now being paused ..."
   _SERVICE_REMOVE_CONTAINERS=0
   _docker_compose_command stop
 }
 
-_service_resume() {
+_pictl_cli_resume() {
   _is_disk_mounted_all
 
-  echo "Media centre now being resumed ..."
+  _cli_log_warning "Media centre now being resumed ..."
   _docker_compose_command start
 }
 
-_service_start() {
-  echo "Media centre now starting ..."
+_pictl_cli_start() {
+  _cli_log_warning "Media centre now starting ..."
   _disk_manifest_mount_all
   _disk_initialize_mounts
 
@@ -87,30 +53,30 @@ _service_start() {
   fi
 }
 
-_service_status() {
+_pictl_cli_status() {
   _docker_compose_command ps -a
 }
 
-_service_stop() {
-  echo "Media centre now stopping ..."
+_pictl_cli_stop() {
+  _cli_log_warning "Media centre now stopping ..."
   _SERVICE_REMOVE_CONTAINERS=1
   _docker_compose_command stop
   _disk_manifest_unmount_all
 }
 
-_service_upgrade() {
-  echo "Media centre now being upgraded ..."
+_pictl_cli_upgrade() {
+  _cli_log_warning "Media centre now being upgraded ..."
   _SERVICE_REMOVE_CONTAINERS=1
   _docker_compose_command stop
   _docker_compose_command pull
-  _service_start
+  _pictl_cli_start
 }
 
 _configuration_and_security() {
   _dependencies_group_cli
-
   _security_root_require
   _configuration_pictl
+  _io_colours_load
   _security_validate
 
   if [[ "${1}" != "account" ]]; then
@@ -121,65 +87,11 @@ _configuration_and_security() {
 
 main() {
   local _SERVICE_REMOVE_CONTAINERS=0
-
   _configuration_and_security "$@"
 
-  case "${1}" in
-    account)
-      shift
-      _service_account
-      ;;
-    backup)
-      shift
-      _service_backup "$@"
-      ;;
-    disk)
-      shift
-      _service_disk "$@"
-      ;;
-    debug)
-      _configuration_pictl_debug
-      ;;
-    help)
-      _help
-      ;;
-    install)
-      shift
-      _service_install "$@"
-      ;;
-    kill)
-      _service_kill
-      ;;
-    manifest)
-      shift
-      _service_manifest "$@"
-      ;;
-    logs)
-      _service_logs
-      ;;
-    pause)
-      _service_pause
-      ;;
-    resume)
-      _service_resume
-      ;;
-    start)
-      _service_start
-      ;;
-    status)
-      _service_status
-      ;;
-    stop)
-      _service_stop
-      ;;
-    upgrade)
-      _service_upgrade
-      ;;
-    *)
-      _help >&2
-      return 127
-      ;;
-  esac
-}
+  _cli_bootstrap
 
+  _pictl_cli "$@"
+
+}
 main "$@"

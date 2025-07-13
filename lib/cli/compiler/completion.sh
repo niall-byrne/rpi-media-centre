@@ -1,0 +1,132 @@
+#!/bin/bash
+
+# pictl cli compiler completion library
+
+set -eo pipefail
+
+_cli_compiler_completion() {
+  _cli_log_warning "CLI: Compiling ..."
+  time _cli_compiler_configuration_load_to_buffer "_cli_compiler_completion_dispatcher"
+  _cli_log_success "CLI: Ready to go!"
+}
+
+_cli_compiler_completion_dispatcher() {
+  case "${RPI_COMPILER_STAGE}" in
+    0)
+      _cli_compiler_complete_write_file_header
+      _cli_compiler_completion_bash_completion_case_begin
+      ;;
+    1)
+      _cli_compiler_buffer_assign "RPI_CLI_COMPILER_HEADER"
+      ;;
+    2)
+      _cli_compiler_buffer_assign "RPI_CLI_COMPILER_USAGE_STRING"
+      _cli_compiler_completion_bash_completion
+      echo "  PICTL: Compiled ${RPI_CLI_COMPILER_HEADER}"
+      ;;
+    3) ;;
+    4)
+      _cli_compiler_completion_bash_completion_case_condition_wildcard
+      _cli_compiler_completion_bash_completion_case_end
+      _cli_compiler_complete_write_file_footer
+      echo -en "$RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE" > "${RPI_PATH_COMPILED_COMPLETION}"
+      ;;
+  esac
+}
+
+_cli_compiler_completion_bash_completion() {
+  local RPI_CLI_COMPILER_COMPLETION_COMMAND_NAME=""
+  local RPI_CLI_COMPILER_COMPLETION_SUBCOMMANDS=()
+  local RPI_CLI_COMPILER_USAGE_LINE_INDEX=0
+
+  while IFS= read -r FILE_LINE; do
+    case "${RPI_CLI_COMPILER_USAGE_LINE_INDEX}" in
+      0 | 1) ;;
+      2)
+        _cli_compiler_completion_bash_completion_command_name
+        ;;
+      *)
+        _cli_compiler_completion_bash_completion_subcommands
+        ;;
+    esac
+    ((RPI_CLI_COMPILER_USAGE_LINE_INDEX += 1))
+  done <<< "${RPI_CLI_COMPILER_USAGE_STRING}"
+
+  _cli_compiler_completion_bash_completion_case_condition_subcommand
+}
+
+_cli_compiler_completion_bash_completion_command_name() {
+  local RPI_CLI_COMPILER_COMPLETION_COMMAND_WORD=""
+  local RPI_CLI_COMPILER_COMPLETION_COMMAND_WORDS
+
+  IFS=' ' read -ra RPI_CLI_COMPILER_COMPLETION_COMMAND_WORDS <<< "${FILE_LINE}"
+
+  for RPI_CLI_COMPILER_COMPLETION_COMMAND_WORD in "${RPI_CLI_COMPILER_COMPLETION_COMMAND_WORDS[@]}"; do
+    case "${RPI_CLI_COMPILER_COMPLETION_COMMAND_WORD:0:1}" in
+      "(" | "[" | "<") ;;
+      *)
+        RPI_CLI_COMPILER_COMPLETION_COMMAND_NAME+="|${RPI_CLI_COMPILER_COMPLETION_COMMAND_WORD}"
+        ;;
+    esac
+  done <<< "${FILE_LINE}"
+
+  RPI_CLI_COMPILER_COMPLETION_COMMAND_NAME="${RPI_CLI_COMPILER_COMPLETION_COMMAND_NAME:1}"
+}
+
+_cli_compiler_completion_bash_completion_subcommands() {
+  local RPI_CLI_COMPILER_USAGE_SUBCOMMAND
+  local RPI_CLI_COMPILER_USAGE_UNUSED
+
+  # shellcheck disable=SC2034
+  IFS="${RPI_CLI_COMPILER_FIELD_SEPERATOR}" read -r \
+    RPI_CLI_COMPILER_USAGE_SUBCOMMAND \
+    RPI_CLI_COMPILER_USAGE_UNUSED \
+    <<< "${FILE_LINE}"
+
+  # shellcheck disable=SC2034
+  IFS=" " read -r \
+    RPI_CLI_COMPILER_USAGE_SUBCOMMAND_NAME \
+    RPI_CLI_COMPILER_USAGE_UNUSED \
+    <<< "${RPI_CLI_COMPILER_USAGE_SUBCOMMAND}"
+
+  RPI_CLI_COMPILER_COMPLETION_SUBCOMMANDS+=("${RPI_CLI_COMPILER_USAGE_SUBCOMMAND_NAME}")
+}
+
+_cli_compiler_completion_bash_completion_case_begin() {
+  RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="  case \"\${1}\" in\n"
+}
+
+_cli_compiler_completion_bash_completion_case_end() {
+  RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="  esac\n"
+  RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="}\n"
+}
+
+_cli_compiler_completion_bash_completion_case_condition_subcommand() {
+  RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="    *'${RPI_CLI_COMPILER_COMPLETION_COMMAND_NAME}')\n"
+  RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="      echo '${RPI_CLI_COMPILER_COMPLETION_SUBCOMMANDS[*]}'\n"
+  RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="      ;;\n"
+}
+
+_cli_compiler_completion_bash_completion_case_condition_wildcard() {
+  RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="    *)\n"
+  RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="      return 1\n"
+  RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="      ;;\n"
+}
+
+_cli_compiler_complete_write_file_footer() {
+  RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="\n"
+  RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="complete -F _rpi_bash_completion pictl\n"
+}
+
+_cli_compiler_complete_write_file_header() {
+  local FILE_LINE
+
+  while IFS=$'\n' read -r FILE_LINE; do
+    RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="${FILE_LINE}\n"
+  done < <(cat "${RPI_PATH_FRAGMENTS}/completion")
+
+  RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="\n"
+  RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="_rpi_bash_completion_lookup(){\n"
+  RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="  # \$1: the command combination to lookup\n"
+  RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="\n"
+}
