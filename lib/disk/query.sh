@@ -5,7 +5,7 @@
 set -eo pipefail
 
 _is_disk_encrypted() {
-  test -f .rpi/crypt
+  test -f /etc/rpi/crypt
 }
 
 _is_disk_mounted() {

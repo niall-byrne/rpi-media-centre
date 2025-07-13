@@ -44,7 +44,7 @@ _backup_cli_keyfile_s3() {
 
   _filesystem_check_does_not_exist "${1}"
   openssl rand 32 > "${1}"
-  chmod 400 "${1}"
+  _security_path_secure "${1}" "root" "root" "600"
 
   echo "BACKUP SCHEDULER: Successfully generated '${1}' !"
 }
@@ -60,9 +60,9 @@ _backup_cli_recover() {
     _backup_cli_usage_error "_backup_cli_usage"
   fi
 
+  # shellcheck disable=SC2034
   RPI_BACKUP_JOB_RECOVERY_PATH="$(_filesystem_resolve_path_relative_to_cli "${2}")"
 
-  _backup_job_validation_path "${RPI_BACKUP_JOB_RECOVERY_PATH}"
   _backup_manifest_all_command "_backup_job_task_recover" "" "${1}"
 }
 
@@ -91,7 +91,7 @@ _backup_cli_queue_cli_clear() {
   _backup_scheduler_make_queues
 
   _io_prompt_confirmation
-  sudo find "${RPI_BACKUP_PATH_QUEUE_ROOT}" -type f -delete
+  find "${RPI_BACKUP_PATH_QUEUE_ROOT}" -type f -delete
 
   echo "BACKUP SCHEDULER: All queued backup jobs have been removed !"
 }
@@ -108,7 +108,7 @@ _backup_cli_queue_cli_remove() {
   _backup_scheduler_make_queues
 
   _io_prompt_confirmation
-  sudo find "${RPI_BACKUP_PATH_QUEUE_ROOT}" -type f -name "${1}" -delete
+  find "${RPI_BACKUP_PATH_QUEUE_ROOT}" -type f -name "${1}" -delete
 
   echo "BACKUP SCHEDULER: Queued backup jobs matching '${1}' have been removed !"
 }
@@ -118,7 +118,7 @@ _backup_cli_queue_cli_show() {
 
   _backup_scheduler_make_queues
 
-  sudo tree "${RPI_BACKUP_PATH_QUEUE_ROOT}"
+  tree "${RPI_BACKUP_PATH_QUEUE_ROOT}"
 }
 
 _backup_cli_queue_cli_usage() {

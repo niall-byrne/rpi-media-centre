@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eo pipefail
+set -Eeo pipefail
 
 # shellcheck source=lib/defaults.sh
 source "${RPI_WORKING_DIRECTORY}/lib/defaults.sh"
@@ -20,11 +20,13 @@ source "${RPI_WORKING_DIRECTORY}/lib/docker.sh"
 source "${RPI_WORKING_DIRECTORY}/lib/event.sh"
 # shellcheck source=lib/filesystem.sh
 source "${RPI_WORKING_DIRECTORY}/lib/filesystem.sh"
-# shellcheck source=lib/installer.sh
-source "${RPI_WORKING_DIRECTORY}/lib/installer.sh"
+# shellcheck source=lib/installer/cli.sh
+source "${RPI_WORKING_DIRECTORY}/lib/installer/cli.sh"
 # shellcheck source=lib/io.sh
 source "${RPI_WORKING_DIRECTORY}/lib/io.sh"
 # shellcheck source=lib/manifest.sh
 source "${RPI_WORKING_DIRECTORY}/lib/manifest.sh"
+# shellcheck source=lib/security/__all__.sh
+source "${RPI_WORKING_DIRECTORY}/lib/security/__all__.sh"
 # shellcheck source=lib/trap.sh
 source "${RPI_WORKING_DIRECTORY}/lib/trap.sh"

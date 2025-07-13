@@ -52,11 +52,11 @@ This project combines the following software:
     - `$ sudo cryptsetup luksClose /dev/mapper/decrypted_disk`
 3. Determine the UUID of the encrypted partition you created:
     - `$ sudo blkid`
-4. Create a `.rpi/crypt` file inside the cloned repository containing this UUID:
-    - `$ mkdir .rpi`
-    - `$ echo "my-uuid-value,media,/mnt/media" > .rpi/crypt`
+4. Create a `/etc/rpi/crypt` file inside the cloned repository containing this UUID:
+    - `$ sudo mkdir -p /etc/rpi`
+    - `$ echo "my-uuid-value,media,/mnt/media" | sudo tee /etc/rpi/crypt`
 5. Start the software:
-    - `$ ./pictl start`
+    - `$ sudo ./pictl start`
 6. Enter the disk encryption password and Samba credentials.
 7. Listen to some music already.
 
@@ -72,7 +72,7 @@ This project combines the following software:
 5. Test your fstab mounts the disk:
    - `$ sudo mount -a`
 6. Start the software:
-    - `$ ./pictl start`
+   - `$ sudo ./pictl start`
 7. Since the disk is already mounted at the expected mount-point, there is no decryption prompt.  The service can be used immediately.
 8. Listen to some music already.
 
@@ -104,40 +104,44 @@ To *keep* this user read-only, avoid creating directories with 'other writable' 
 
 ## Configuration
 
-A series `RPI` prefixed environment variables can be used to customize the behaviour of the managed services.  These values can be stored in an `.rpi/config` file to persist configuration.
+A series `RPI` prefixed environment variables can be used to customize the behaviour of the managed services.  These values can be stored in an `/etc/rpi/config` file to persist configuration.
 
 It is imperative to keep this file secure, as it generally will contain sensitive values:
-   - `$ chmod 600 .rpi/config`
+   - `$ chmod 600 /etc/rpi/config`
 
 ### Global Configuration
 
 The [docker-compose.yml](services/docker-compose.yml) is configured by series of `RPI` prefixed environment variables:
 
-| Variable               | Value                                                                                                                                           |
-|------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
-| `RPI_CONTAINER_GID`    | defaults to the current user's `gid`, if customizing consider what `gid` your disk is mounted with                                              |
-| `RPI_CONTAINER_UID`    | defaults to the current user's `uid`, if customizing consider what `uid` your disk is mounted with                                              |
-| `RPI_CONTAINER_UID_RO` | defaults to the current user's `uid` incremented by 1, used by Samba as the `uid` of the read-only `android` user                               |
-| `RPI_MANIFEST_EDITOR`  | defaults to `/usr/bin/vi`                                                                                                                       |
-| `RPI_RESTART_POLICY`   | defaults to `no` (See the [documentation](https://github.com/compose-spec/compose-spec/blob/main/spec.md#restart) for details on this setting.) |
-| `RPI_ROOT`             | defaults to `/mnt/media`                                                                                                                        |
+| Variable              | Value                                                                                                                                           |
+|-----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| `RPI_MANIFEST_EDITOR` | defaults to `/usr/bin/vi`                                                                                                                       |
+| `RPI_RESTART_POLICY`  | defaults to `no` (See the [documentation](https://github.com/compose-spec/compose-spec/blob/main/spec.md#restart) for details on this setting.) |
+| `RPI_ROOT`            | defaults to `/mnt/media`                                                                                                                        |
+| `RPI_SVC_GID`         | defaults to the current user's `gid`, if customizing consider what `gid` your disk is mounted with or accessible by                             |
+| `RPI_SVC_GROUPNAME`   | defaults to the group associated with `RPI_SVC_GID` or create a new group `nas` with this `gid`                                                 |
+| `RPI_SVC_UID`         | defaults to the current user's `uid`, if customizing consider what `uid` your disk is mounted with or accessible by                             |
+| `RPI_SVC_USERNAME`    | defaults the user associated with `RPI_SVC_UID` or create a new user `nas` with this `uid`                                                      |
+| `RPI_SVC_UID_RO`      | defaults to the current user's `uid` incremented by 1, used by Samba as the `uid` of the read-only `android` user                               |
 
-Store one or more of these variables as successive lines in the `.rpi/config` file:
+Store one or more of these variables as successive lines in the `/etc/rpi/config` file:
 
   ```bash
-  RPI_CONTAINER_GID="1005"
-  RPI_CONTAINER_UID="1005"
-  RPI_CONTAINER_UID_RO="1001"
   RPI_MANIFEST_EDITOR="/usr/bin/nano"
   RPI_RESTART_POLICY="unless-stopped"
   RPI_ROOT="/mnt/my_custom_name"
+  RPI_SVC_GID="1005"
+  RPI_SVC_GROUPNAME="custom_group"
+  RPI_SVC_UID="1005"
+  RPI_SVC_UID_RO="1001"
+  RPI_SVC_USERNAME="custom_user"
   ```
 
 ### Service Selection
 
-The `.rpi/config` file can also control *which* services `pictl` manages via a bash array named `RPI_SERVICES`.
+The `/etc/rpi/config` file can also control *which* services `pictl` manages via a bash array named `RPI_SERVICES`.
 
-By default, this array is set to `("plex" "samba")`, meaning it manages only the Plex and Samba services.  It is possible to control the service selection by defining this array manually in the `.rpi/config` file:
+By default, this array is set to `("plex" "samba")`, meaning it manages only the Plex and Samba services.  It is possible to control the service selection by defining this array manually in the `/etc/rpi/config` file:
 
 To enable a single service, such as Plex, add a line like following:
 
@@ -155,16 +159,16 @@ To enable multiple services, add them to the array definition as quoted, space s
 
 There are optional shell scripts that can be created and executed when `pictl` encounters specific events.
 
-| Script Path                           | Event                                             |
-|---------------------------------------|---------------------------------------------------|
-| `.rpi/event-disk-after-mounted.sh`    | executed after all encrypted disks are mounted    |
-| `.rpi/event-disk-before-mounted.sh`   | executed before all encrypted disks are mounted   |
-| `.rpi/event-disk-after-unmounted.sh`  | executed after all encrypted disks are unmounted  |
-| `.rpi/event-disk-before-unmounted.sh` | executed before all encrypted disks are unmounted |
+| Script Path                                      | Event                                             |
+|--------------------------------------------------|---------------------------------------------------|
+| `/etc/rpi/events/event-disk-after-mounted.sh`    | executed after all encrypted disks are mounted    |
+| `/etc/rpi/events/event-disk-before-mounted.sh`   | executed before all encrypted disks are mounted   |
+| `/etc/rpi/events/event-disk-after-unmounted.sh`  | executed after all encrypted disks are unmounted  |
+| `/etc/rpi/events/event-disk-before-unmounted.sh` | executed before all encrypted disks are unmounted |
 
 This is particularly useful for maintaining specific file permissions on the shared media.
 
-If one wanted to ensure the Samba permissions were correct on `/mnt/media/shared` this `.rpi/event-disk-after-mounted.sh` script could be useful:
+If one wanted to ensure the Samba permissions were correct on `/mnt/media/shared` this `/etc/rpi/events/event-disk-after-mounted.sh` script could be useful:
 
    ```bash
    #!/bin/bash
@@ -176,7 +180,7 @@ This grants full read and write access to all shared media files to the owner, r
 This would work in tandem with the default Samba configuration to ensure the `android` user has read only access, and deny access to other users.  Permissions might change when loading files over `rsync` or methods other than Samba, so the periodic execution of this script could be useful during disk mounts.
 
 It is recommended to keep these event scripts secure and executable:
-   - `$ chmod 700 .rpi/event-disk-after-mounted.sh`
+   - `$ chmod 700 /etc/rpi/events/event-disk-after-mounted.sh`
 
 #### Plex Configuration
 
@@ -189,21 +193,19 @@ Plex is generally configured through its web interface, but some settings are ab
 | `RPI_PLEX_PATH_DATA_MOUNT_[2-9]` | defaults to null mounts                      |
 | `RPI_PLEX_PATH_TRANSCODE`        | default to `${RPI_ROOT}/plex/transcode`      |
 
-These values can be customized by storing one or more of them as successive lines in the `.rpi/config` file:
+These values can be customized by storing one or more of them as successive lines in the `/etc/rpi/config` file:
 
   ```bash
-  # It may be desirable to move the Plex system files off of your USB drive to allow the disk to sleep.
-  # This comes with a series of tradeoffs, including the performance and speed of the system boot disk.
-  RPI_PLEX_PATH_CONFIG="${HOME}/.rpi/plex/config"
+  RPI_PLEX_PATH_CONFIG="/var/local/rpi/plex/config"
   RPI_PLEX_PATH_DATA_MOUNT_2="/mnt/disk2:/disk2"  # Exposes a second disk to Plex
-  RPI_PLEX_PATH_TRANSCODE="${HOME}/.rpi/plex/transcode"
+  RPI_PLEX_PATH_TRANSCODE="/var/local/rpi/plex/transcode"
   ```
 
 Plex is an enabled service by default.
 
 #### Samba Configuration
 
-Some Samba settings can be stored in the `.rpi/config` file to make this service more convenient to use.
+Some Samba settings can be stored in the `/etc/rpi/config` file to make this service more convenient to use.
 
 | Variable                          | Value                                                             |
 |-----------------------------------|-------------------------------------------------------------------|
@@ -219,29 +221,27 @@ Some Samba settings can be stored in the `.rpi/config` file to make this service
 | `RPI_SAMBA_SUBNET`                | managed by `pictl`, but defaults to `192.168.0.0/24` for no-ops   |
 | `RPI_SAMBA_WORKGROUP`             | defaults to `WORKGROUP`                                           |
 
-These values can be customized by storing one or more of them as successive lines in the `.rpi/config` file:
+These values can be customized by storing one or more of them as successive lines in the `/etc/rpi/config` file:
 
   ```bash
-  # It may be desirable to move the Samba system files off of your USB drive to allow the disk to sleep.
-  # This comes with a series of tradeoffs, including the performance and speed of the system boot disk.
-  RPI_SAMBA_PATH_CONFIG="${HOME}/.rpi/samba/config"
   RPI_SAMBA_CREDENTIALS_USERNAME="somebody"
   RPI_SAMBA_CREDENTIALS_PASSWORD="!*secret1234"
+  RPI_SAMBA_PATH_CONFIG="/var/local/rpi/samba/config"
   RPI_SAMBA_PATH_DATA_MOUNT_4="/mnt/disk2:/disk2"  # Exposes a second disk to Samba
   RPI_SAMBA_SERVICE_DISCOVERY="0"
   RPI_SAMBA_SUBNET="172.16.0.0/28"
   ```
 
-It is also possible to create a completely custom Samba configuration.  Using the [existing config](./services/samba/config.yml) as a template, create a `.rpi/samba.yml` file and customize as needed.  Refer to the [crazymax/samba](https://github.com/crazy-max/docker-samba) repository for details.
+It is also possible to create a completely custom Samba configuration.  Using the [existing config](./services/samba/config.yml) as a template, create a `/etc/rpi/samba.yml` file and customize as needed.  Refer to the [crazymax/samba](https://github.com/crazy-max/docker-samba) repository for details.
 
 Although variable interpolation is available, it is still recommended to keep this custom Samba configuration file secure:
-   - `$ chmod 600 .rpi/samba.yml`
+   - `$ chmod 600 /etc/rpi/samba.yml`
 
 Samba is an enabled service by default.
 
 #### Syncthing Configuration
 
-Some Syncthing settings can be stored in the `.rpi/config` file to make this service more convenient to use.
+Some Syncthing settings can be stored in the `/etc/rpi/config` file to make this service more convenient to use.
 
 | Variable                              | Value                                                                                              |
 |---------------------------------------|----------------------------------------------------------------------------------------------------|
@@ -252,19 +252,17 @@ Some Syncthing settings can be stored in the `.rpi/config` file to make this ser
 | `RPI_SYNCTHING_PATH_CONFIG`           | default to `${RPI_ROOT}/syncthing`                                                                 |
 | `RPI_SYNCTHING_HOSTNAME`              | defaults to `syncthing`, controls the device name other Syncthing clients will see when connecting |
 
-These values can be customized by storing one or more of them as successive lines in the `.rpi/config` file:
+These values can be customized by storing one or more of them as successive lines in the `/etc/rpi/config` file:
 
   ```bash
-  # It may be desirable to move the Syncthing system files off of your USB drive to allow the disk to sleep.
-  # This comes with a series of tradeoffs, including the performance and speed of the system boot disk.
-  RPI_SYNCTHING_PATH_CONFIG="${HOME}/.rpi/syncthing/config"
   RPI_SYNCTHING_CREDENTIALS_USERNAME="nobody"
   RPI_SYNCTHING_CREDENTIALS_PASSWORD="v3ryS3cr3t!"
+  RPI_SYNCTHING_PATH_CONFIG="/var/local/rpi/syncthing/config"
   RPI_SYNCTHING_PATH_DATA_MOUNT_2="/mnt/disk2:/disk2"  # Exposes a second disk to Syncthing
   RPI_SYNCTHING_HOSTNAME="KitchenPi"
   ```
 
-This service is *not* enabled by default.  To use it, add it to an `RPI_SERVICES` array definition in the `.rpi/config` file
+This service is *not* enabled by default.  To use it, add it to an `RPI_SERVICES` array definition in the `/etc/rpi/config` file
 
   ```bash
   RPI_SERVICES=("plex" "samba" "syncthing")
