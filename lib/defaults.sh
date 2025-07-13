@@ -4,9 +4,13 @@ set -eo pipefail
 
 # Global Environment Variable Defaults
 
+RPI_COLOUR_BOOLEAN="${RPI_COLOUR_BOOLEAN:-"0"}"
 # shellcheck disable=SC2034
 RPI_PROJECT_REPOSITORY="https://github.com/niall-byrne/rpi-media-centre"
+# shellcheck disable=SC2034
+RPI_CLI_JUST_COMPILED_BOOLEAN="0"
 
+export RPI_CLI_MEMORY_ONLY_BOOLEAN="${1:-"0"}"
 export RPI_EXECUTION_DIRECTORY="${RPI_EXECUTION_DIRECTORY:-"${PWD}"}"
 export RPI_HOST_IP="${RPI_HOST_IP:-"$(hostname -I | cut -f 1 -d ' ' || "127.0.0.1")"}"
 export RPI_HOST_TZ="${RPI_HOST_TZ:-"$(cat /etc/timezone || "UTC")"}"

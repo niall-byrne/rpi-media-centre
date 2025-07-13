@@ -14,7 +14,7 @@ _trap_cleanup() {
 
   for RPI_EXIT_CLEANUP_PATH in "${RPI_EXIT_CLEANUP_PATHS[@]}"; do
     if [[ -e "${RPI_EXIT_CLEANUP_PATH}" ]]; then
-      _debug_with echo "TRAP: removing '${RPI_EXIT_CLEANUP_PATH}' ..."
+      _debug_with _cli_log_warning "TRAP: removing '${RPI_EXIT_CLEANUP_PATH}' ..."
       rm -f "${RPI_EXIT_CLEANUP_PATH}"
     fi
   done

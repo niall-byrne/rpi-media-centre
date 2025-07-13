@@ -21,14 +21,14 @@ _backup_job_validation() {
     [[ -n "${RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER}" && -z "${RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS}" ]] ||
     [[ -z "${RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER}" && -n "${RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS}" ]] ||
     [[ -z "${RPI_BACKUP_JOB_REMOTE_TARGET}" && -n "${RPI_BACKUP_JOB_REMOTE_PARAMETER}" ]]; then
+    _cli_log_error " -- BACKUP JOB: Backup Job is INVALID!"
     {
-      echo " -- BACKUP JOB: Backup Job is INVALID!"
       "${1}"
     } >&2
   fi
 
   if [[ -n "${RPI_BACK_JOB_VALIDATION_LOGGING}" ]]; then
-    echo " -- BACKUP JOB: Backup Job is VALID!"
+    _cli_log_success " -- BACKUP JOB: Backup Job is VALID!"
     _backup_job_log
   fi
 
@@ -82,10 +82,10 @@ _backup_job_validation_queue() {
     fi
   done
 
+  _cli_log_error " -- BACKUP JOB: Invalid queue for this job."
   {
-    echo " -- BACKUP JOB: Invalid queue for this job."
     _backup_job_log
-    _backup_job_help_queue
+    _backup_job_message_queue
   } >&2
   return 127
 }
@@ -101,10 +101,10 @@ _backup_job_validation_remote_parameters_s3() {
       return 0
       ;;
     *)
+      _cli_log_error " -- BACKUP JOB: Invalid remote S3 storage parameter for this job."
       {
-        echo " -- BACKUP JOB: Invalid remote S3 storage parameter for this job."
         _backup_job_log
-        _backup_job_help_remote_parameters
+        _backup_job_message_remote_param
       } >&2
       return 127
       ;;
@@ -122,10 +122,10 @@ _backup_job_validation_remote_target() {
       _dependencies_group_backups_aws
       ;;
     *)
+      _cli_log_error " -- BACKUP JOB: Invalid remote storage target for this job."
       {
-        echo " -- BACKUP JOB: Invalid remote storage target for this job."
         _backup_job_log
-        _backup_job_help_remote_target
+        _backup_job_message_remote_target
       } >&2
       return 127
       ;;
@@ -145,10 +145,10 @@ _backup_job_validation_tarball_versions() {
     return 0
   fi
 
+  _cli_log_error " -- BACKUP JOB: Invalid local tarball version count."
   {
-    echo " -- BACKUP JOB: Invalid local tarball version count."
     _backup_job_log
-    _backup_job_help_tarball_versions
+    _backup_job_message_tarball_versions
   } >&2
   return 127
 }

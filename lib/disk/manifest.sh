@@ -41,11 +41,13 @@ _disk_manifest_all_command_wrapper() {
 }
 
 _disk_manifest_help() {
-  echo "Each line should be a comma separated series of:"
-  echo "  RPI_DISK_UUID                               - the UUID of the disk (find with: sudo blkid)"
-  echo "  RPI_DISK_NAME                               - a unique name for this disk"
-  echo "  RPI_DISK_CRYPT_GROUP                        - an optional identifier for disks that share a luks password"
-  echo "  RPI_DISK_MOUNT_POINT                        - a valid mount point for this disk on the filesystem"
+  _cli_pretty_highlight "Each line should be a comma separated series of:"
+  {
+    echo " RPI_DISK_UUID        |the \`UUID\` of the disk (find with: sudo blkid)"
+    echo " RPI_DISK_NAME        |a unique name for this disk"
+    echo " RPI_DISK_CRYPT_GROUP |an optional identifier for disks that share a luks password"
+    echo " RPI_DISK_MOUNT_POINT |a valid mount point for this disk on the filesystem"
+  } | _cli_pretty_columns
 }
 
 _disk_manifest_line_invalid() {
@@ -66,9 +68,9 @@ _disk_manifest_line_log() {
 }
 
 _disk_manifest_line_log_all() {
-  echo "== Start of Disk '${RPI_DISK_NAME}' =="
+  _cli_log_notice "== Start of Disk '${RPI_DISK_NAME}' =="
   _disk_manifest_line_log
-  echo "== End of Disk '${RPI_DISK_NAME}' =="
+  _cli_log_notice "== End of Disk '${RPI_DISK_NAME}' =="
 }
 
 _disk_manifest_line_validate() {
@@ -88,8 +90,7 @@ _disk_manifest_line_validate() {
   fi
 
   if ! blkid | grep "${RPI_DISK_UUID}" > /dev/null; then
-    echo "-- WARNING --"
-    echo "DISK: UUID '${RPI_DISK_UUID}' could not be found."
+    _cli_log_warning "DISK: UUID '${RPI_DISK_UUID}' could not be found."
   fi
 }
 
@@ -101,7 +102,7 @@ _disk_manifest_load() {
   local RPI_DISK_CRYPT_GROUP
   local RPI_DISK_MOUNT_POINT
 
-  echo "-- loading /etc/rpi/crypt file ... --"
+  _cli_log_notice "-- loading /etc/rpi/crypt file ... --"
 
   _security_path_check /etc/rpi/crypt "root" "root" "600"
 
@@ -127,7 +128,7 @@ _disk_manifest_load() {
 
     for ((RPI_DISK_INDEX = 0; RPI_DISK_INDEX < "${#RPI_DISK_NAME_SET[@]}"; RPI_DISK_INDEX++)); do
       if [[ "${RPI_DISK_NAME_SET["${RPI_DISK_INDEX}"]}" == "${RPI_DISK_NAME}" ]]; then
-        echo "The disk name '${RPI_DISK_NAME}' is used multiple times, this value must be unique."
+        _cli_log_error "The disk name '${RPI_DISK_NAME}' is used multiple times, this value must be unique."
         _disk_manifest_line_invalid
       fi
     done

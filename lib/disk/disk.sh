@@ -32,10 +32,10 @@ _disk_initialize_mounts() {
 
 _disk_lock() {
   if _is_disk_mounted "${RPI_DISK_UUID}" "${RPI_DISK_NAME}" "${RPI_DISK_MOUNT_POINT}"; then
-    echo "Unmounting disk '${RPI_DISK_NAME}' ..."
+    _cli_log_warning "Unmounting disk '${RPI_DISK_NAME}' ..."
     umount "/dev/mapper/${RPI_DISK_NAME}"
 
-    echo "Sealing disk '${RPI_DISK_NAME}' ..."
+    _cli_log_warning "Sealing disk '${RPI_DISK_NAME}' ..."
     cryptsetup close "/dev/mapper/${RPI_DISK_NAME}"
   fi
 }
@@ -46,7 +46,7 @@ _disk_unlock() {
   if ! _is_disk_mounted "${RPI_DISK_UUID}" "${RPI_DISK_NAME}" "${RPI_DISK_MOUNT_POINT}"; then
     _security_path_mkdir "${RPI_DISK_MOUNT_POINT}" "${RPI_SVC_USERNAME}" "${RPI_SVC_GROUP}" "700"
 
-    echo "Decrypting disk '${RPI_DISK_NAME}' ..."
+    _cli_log_warning "Decrypting disk '${RPI_DISK_NAME}' ..."
 
     if [[ -n "${RPI_DISK_CRYPT_GROUP}" ]]; then
       _disk_unlock_with_crypt_group
@@ -54,10 +54,10 @@ _disk_unlock() {
       cryptsetup luksOpen "/dev/disk/by-uuid/${RPI_DISK_UUID}" "${RPI_DISK_NAME}"
     fi
 
-    echo "Checking data on disk '${RPI_DISK_NAME}' ..."
+    _cli_log_warning "Checking data on disk '${RPI_DISK_NAME}' ..."
     fsck "/dev/mapper/${RPI_DISK_NAME}"
 
-    echo "Mounting disk '${RPI_DISK_NAME}' ..."
+    _cli_log_notice "Mounting disk '${RPI_DISK_NAME}' ..."
     mount "/dev/mapper/${RPI_DISK_NAME}" "${RPI_DISK_MOUNT_POINT}" -o noatime,rw,errors=remount-ro
   fi
 }

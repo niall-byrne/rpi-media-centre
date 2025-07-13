@@ -12,10 +12,8 @@ _dependencies_enforce() {
   if command -v "${1}" > /dev/null; then
     return 0
   fi
-  {
-    echo "DEPENDENCIES: ${2} is required by pictl, but it could not be found."
-    echo "${3}"
-  } >&2
+  _cli_log_error "DEPENDENCIES: ${2} is required by pictl, but it could not be found."
+  echo "${3}"
   return 127
 }
 
