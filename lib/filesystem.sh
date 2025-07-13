@@ -37,19 +37,6 @@ _filesystem_check_is_folder() {
   fi
 }
 
-_filesystem_check_permissions() {
-  # $1: the path to check
-  # $2: the permission octal value required
-
-  if [[ "$(stat -c "%a" "${1}")" != "${2}" ]]; then
-    {
-      echo "The permissions on '${1}' are not secure!"
-      echo "Please consider running: chmod ${2} ${1}"
-    } >&2
-    return 127
-  fi
-}
-
 _filesystem_resolve_path_relative_to_cli() {
   # $1: the path to resolve
 

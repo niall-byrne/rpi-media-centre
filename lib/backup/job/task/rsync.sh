@@ -17,6 +17,12 @@ _backup_job_task_rsync_filesystem() {
 
   echo " -- BACKUP JOB: Copying '${RPI_BACKUP_JOB_LOCAL_SOURCE}' with rsync ..."
   RPI_BACKUP_JOB_LOCAL_RSYNC_TARGET="${RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER}/$(basename "${RPI_BACKUP_JOB_LOCAL_SOURCE}")-rsync-backup"
-  mkdir -p "${RPI_BACKUP_JOB_LOCAL_RSYNC_TARGET}"
+
+  _security_path_mkdir \
+    "${RPI_BACKUP_JOB_LOCAL_RSYNC_TARGET}" \
+    "${RPI_SVC_USERNAME}" \
+    "${RPI_SVC_GROUPNAME}" \
+    "700"
+
   rsync -a --delete "${RPI_BACKUP_JOB_LOCAL_SOURCE}" "${RPI_BACKUP_JOB_LOCAL_RSYNC_TARGET}/"
 }

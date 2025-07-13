@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo "cryptsetup: test double script"
+echo "  -- $*"

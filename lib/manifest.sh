@@ -86,41 +86,41 @@ _manifest_cli_edit() {
 }
 
 _manifest_cli_edit_backup() {
-  if [[ ! -f .rpi/backup ]]; then
+  if [[ ! -f /etc/rpi/backup ]]; then
     _manifest_cli_help_backup |
       _io_comment_lines_stdin |
       _io_append_newline_stdin \
-        > .rpi/backup
-    chmod "600" .rpi/backup
+        > /etc/rpi/backup
+    chmod "600" /etc/rpi/backup
   fi
 
-  "${RPI_MANIFEST_EDITOR}" .rpi/backup
+  "${RPI_MANIFEST_EDITOR}" /etc/rpi/backup
   _manifest_cli_check_backup
 }
 
 _manifest_cli_edit_config() {
-  if [[ ! -f .rpi/config ]]; then
+  if [[ ! -f /etc/rpi/config ]]; then
     _manifest_cli_help_config |
       _io_comment_lines_stdin |
       _io_append_newline_stdin \
-        > .rpi/config
-    chmod "600" .rpi/backup
+        > /etc/rpi/config
+    chmod "600" /etc/rpi/config
   fi
 
-  "${RPI_MANIFEST_EDITOR}" .rpi/config
+  "${RPI_MANIFEST_EDITOR}" /etc/rpi/config
   _manifest_cli_check_config
 }
 
 _manifest_cli_edit_crypt() {
-  if [[ ! -f .rpi/crypt ]]; then
+  if [[ ! -f /etc/rpi/crypt ]]; then
     _manifest_cli_help_crypt |
       _io_comment_lines_stdin |
       _io_append_newline_stdin \
-        > .rpi/crypt
-    chmod "600" .rpi/crypt
+        > /etc/rpi/crypt
+    chmod "600" /etc/rpi/crypt
   fi
 
-  "${RPI_MANIFEST_EDITOR}" .rpi/crypt
+  "${RPI_MANIFEST_EDITOR}" /etc/rpi/crypt
   _manifest_cli_check_crypt
 }
 
@@ -147,17 +147,17 @@ _manifest_cli_help() {
 }
 
 _manifest_cli_help_backup() {
-  echo "** Details for the .rpi/backup file **"
+  echo "** Details for the /etc/rpi/backup file **"
   _backup_manifest_help
 }
 
 _manifest_cli_help_config() {
-  echo "** Details for the .rpi/config file **"
+  echo "** Details for the /etc/rpi/config file **"
   _configuration_pictl_help
 }
 
 _manifest_cli_help_crypt() {
-  echo "** Details for the .rpi/crypt file **"
+  echo "** Details for the /etc/rpi/crypt file **"
   _disk_manifest_help
 }
 

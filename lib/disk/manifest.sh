@@ -42,7 +42,7 @@ _disk_manifest_help() {
 
 _disk_manifest_line_invalid() {
   {
-    echo "The .rpi/crypt file is improperly formatted!"
+    echo "The /etc/rpi/crypt file is improperly formatted!"
     echo "Input Line: ${FILE_LINE}"
     _disk_manifest_line_log
     _disk_manifest_help
@@ -66,7 +66,7 @@ _disk_manifest_line_validate() {
   # $1: the help function to call in the event that the line is invalid
 
   if ! _filesystem_check_is_folder "${RPI_DISK_MOUNT_POINT}" ||
-    ! _filesystem_check_permissions "${RPI_DISK_MOUNT_POINT}" "700"; then
+    ! _security_path_check "${RPI_DISK_MOUNT_POINT}" "${RPI_SVC_USERNAME}" "${RPI_SVC_GROUPNAME}" "700"; then
     "${1}"
     return 127
   fi
@@ -78,7 +78,7 @@ _disk_manifest_line_validate() {
     return 127
   fi
 
-  if ! sudo blkid | grep "${RPI_DISK_UUID}" > /dev/null; then
+  if ! blkid | grep "${RPI_DISK_UUID}" > /dev/null; then
     echo "-- WARNING --"
     echo "DISK: UUID '${RPI_DISK_UUID}' could not be found."
   fi
@@ -91,9 +91,9 @@ _disk_manifest_load() {
   local RPI_DISK_NAME
   local RPI_DISK_MOUNT_POINT
 
-  echo "-- loading .rpi/crypt file ... --"
+  echo "-- loading /etc/rpi/crypt file ... --"
 
-  _filesystem_check_permissions .rpi/crypt "600"
+  _security_path_check /etc/rpi/crypt "root" "root" "600"
 
   while IFS= read -r FILE_LINE; do
     IFS="," read -r RPI_DISK_UUID RPI_DISK_NAME RPI_DISK_MOUNT_POINT <<< "$FILE_LINE"
@@ -121,7 +121,7 @@ _disk_manifest_load() {
     RPI_DISK_NAME_SET+=("${RPI_DISK_NAME}")
     RPI_DISK_MOUNT_POINT_SET+=("${RPI_DISK_MOUNT_POINT}")
 
-  done < .rpi/crypt
+  done < /etc/rpi/crypt
 }
 
 _disk_manifest_mount_all() {

@@ -21,8 +21,7 @@ _control_lock() {
     fi
   done
 
-  echo "${BASHPID}" |
-    sudo tee "/var/lock/${1}" > /dev/null
+  echo "${BASHPID}" > "/var/lock/${1}"
   RPI_EXIT_CLEANUP_PATHS+=("/var/lock/${1}")
 }
 
