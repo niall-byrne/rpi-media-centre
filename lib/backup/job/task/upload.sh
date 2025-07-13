@@ -7,7 +7,7 @@ set -eo pipefail
 _backup_job_task_upload() {
   case "${RPI_BACKUP_JOB_REMOTE_TARGET}" in
     "")
-      echo " -- BACKUP JOB: No upload required for this job !"
+      _cli_log_notice " -- BACKUP JOB: No upload required for this job !"
       ;;
     "s3://"*)
       _backup_job_task_wrapper "_backup_job_task_upload_s3"
@@ -47,7 +47,7 @@ _backup_job_task_upload_s3_from_latest_tarball_retryable() {
 }
 
 _backup_job_task_upload_s3_estimate_tarball_size() {
-  echo " -- BACKUP JOB: Calculating size of '${RPI_BACKUP_JOB_LOCAL_SOURCE}' ..."
+  _cli_log_notice " -- BACKUP JOB: Calculating size of '${RPI_BACKUP_JOB_LOCAL_SOURCE}' ..."
   RPI_BACKUP_JOB_UPLOAD_EXPECTED_SIZE="$(
     tar \
       --totals \

@@ -30,12 +30,9 @@ _security_defaults_set_groupname() {
   if [[ -n "${RPI_SVC_GROUPNAME}" ]]; then
     # Group has been specified, check if it exists.
     if ! getent group "${RPI_SVC_GROUPNAME}" > /dev/null 2>&1; then
-      {
-        echo "-- ERROR --"
-        echo "SECURITY: The specified group '${RPI_SVC_GROUPNAME}' (RPI_SVC_GROUPNAME) does not exist!"
-        echo "Please consider using the 'account' command to provision it."
-        return 127
-      } >&2
+      _cli_log_error "SECURITY: The specified group '${RPI_SVC_GROUPNAME}' (RPI_SVC_GROUPNAME) does not exist!"
+      echo "Please consider using the 'account' command to provision it."
+      return 127
     fi
   else
     # No group specified, try to use the primary group of RPI_SVC_USERNAME
@@ -46,21 +43,15 @@ _security_defaults_set_groupname() {
 _security_defaults_set_username() {
   if [[ -n "${RPI_SVC_USERNAME}" ]]; then
     if ! id "${RPI_SVC_USERNAME}" > /dev/null 2>&1; then
-      {
-        echo "-- ERROR --"
-        echo "SECURITY: The specified user '${RPI_SVC_USERNAME}' (RPI_SVC_USERNAME) does not exist!"
-        echo "Please consider using the 'account' command to provision it."
-        return 127
-      } >&2
+      _cli_log_error "SECURITY: The specified user '${RPI_SVC_USERNAME}' (RPI_SVC_USERNAME) does not exist!"
+      echo "Please consider using the 'account' command to provision it."
+      return 127
     fi
     return 0
   elif [[ -n "${RPI_SVC_GROUPNAME}" ]]; then
     # If a group has been specified, without a username, the config is invalid
-    {
-      echo "-- ERROR --"
-      echo "SECURITY: invalid configuration!"
-      echo "The 'RPI_SVC_GROUPNAME' is specified without 'RPI_SVC_USERNAME'."
-    }
+    _cli_log_error "SECURITY: invalid configuration!"
+    _cli_log_error "The 'RPI_SVC_GROUPNAME' is specified without 'RPI_SVC_USERNAME'."
     return 127
   else
     # Otherwise, fallback to the SUDO_USER for single user mode

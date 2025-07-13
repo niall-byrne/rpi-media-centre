@@ -26,26 +26,26 @@ _configuration_pictl_check() {
 _configuration_pictl_debug() {
   local RPI_CONFIGURATION_QUIET_LOAD=1
 
-  echo "-- rpi-media-centre running configuration --"
-  echo "** credentials have been removed **"
+  _cli_pretty_title "-- rpi-media-centre running configuration --"
+  _cli_pretty_highlight "** credentials have been removed **"
   declare -p |
     grep '^declare -. RPI_' |
     grep -v "CREDENTIALS" |
+    grep -v "COLOUR" |
     sed 's/^declare -. //g' |
-    sort
+    sort |
+    _cli_pretty_envar
 }
 
 _configuration_pictl_help() {
-  echo "The config file is a sourced BASH script that configures one or more of the following:"
+  _cli_pretty_highlight "The config file is a sourced BASH script that configures one or more of the following:"
 
   # Generate a summary from README.md
   grep '^| `RPI_' README.md |
     cut -d "|" -f2,3 |
-    tr -d '`' |
-    sed 's/  */ /g' |
-    awk -F"|" '{ $1 = sprintf("%-40s", $1); print $1 $2}' |
-    sed 's/the \[documentation\](\(.*\)) for/\1 for/g' |
-    sort
+    sort |
+    _cli_pretty_markdown |
+    _cli_pretty_columns
 
   echo "Please see ${RPI_PROJECT_REPOSITORY} for further details."
 }
@@ -55,7 +55,7 @@ _configuration_pictl_secure_load() {
 
   if [[ -f /etc/rpi/config ]]; then
     if [[ "${RPI_CONFIGURATION_QUIET_LOAD}" -ne "1" ]]; then
-      echo "-- loading /etc/rpi/config file ... --"
+      _cli_log_notice "-- loading /etc/rpi/config file ... --"
     fi
     _security_path_check /etc/rpi/config "root" "root" "600"
     "$@"
@@ -68,7 +68,7 @@ _configuration_pihole() {
 
 _configuration_samba() {
   if [[ -f /etc/rpi/samba.yml ]]; then
-    echo "-- loading /etc/rpi/samba.yml file ... --"
+    _cli_log_notice "-- loading /etc/rpi/samba.yml file ... --"
     _security_path_check /etc/rpi/samba.yml "root" "root" "600"
     cp -a /etc/rpi/samba.yml "${RPI_SAMBA_PATH_CONFIG}"/config.yml
   else
@@ -97,7 +97,7 @@ _configuration_syncthing_setting() {
   shift
 
   if [[ -n "${!VALUE}" ]]; then
-    echo "Configuring syncthing '${*}' with environment variable '${VALUE}' ..."
+    _cli_log_warning "Configuring syncthing '${*}' with environment variable '${VALUE}' ..."
 
     while ! curl -fkLsS -m 2 127.0.0.1:8384/rest/noauth/health >> /dev/null 2>&1; do
       sleep 1

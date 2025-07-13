@@ -6,6 +6,8 @@ set -Eeo pipefail
 source "${RPI_WORKING_DIRECTORY}/lib/defaults.sh"
 # shellcheck source=lib/backup/__all__.sh
 source "${RPI_WORKING_DIRECTORY}/lib/backup/__all__.sh"
+# shellcheck source=lib/cli/__all__.sh
+source "${RPI_WORKING_DIRECTORY}/lib/cli/__all__.sh"
 # shellcheck source=lib/configuration.sh
 source "${RPI_WORKING_DIRECTORY}/lib/configuration.sh"
 # shellcheck source=lib/control.sh
