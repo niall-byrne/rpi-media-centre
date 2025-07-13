@@ -8,9 +8,7 @@ _filesystem_check_exists() {
   # $1: the path to check
 
   if [[ ! -e "${1}" ]]; then
-    {
-      echo "The path '${1}' does not exist on the filesystem!"
-    } >&2
+    _cli_log_error "The path '${1}' does not exist on the filesystem!"
     return 127
   fi
 }
@@ -19,9 +17,7 @@ _filesystem_check_does_not_exist() {
   # $1: the path to check
 
   if [[ -e "${1}" ]]; then
-    {
-      echo "The path '${1}' already exists on the filesystem!"
-    } >&2
+    _cli_log_error "The path '${1}' already exists on the filesystem!"
     return 127
   fi
 }
@@ -30,9 +26,7 @@ _filesystem_check_is_folder() {
   # $1: the folder to check
 
   if [[ ! -d "${1}" ]]; then
-    {
-      echo "The folder '${1}' is not a valid filesystem folder."
-    } >&2
+    _cli_log_error "The folder '${1}' is not a valid filesystem folder."
     return 127
   fi
 }

@@ -8,7 +8,7 @@ _event_script() {
   # $1: the event script to execute
 
   if [[ -f "/etc/rpi/events/${1}" ]]; then
-    echo "-- loading /etc/rpi/events/${1} file ... --"
+    _cli_log_notice "-- loading /etc/rpi/events/${1} file ... --"
 
     # Don't halt execution if the event script fails.
 

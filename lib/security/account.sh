@@ -11,11 +11,8 @@ _security_account_provision_service_account() {
 
   if [[ -z "${RPI_SVC_USERNAME}" ]] ||
     [[ "${RPI_SVC_USERNAME}" == "${SUDO_USER}" ]]; then
-    {
-      echo "-- ERROR --"
-      echo "SECURITY: You must specify the RPI_SVC_USERNAME to provision a service account."
-      return 127
-    } >&2
+    _cli_log_error "SECURITY: You must specify the RPI_SVC_USERNAME to provision a service account."
+    return 127
   fi
 
   if [[ -z "${RPI_SVC_GROUPNAME}" ]]; then
@@ -31,16 +28,16 @@ _security_account_provision_service_account() {
   _security_account_provision_service_account_group "${RPI_SVC_GROUPNAME}"
   _security_account_provision_service_account_username "${RPI_SVC_USERNAME}"
 
-  echo "SECURITY: The service account has been successfully provisioned."
-  echo "If this is the service account you wish to use consider changing the ownership of your media files:"
-  echo "  $ sudo chown -R ${RPI_SVC_USERNAME}:${RPI_SVC_GROUPNAME} ${RPI_ROOT}/shared/media"
+  _cli_log_success "SECURITY: The service account has been successfully provisioned."
+  echo "If this is the service account you wish to use it must be able to read your media file."
+  echo "Please consider: sudo chown -R ${RPI_SVC_USERNAME}:${RPI_SVC_GROUPNAME} ${RPI_ROOT}/shared/media"
 }
 
 _security_account_provision_service_account_group() {
   # $1: the group to create
 
   if ! getent group "${1}" > /dev/null; then
-    echo "SECURITY: Adding the service account group '${1}' ..."
+    _cli_log_warning "SECURITY: Adding the service account group '${1}' ..."
 
     _io_prompt_confirmation
 
@@ -56,12 +53,10 @@ _security_account_provision_service_account_group() {
     fi
 
     _security_defaults_set_gid
-    echo "SECURITY: The service account group '${1}' has been created with gid '${RPI_SVC_GID}' !"
+    _cli_log_success "SECURITY: The service account group '${1}' has been created with gid '${RPI_SVC_GID}' !"
 
   else
-    {
-      echo "SECURITY: The group '${1}' already exists, nothing to do."
-    } >&2
+    _cli_log_notice "SECURITY: The group '${1}' already exists, nothing to do."
     _security_defaults_set_gid
   fi
 }
@@ -70,7 +65,7 @@ _security_account_provision_service_account_username() {
   # $1: the user to create
 
   if ! getent passwd "${RPI_SVC_USERNAME}" > /dev/null; then
-    echo "SECURITY: Adding the service account user '${1}' ..."
+    _cli_log_warning "SECURITY: Adding the service account user '${1}' ..."
 
     _io_prompt_confirmation
 
@@ -91,12 +86,10 @@ _security_account_provision_service_account_username() {
     fi
 
     _security_defaults_set_uid
-    echo "SECURITY: The service account user '${1}' has been created with uid '${RPI_SVC_UID}' !"
+    _cli_log_success "SECURITY: The service account user '${1}' has been created with uid '${RPI_SVC_UID}' !"
 
   else
-    {
-      echo "SECURITY: The username '${1}' already exists, nothing to do."
-    } >&2
+    _cli_log_notice "SECURITY: The username '${1}' already exists, nothing to do."
     _security_defaults_set_uid
   fi
 }

@@ -17,7 +17,7 @@ _backup_scheduler_dequeue() {
       continue
     fi
     _backup_scheduler_job_run "${1}" "${RPI_BACKUP_JOB}"
-    echo "BACKUP SCHEDULER: =========================================="
+    _cli_log_notice "BACKUP SCHEDULER: =========================================="
   done
 }
 
@@ -48,7 +48,7 @@ _backup_scheduler_job_promote() {
   RPI_BACKUP_JOB_NEXT_QUEUE="$(_backup_job_get_next_queue "${1}")"
 
   if [[ -n "${RPI_BACKUP_JOB_NEXT_QUEUE}" ]]; then
-    echo "BACKUP SCHEDULER: Promoted! New task '${RPI_BACKUP_JOB_NEXT_QUEUE}' for backup job '${3}' ..."
+    _cli_log_warning "BACKUP SCHEDULER: Promoted! New task '${RPI_BACKUP_JOB_NEXT_QUEUE}' for backup job '${3}' ..."
     RPI_BACKUP_JOB_NEXT_PATH="${RPI_BACKUP_PATH_QUEUE_ROOT}/${RPI_BACKUP_JOB_NEXT_QUEUE}/${3}"
     mv "${2}" "${RPI_BACKUP_JOB_NEXT_PATH}"
     _backup_scheduler_job_run "${RPI_BACKUP_JOB_NEXT_QUEUE}" "${RPI_BACKUP_JOB_NEXT_PATH}"
@@ -65,11 +65,11 @@ _backup_scheduler_job_run() {
 
   RPI_BACKUP_JOB_NAME="$(basename "${2}")"
 
-  echo "BACKUP SCHEDULER: Backup job '${RPI_BACKUP_JOB_NAME}' - is starting the '${1}' task ..."
+  _cli_log_notice "BACKUP SCHEDULER: Backup job '${RPI_BACKUP_JOB_NAME}' - is starting the '${1}' task ..."
 
   if ! "${2}" "${1}"; then
-    echo "BACKUP SCHEDULER: Backup job '${RPI_BACKUP_JOB_NAME}' - has failed the '${1}' task !"
-    echo "BACKUP SCHEDULER: This job will be retried tomorrow."
+    _cli_log_error "BACKUP SCHEDULER: Backup job '${RPI_BACKUP_JOB_NAME}' - has failed the '${1}' task !"
+    _cli_log_error "BACKUP SCHEDULER: This job will be retried tomorrow."
 
     (
       export RPI_BACKUP_JOB_NAME
@@ -85,7 +85,7 @@ _backup_scheduler_job_run() {
     return 0
   fi
 
-  echo "BACKUP SCHEDULER: Backup job '${RPI_BACKUP_JOB_NAME}' - is completed the '${1}' task !"
+  _cli_log_success "BACKUP SCHEDULER: Backup job '${RPI_BACKUP_JOB_NAME}' - is completed the '${1}' task !"
 
   _backup_scheduler_job_promote "${1}" "${2}" "${RPI_BACKUP_JOB_NAME}"
 }
@@ -113,11 +113,9 @@ _backup_scheduler_validate_schedule() {
   RPI_SCHEDULER_END_EPOCH=$(date -ud "${RPI_BACKUP_SCHEDULER_END_TIME} today" +%s)
 
   if (("${RPI_SCHEDULER_START_EPOCH}" >= "${RPI_SCHEDULER_END_EPOCH}")); then
-    {
-      echo "Backup Job Scheduler Error!"
-      echo "The value for RPI_BACKUP_SCHEDULER_START_TIME must come before the value for RPI_BACKUP_SCHEDULER_END_TIME !"
-      echo "Please revise your /etc/rpi/config file."
-    } >&2
+    _cli_log_error "BACKUP SCHEDULER: Scheduling error !"
+    _cli_log_error "The value for RPI_BACKUP_SCHEDULER_START_TIME must come before the value for RPI_BACKUP_SCHEDULER_END_TIME !"
+    echo "Please revise your /etc/rpi/config file."
     return 127
   fi
 }

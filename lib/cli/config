@@ -1,0 +1,182 @@
+pictl
+=
+-- rpi-media-centre service manager --
+Usage:
+pictl [SUBCOMMAND]
+account|provision a service account
+backup [SUBCOMMAND]|manage the backup service
+compile [SUBCOMMAND]|manage the compiler service
+disk [SUBCOMMAND]|manage the local disks
+help|displays this message
+install|run the installer
+kill|kill all services immediately (unmounts encrypted disks)
+logs|tail the service logs
+manifest [SUBCOMMAND]|manage the service manifest files
+pause|pause all services
+resume|resume all services
+start|start all services (mounts encrypted disks)
+status|show all service statuses
+stop|stops all services (unmounts encrypted disks)
+upgrade|performs in place upgrade (services are restarted)
+=
+account||_security_account_provision_service_account
+backup||_backup_cli
+compile||_compile_cli
+disk||_disk_cli
+debug||_configuration_pictl_debug
+install||_installer_cli
+kill||
+manifest||_manifest_cli
+logs||
+pause||
+resume||
+start||
+status||
+stop||
+upgrade||
+=
+
+backup
+=
+-- rpi-media-centre backup manager --
+Usage:
+pictl backup [SUBCOMMAND]
+keyfile-s3 (FILENAME)|generate a new encryption keyfile for s3
+queue [SUBCOMMAND]|manage the backup job queue
+recover (NAME) (PATH)|copy the named remote backup to a local path
+schedule (GROUP)|schedule a group of backup jobs
+=
+keyfile-s3||
+queue||_backup_cli_queue_cli
+recover||
+service|_backup_cli_service_cli_--restricted--|_backup_cli_service_cli
+schedule||
+=
+
+backup_job
+=
+-- rpi-media-centre backup job executor --
+Usage:
+pictl backup service job (OPTIONS)
+-s [RPI_BACKUP_JOB_LOCAL_SOURCE]|
+-r [<optional> RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER]|
+-b [<optional> RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER]|
+-v [<optional> RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS]|
+-k [<optional> RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH]|
+-t [<optional> RPI_BACKUP_JOB_REMOTE_TARGET]|
+-p [<optional> RPI_BACKUP_JOB_REMOTE_PARAMETER]|
+-q [RPI_BACKUP_JOB_QUEUE]|
+=
+rsync||_backup_job_task_rsync
+tarball||_backup_job_task_tarball
+upload||_backup_job_task_upload
+=
+
+backup_cli_queue
+=
+-- rpi-media-centre backup queue manager --
+Usage:
+pictl backup queue [SUBCOMMAND]
+remove (NAME)|remove the named backup job from the queue
+remove-all|remove all currently queued backup jobs
+show|display all currently queued backup jobs
+=
+remove||
+remove-all||
+show||
+=
+
+backup_cli_service
+=
+-- rpi-media-centre backup service manager --
+Usage:
+pictl backup service [SUBCOMMAND]
+job (CONFIGURATION)|execute the given backup job
+start|start the backup scheduler service
+=
+>_backup_cli_service_cli_before_all
+job||_backup_job
+start||
+show||
+=
+
+compile
+=
+-- rpi-media-centre compilation manager --
+Usage:
+pictl compile [SUBCOMMAND]
+cli|compile the pictl cli
+completion|compile the pictl bash completion
+=
+cli||_cli_bootstrap "1"
+completion||_cli_completion
+=
+
+disk
+=
+-- rpi-media-centre disk manager --
+Usage:
+pictl disk [SUBCOMMAND]
+filesystem|display filesystem details
+hardware|display hardware details
+=
+filesystem||
+hardware||
+=
+
+manifest
+=
+-- rpi-media-centre manifest manager --
+Usage:
+pictl manifest [SUBCOMMAND]
+check [MANIFEST]|check the specified manifest file for errors
+details [MANIFEST]|get details on the specified manifest file format
+edit [MANIFEST]|edit the specified manifest file
+=
+check||_manifest_cli_check_cli
+details||_manifest_cli_details_cli
+edit||_manifest_cli_edit_cli
+=
+
+manifest_cli_check
+=
+-- rpi-media-centre manifest checker --
+Usage:
+pictl manifest check [MANIFEST]
+backup|check the backup manifest file for errors
+config|check the config manifest file for errors
+crypt|check the crypt manifest file for errors
+=
+backup||_manifest_cli_check_backup
+config||_manifest_cli_check_config
+crypt||_manifest_cli_check_crypt
+=
+
+manifest_cli_details
+=
+-- rpi-media-centre manifest details --
+Usage:
+pictl manifest details [MANIFEST]
+backup|display details for the backup manifest file
+config|display details for the config manifest file
+crypt|display details for the crypt manifest file
+=
+backup||_manifest_cli_details_backup
+config||_manifest_cli_details_config
+crypt||_manifest_cli_details_crypt
+=
+
+manifest_cli_edit
+=
+-- rpi-media-centre manifest editor --
+Usage:
+pictl manifest edit [MANIFEST]
+backup|edit the backup manifest file
+config|edit the config manifest file
+crypt|edit the crypt manifest file
+=
+>_dependencies_requirement_manifest_editor
+backup||_manifest_cli_edit_backup
+config||_manifest_cli_edit_config
+crypt||_manifest_cli_edit_crypt
+=

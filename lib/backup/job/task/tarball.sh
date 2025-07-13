@@ -8,7 +8,7 @@ _backup_job_task_tarball() {
   if [[ -n "${RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER}" ]]; then
     _backup_job_task_wrapper "_backup_job_task_tarball_filesystem"
   else
-    echo " -- BACKUP JOB: No tarball required for this job !"
+    _cli_log_notice " -- BACKUP JOB: No tarball required for this job !"
   fi
 }
 
@@ -27,7 +27,7 @@ _backup_job_task_tarball_filesystem_build() {
 
   RPI_EXIT_CLEANUP_PATHS+=("${RPI_BACKUP_JOB_LOCAL_TARBALL_INCOMPLETE_FILENAME}")
 
-  echo " -- BACKUP JOB: Creating tarball '${RPI_BACKUP_JOB_LOCAL_TARBALL_FINISHED_FILENAME}' ..."
+  _cli_log_notice " -- BACKUP JOB: Creating tarball '${RPI_BACKUP_JOB_LOCAL_TARBALL_FINISHED_FILENAME}' ..."
   tar cf "${RPI_BACKUP_JOB_LOCAL_TARBALL_INCOMPLETE_FILENAME}" "$(basename "${RPI_BACKUP_JOB_LOCAL_SOURCE}")"
   mv "${RPI_BACKUP_JOB_LOCAL_TARBALL_INCOMPLETE_FILENAME}" "${RPI_BACKUP_JOB_LOCAL_TARBALL_FINISHED_FILENAME}"
 
@@ -45,7 +45,7 @@ _backup_job_task_tarball_filesystem_clean() {
 _backup_job_task_tarball_filesystem_prune() {
   local RPI_BACKUP_JOB_PRUNE_INDEX
 
-  echo " -- BACKUP JOB: Restricting storage to '${RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS}' tarball version(s) ... "
+  _cli_log_warning " -- BACKUP JOB: Restricting storage to '${RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS}' tarball version(s) ... "
 
   ((RPI_BACKUP_JOB_PRUNE_INDEX = RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS + 1))
 
