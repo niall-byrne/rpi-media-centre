@@ -7,3 +7,4 @@ dockerized
 fstab
 hostname
 rpi-media-centre
+sudo

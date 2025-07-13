@@ -94,11 +94,18 @@ _backup_scheduler_make_queues() {
   local RPI_BACKUP_PATH_SELECTED_QUEUE
 
   for RPI_BACKUP_PATH_SELECTED_QUEUE in "${RPI_BACKUP_QUEUE_NAMES[@]}"; do
-    mkdir -p "${RPI_BACKUP_PATH_QUEUE_ROOT}/${RPI_BACKUP_PATH_SELECTED_QUEUE}"
-    chmod 700 -R "${RPI_BACKUP_PATH_QUEUE_ROOT}/${RPI_BACKUP_PATH_SELECTED_QUEUE}"
+    _security_path_mkdir \
+      "${RPI_BACKUP_PATH_QUEUE_ROOT}/${RPI_BACKUP_PATH_SELECTED_QUEUE}" \
+      "${RPI_SVC_USERNAME}" \
+      "${RPI_SVC_GROUPNAME}" \
+      "700"
   done
 
-  chmod 700 -R "${RPI_BACKUP_PATH_QUEUE_ROOT}"
+  _security_path_secure \
+    "${RPI_BACKUP_PATH_QUEUE_ROOT}" \
+    "${RPI_SVC_USERNAME}" \
+    "${RPI_SVC_GROUPNAME}" \
+    "700"
 }
 
 _backup_scheduler_validate_schedule() {
@@ -109,7 +116,7 @@ _backup_scheduler_validate_schedule() {
     {
       echo "Backup Job Scheduler Error!"
       echo "The value for RPI_BACKUP_SCHEDULER_START_TIME must come before the value for RPI_BACKUP_SCHEDULER_END_TIME !"
-      echo "Please revise your .rpi/config file."
+      echo "Please revise your /etc/rpi/config file."
     } >&2
     return 127
   fi

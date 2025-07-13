@@ -88,7 +88,7 @@ _backup_manifest_help() {
 
 _backup_manifest_line_invalid() {
   {
-    echo "The .rpi/backup file is improperly formatted!"
+    echo "The /etc/rpi/backup file is improperly formatted!"
     echo "Input Line: ${FILE_LINE}"
     _backup_job_log
     _backup_manifest_help
@@ -114,17 +114,17 @@ _backup_manifest_load() {
   local RPI_BACKUP_JOB_REMOTE_TARGET
   local RPI_BACKUP_JOB_REMOTE_PARAMETER
 
-  echo "-- loading .rpi/backup file ... --"
+  echo "-- loading /etc/rpi/backup file ... --"
 
-  if [[ ! -e .rpi/backup ]]; then
+  if [[ ! -e /etc/rpi/backup ]]; then
     {
-      echo "Please create the .rpi/backup file to use this feature."
+      echo "Please create the /etc/rpi/backup file to use this feature."
       _backup_manifest_help
     } >&2
     return 127
   fi
 
-  _filesystem_check_permissions .rpi/backup "600"
+  _security_path_check /etc/rpi/backup "root" "root" "600"
 
   while IFS= read -r FILE_LINE; do
 
@@ -162,7 +162,7 @@ _backup_manifest_load() {
     RPI_BACKUP_JOBS_REMOTE_TARGETS+=("${RPI_BACKUP_JOB_REMOTE_TARGET}")
     RPI_BACKUP_JOBS_REMOTE_PARAMETERS+=("${RPI_BACKUP_JOB_REMOTE_PARAMETER}")
 
-  done < .rpi/backup
+  done < /etc/rpi/backup
 }
 
 _backup_manifest_write_jobs_all() {
@@ -191,5 +191,5 @@ _backup_manifest_write_jobs_all() {
     echo "pictl backup service job ${RPI_BACKUP_JOB_DATA} -q \"\${1}\""
   } > "${RPI_BACKUP_PATH_NEW_JOB}"
 
-  chmod 700 "${RPI_BACKUP_PATH_NEW_JOB}"
+  _security_path_secure "${RPI_BACKUP_PATH_NEW_JOB}" "root" "root" "700"
 }
