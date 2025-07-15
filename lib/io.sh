@@ -19,10 +19,11 @@ _io_colours_escape() {
   local RPI_IO_COLOUR
 
   _io_colours_load "1"
+  _io_colours_load_theme
 
   RPI_IO_COLOUR_LIST="$(
     declare -p |
-      grep '^declare -. COLOUR_' |
+      grep '^declare -. COLOUR_\|^declare -. THEME_' |
       sed 's/^declare -. //g' |
       cut -d '=' -f 1
   )"
@@ -35,15 +36,15 @@ _io_colours_escape() {
 _io_colours_load() {
   # $1: override to force loading regardless of config
 
-  local RPI_IO_COLOUR_LOAD_BOOLEAN="${1}"
+  local RPI_IO_COLOUR_FORCE_BOOLEAN="${1}"
   local RPI_IO_COLOUR_LIST
   local RPI_IO_COLOUR
 
   if [[ "${RPI_COLOUR_BOOLEAN}" == "1" ]] ||
-    [[ "${RPI_IO_COLOUR_LOAD_BOOLEAN}" == "1" ]]; then
+    [[ "${RPI_IO_COLOUR_FORCE_BOOLEAN}" == "1" ]]; then
     tput init >> /dev/null 2>&1 || return 0
 
-    source "${RPI_WORKING_DIRECTORY}/lib/cli/theme.sh"
+    source "${RPI_WORKING_DIRECTORY}/lib/cli/theme/base_colours.sh"
 
     RPI_IO_COLOUR_LIST="$(
       declare -p |
@@ -55,7 +56,16 @@ _io_colours_load() {
     for RPI_IO_COLOUR in ${RPI_IO_COLOUR_LIST}; do
       printf -v "${RPI_IO_COLOUR/RPI_/}" '%s' "${!RPI_IO_COLOUR}"
     done
+
+    _io_colours_load_theme
   fi
+}
+
+_io_colours_load_theme() {
+  # shellcheck source=/dev/null
+  source "${RPI_WORKING_DIRECTORY}/lib/cli/theme/${RPI_COLOUR_THEME}.sh"
+  # shellcheck disable=SC2034
+  THEME_NC="${COLOUR_NC}"
 }
 
 _io_comment_lines_stdin() {
@@ -133,6 +143,38 @@ ${RPI_IO_FUNCTION_NAME}() {
 EOF
   )"
 
+}
+
+_io_make_var_function() {
+  # $1: the function name
+  # $2: (optional) the new function name
+
+  local RPI_IO_VAR_FUNCTION_NAME
+
+  RPI_IO_VAR_FUNCTION_NAME="${2:-"${1}_var"}"
+
+  eval "$(
+    cat << EOF
+
+${RPI_IO_VAR_FUNCTION_NAME}() {
+  # \${@ 0:-2} the args to use
+  # \${@ -1} the variable name to apply the function to
+
+  local RPI_IO_LAST_ARGUMENT="\${!#}"
+
+  if [[ "\${#@}" -eq "1" ]]; then
+    if [[ -z "\${!RPI_IO_LAST_ARGUMENT}" ]]; then
+      printf -v "\${RPI_IO_LAST_ARGUMENT}" "%s" ""
+    else
+      printf -v "\${RPI_IO_LAST_ARGUMENT}" "%s" "\$("${1}" "\${!RPI_IO_LAST_ARGUMENT}")"
+    fi
+  else
+    printf -v "\${RPI_IO_LAST_ARGUMENT}" "%s" "\$("${1}" "\${@:1:\$#-1}" "\${!RPI_IO_LAST_ARGUMENT}")"
+  fi
+}
+
+EOF
+  )"
 }
 
 _io_prompt() {
