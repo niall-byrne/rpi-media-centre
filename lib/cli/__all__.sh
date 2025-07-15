@@ -8,5 +8,5 @@ source "${RPI_WORKING_DIRECTORY}/lib/cli/cli.sh"
 source "${RPI_WORKING_DIRECTORY}/lib/cli/compiler/__all__.sh"
 # shellcheck source=lib/cli/logger.sh
 source "${RPI_WORKING_DIRECTORY}/lib/cli/logger.sh"
-# shellcheck source=lib/cli/pretty.sh
-source "${RPI_WORKING_DIRECTORY}/lib/cli/pretty.sh"
+# shellcheck source=lib/cli/pretty/__all__.sh
+source "${RPI_WORKING_DIRECTORY}/lib/cli/pretty/__all__.sh"
