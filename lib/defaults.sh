@@ -5,6 +5,7 @@ set -eo pipefail
 # Global Environment Variable Defaults
 
 RPI_COLOUR_BOOLEAN="${RPI_COLOUR_BOOLEAN:-"0"}"
+RPI_COLOUR_THEME="${RPI_COLOUR_THEME:-"standard"}"
 # shellcheck disable=SC2034
 RPI_PROJECT_REPOSITORY="https://github.com/niall-byrne/rpi-media-centre"
 # shellcheck disable=SC2034
@@ -24,6 +25,9 @@ export RPI_SVC_USERNAME="${RPI_SVC_USERNAME:-""}"
 export RPI_SVC_GID=${RPI_SVC_GID:-""}
 export RPI_SVC_UID=${RPI_SVC_UID:-""}
 export RPI_SVC_UID_RO=${RPI_SVC_UID_RO:-""}
+
+RPI_DISK_GAUGE_THRESHOLD_WARNING=${RPI_DISK_GAUGE_THRESHOLD_WARNING:-60}
+RPI_DISK_GAUGE_THRESHOLD_CRITICAL=${RPI_DISK_GAUGE_THRESHOLD_CRITICAL:-90}
 
 # Backup Environment Variable Defaults
 export RPI_BACKUP_PATH_QUEUE_ROOT="${RPI_BACKUP_PATH_QUEUE_ROOT:-"/var/local/rpi/backup_jobs"}"
