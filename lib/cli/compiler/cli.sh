@@ -5,9 +5,9 @@
 set -eo pipefail
 
 # CLI Column Alignment Settings
-RPI_CLI_COLUMN_ALIGNMENT_WITH_TAB="37"
+RPI_CLI_COLUMN_WIDTH="42"
 # shellcheck disable=SC2034
-RPI_CLI_COLUMN_ALIGNMENT_WITHOUT_TAB="$((RPI_CLI_COLUMN_ALIGNMENT_WITH_TAB + 11))"
+RPI_CLI_COLUMN_ALIGNMENT_WITHOUT_TAB="$((RPI_CLI_COLUMN_WIDTH + 5))"
 
 _cli_compiler_cli() {
   _cli_log_warning "CLI: Compiling ..."
@@ -164,7 +164,7 @@ _cli_compiler_cli_function_usage_decorate_header() {
 }
 
 _cli_compiler_cli_function_usage_decorate_command_arguments() {
-  FILE_LINE="$(_cli_pretty_brackets_style_1 "${COLOUR_GRAY}" "${COLOUR_GRAY}" "${FILE_LINE}")"
+  FILE_LINE="$(_cli_pretty_brackets_style_2 "${FILE_LINE}")"
   FILE_LINE="  ${COLOUR_LIGHT_RED}${FILE_LINE}${COLOUR_NC}"
 }
 
@@ -188,16 +188,19 @@ _cli_compiler_cli_function_usage_decorate_command_argument_list() {
 }
 
 _cli_compiler_cli_function_usage_decorate_command_argument_list_parameter() {
-  RPI_CLI_COMPILER_USAGE_SUBCOMMAND="$(printf "%-${RPI_CLI_COLUMN_ALIGNMENT_WITH_TAB}s" "${RPI_CLI_COMPILER_USAGE_SUBCOMMAND}")"
-  RPI_CLI_COMPILER_USAGE_SUBCOMMAND="$(_cli_pretty_brackets_style_1 "${COLOUR_GRAY}" "${COLOUR_GRAY}" "${RPI_CLI_COMPILER_USAGE_SUBCOMMAND}")"
+  _cli_pretty_justify_left_var "${RPI_CLI_COLUMN_WIDTH}" "RPI_CLI_COMPILER_USAGE_SUBCOMMAND"
+  RPI_CLI_COMPILER_USAGE_SUBCOMMAND="$(_cli_pretty_brackets_style_2 "${RPI_CLI_COMPILER_USAGE_SUBCOMMAND}")"
   RPI_CLI_COMPILER_USAGE_SUBCOMMAND="${COLOUR_LIGHT_BLUE}${RPI_CLI_COMPILER_USAGE_SUBCOMMAND}${COLOUR_NC}"
-  RPI_CLI_COMPILER_USAGE_SUBCOMMAND_HELP="$(_cli_pretty_brackets_style_1 "${COLOUR_GRAY}" "${COLOUR_GRAY}" "${RPI_CLI_COMPILER_USAGE_SUBCOMMAND_HELP}")"
+  RPI_CLI_COMPILER_USAGE_SUBCOMMAND_HELP="$(_cli_pretty_brackets_style_2 "${RPI_CLI_COMPILER_USAGE_SUBCOMMAND_HELP}")"
   FILE_LINE="    ${RPI_CLI_COMPILER_USAGE_SUBCOMMAND} - ${RPI_CLI_COMPILER_USAGE_SUBCOMMAND_HELP}"
 }
 
 _cli_compiler_cli_function_usage_decorate_command_argument_list_switch() {
   FILE_LINE="   ${COLOUR_LIGHT_BLUE}${RPI_CLI_COMPILER_USAGE_SUBCOMMAND:0:2}${COLOUR_NC} "
-  FILE_LINE+="$(printf "%-${RPI_CLI_COLUMN_ALIGNMENT_WITH_TAB}s" "$(_cli_pretty_brackets_style_1 "${COLOUR_NC}" "${COLOUR_GRAY}" "${RPI_CLI_COMPILER_USAGE_SUBCOMMAND:3}")")"
+  FILE_LINE+="$(
+    _cli_pretty_brackets_style_1 "${RPI_CLI_COMPILER_USAGE_SUBCOMMAND:3}" |
+      _cli_pretty_justify_left "${RPI_CLI_COLUMN_WIDTH}"
+  )"
 }
 
 _cli_compiler_cli_function_usage_error() {

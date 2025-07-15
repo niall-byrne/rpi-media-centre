@@ -34,7 +34,7 @@ _configuration_pictl_debug() {
     grep -v "COLOUR" |
     sed 's/^declare -. //g' |
     sort |
-    _cli_pretty_envar
+    _cli_pretty_env_var
 }
 
 _configuration_pictl_help() {
@@ -44,7 +44,7 @@ _configuration_pictl_help() {
   grep '^| `RPI_' README.md |
     cut -d "|" -f2,3 |
     sort |
-    _cli_pretty_markdown |
+    _cli_pretty_markdown_link |
     _cli_pretty_columns
 
   echo "Please see ${RPI_PROJECT_REPOSITORY} for further details."
