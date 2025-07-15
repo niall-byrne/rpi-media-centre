@@ -1,7 +1,7 @@
 #!/bin/bash
 # shellcheck disable=SC2034
 
-# pictl cli theme library
+# pictl cli base colours library
 
 set -eo pipefail
 
