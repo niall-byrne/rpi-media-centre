@@ -65,3 +65,41 @@ repos:
         stages: [manual]
         pass_filenames: false
         require_serial: true
+      - id: headers-source-file-library-root
+        name: headers-source-file-library-root
+        entry: "\\A(?!#!/bin/bash\n(# shellcheck disable=.+\n){0,1}\nset -Eeo pipefail\n).+\\Z"
+        args: [--multiline]
+        language: pygrep
+        files: "^(lib/__all__.sh)$"
+      - id: headers-source-file-module-roots
+        name: headers-source-file-module-roots
+        entry: "\\A(?!#!/bin/bash\n(# shellcheck disable=.+\n){0,1}\nset -eo pipefail\n).+\\Z"
+        args: [--multiline]
+        language: pygrep
+        files: "^(.+/__all__.sh)$"
+        exclude: "^(lib/__all__.sh)$"
+      - id: headers-source-files
+        name: headers-source-files
+        entry: "\\A(?!#!/bin/bash\n(# shellcheck disable=.+\n){0,1}\n# pictl.+\nset -eo pipefail\n).+\\Z"
+        args: [--multiline]
+        language: pygrep
+        files: "^lib/.+\\.sh$"
+        exclude: "^(.+tests/.+\\.sh|.+/__all__.sh|lib/defaults.sh|lib/trap.sh)$"
+      - id: headers-source-files-exporting-traps
+        name: headers-source-files-exporting-traps
+        entry: "\\A(?!#!/bin/bash\n(# shellcheck disable=.+\n){0,1}\n# pictl.+\nset -Eeo pipefail\n).+\\Z"
+        args: [--multiline]
+        language: pygrep
+        files: "^(lib/trap.sh)$"
+      - id: headers-test-files
+        name: headers-test-files
+        entry: "\\A(?!#!/bin/bash\n).+\\Z"
+        args: [--multiline]
+        language: pygrep
+        files: "^(.+tests/test_.+\\.sh)$"
+      - id: source-test-files
+        name: source-test-files
+        entry: "\\A#!/bin/bash\n.+(source \".+\"|\\. \".+\")+.+\\Z"
+        args: [--multiline]
+        language: pygrep
+        files: "^(.+tests/test_.+\\.sh)$"
