@@ -91,6 +91,13 @@ repos:
         args: [--multiline]
         language: pygrep
         files: "^(lib/trap.sh)$"
+      - id: headers-stdlib-source-files
+        name: headers-stdlib-source-files
+        entry: "\\A(?!#!/bin/bash\n(# shellcheck disable=.+\n){0,1}\n# stdlib.+\nset -eo pipefail\n).+\\Z"
+        args: [--multiline]
+        language: pygrep
+        files: "^stdlib/.+\\.sh$"
+        exclude: "^(.+tests/.+\\.sh)$"
       - id: headers-test-files
         name: headers-test-files
         entry: "\\A(?!#!/bin/bash\n).+\\Z"
