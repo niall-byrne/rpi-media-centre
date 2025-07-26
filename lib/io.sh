@@ -76,6 +76,31 @@ _io_comment_lines_stdin() {
   done
 }
 
+_io_ensure_vars_set() {
+  # $1 the number of variables expected to be received
+  # $@ the list of variable values to check
+
+  local RPI_IO_EXPECTED_ARG_LENGTH="${1}"
+  local RPI_IO_ARG_INDEX=1
+
+  shift
+
+  if [[ "${RPI_IO_EXPECTED_ARG_LENGTH}" != "${#@}" ]]; then
+    _cli_log_error "Expected '${RPI_IO_EXPECTED_ARG_LENGTH}' arguments, but received '${#@}'!"
+    return 127
+  fi
+
+  while (("${#@}" > "0")); do
+    if [[ -z "${1}" ]]; then
+      _cli_log_error "Expected '${RPI_IO_EXPECTED_ARG_LENGTH}' arguments, but argument '${RPI_IO_ARG_INDEX}' was unset!"
+      return 127
+    fi
+    shift
+    ((RPI_IO_ARG_INDEX++))
+  done
+
+}
+
 _io_make_pipeable() {
   # $1: the function name
   # $2: the number of arguments expected

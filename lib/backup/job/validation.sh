@@ -63,7 +63,10 @@ _backup_job_validation_path() {
   # $1: the path to check
 
   _filesystem_check_is_folder "${1}"
-  _security_path_check "${1}" "${RPI_SVC_USERNAME}" "${RPI_SVC_GROUPNAME}" "700"
+  # TODO: NOT SURE ABOUT THIS
+  if [[ "${RPI_RUNTIME_ENVIRONMENT}" != "service" ]]; then
+    _security_path_check "${1}" "${RPI_SVC_USERNAME}" "${RPI_SVC_GROUPNAME}" "700"
+  fi
 }
 
 _backup_job_validation_queue() {

@@ -5,6 +5,8 @@ set -Eeo pipefail
 # shellcheck source=lib/io.sh
 source "${RPI_WORKING_DIRECTORY}/lib/io.sh"
 
+# shellcheck source=lib/array.sh
+source "${RPI_WORKING_DIRECTORY}/lib/array.sh"
 # shellcheck source=lib/defaults.sh
 source "${RPI_WORKING_DIRECTORY}/lib/defaults.sh"
 # shellcheck source=lib/backup/__all__.sh
@@ -33,5 +35,7 @@ source "${RPI_WORKING_DIRECTORY}/lib/installer/cli.sh"
 source "${RPI_WORKING_DIRECTORY}/lib/manifest.sh"
 # shellcheck source=lib/security/__all__.sh
 source "${RPI_WORKING_DIRECTORY}/lib/security/__all__.sh"
+# shellcheck source=lib/settings.sh
+source "${RPI_WORKING_DIRECTORY}/lib/settings.sh"
 # shellcheck source=lib/trap.sh
 source "${RPI_WORKING_DIRECTORY}/lib/trap.sh"

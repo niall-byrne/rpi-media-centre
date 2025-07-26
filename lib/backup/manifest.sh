@@ -34,7 +34,7 @@ _backup_manifest_all_command() {
       continue
     fi
 
-    _backup_manifest_all_command_wrapper \
+    __backup_manifest_all_command_wrapper \
       "${1}" \
       "${RPI_BACKUP_JOBS_NAMES[RPI_BACKUP_JOBS_INDEX]}" \
       "${RPI_BACKUP_JOBS_GROUPS[RPI_BACKUP_JOBS_INDEX]}" \
@@ -49,7 +49,7 @@ _backup_manifest_all_command() {
   done
 }
 
-_backup_manifest_all_command_wrapper() {
+__backup_manifest_all_command_wrapper() {
   local RPI_BACKUP_MANIFEST_ALL_COMMAND="${1}"
   local RPI_BACKUP_JOB_NAME="${2}"
   local RPI_BACKUP_JOB_GROUP="${3}"
@@ -80,7 +80,7 @@ _backup_manifest_help() {
 }
 
 _backup_manifest_line_invalid() {
-  _cli_log_error "The /etc/rpi/backup file is improperly formatted!"
+  _cli_log_error "The ${RPI_MANIFEST_BACKUP} file is improperly formatted!"
   {
     echo "Input Line: ${FILE_LINE}"
     _backup_job_log
@@ -108,17 +108,17 @@ _backup_manifest_load() {
   local RPI_BACKUP_JOB_REMOTE_TARGET
   local RPI_BACKUP_JOB_REMOTE_PARAMETER
 
-  _cli_log_notice "-- loading /etc/rpi/backup file ... --"
+  _cli_log_notice "-- loading ${RPI_MANIFEST_BACKUP} file ... --"
 
-  if [[ ! -e /etc/rpi/backup ]]; then
-    _cli_log_error "Please create the /etc/rpi/backup file to use this feature."
+  if [[ ! -e "${RPI_MANIFEST_BACKUP}" ]]; then
+    _cli_log_error "Please create the ${RPI_MANIFEST_BACKUP} file to use this feature."
     {
       _backup_manifest_help
     } >&2
     return 127
   fi
 
-  _security_path_check /etc/rpi/backup "root" "root" "600"
+  _security_path_check "${RPI_MANIFEST_BACKUP}" "root" "root" "600"
 
   while IFS= read -r FILE_LINE; do
 
@@ -163,7 +163,7 @@ _backup_manifest_load() {
     RPI_BACKUP_JOBS_REMOTE_TARGETS+=("${RPI_BACKUP_JOB_REMOTE_TARGET}")
     RPI_BACKUP_JOBS_REMOTE_PARAMETERS+=("${RPI_BACKUP_JOB_REMOTE_PARAMETER}")
 
-  done < /etc/rpi/backup
+  done < "${RPI_MANIFEST_BACKUP}"
 }
 
 _backup_manifest_write_jobs_all() {
