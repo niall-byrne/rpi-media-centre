@@ -1,0 +1,12 @@
+diff --git a/bin/bashcov b/bin/bashcov
+index d7a63c1..01340e5 100755
+--- a/bin/bashcov
++++ b/bin/bashcov
+@@ -27,6 +27,8 @@ if SimpleCov.use_merging
+   result = SimpleCov::ResultMerger.merged_result
+ end
+
++SimpleCov.instance_variable_set(:@result, result)
++
+ SimpleCov.at_exit do
+   puts "Run completed using #{Bashcov.fullname}" unless Bashcov.mute

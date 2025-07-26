@@ -23,6 +23,7 @@ repos:
         files: "^.+\\.(bash|sh)$|^pictl"
       - id: format-toml
       - id: git-conflict-markers
+        exclude: "^stdlib/logger/tests/test_stdlib_logger_traceback.sh$"
       - id: lint-github-workflow
       - id: lint-github-workflow-header
       - id: lint-markdown
@@ -58,6 +59,13 @@ repos:
         stages: [pre-commit]
   - repo: local
     hooks:
+      - id: bash-coverage-stdlib
+        name: bash-unit-tests
+        entry: bash -c 'TEST_CONTAINER_CI=1 ./testing/container.sh bashcov --root stdlib t stdlib'
+        language: system
+        stages: [manual]
+        pass_filenames: false
+        require_serial: true
       - id: bash-unit-tests
         name: bash-unit-tests
         entry: bash -c 'TEST_CONTAINER_CI=1 ./testing/container.sh t'

@@ -17,7 +17,7 @@ _test_runner_discover() {
       continue
     fi
     __RPI_TEST_RUNNER_DISCOVERED_TEST_MODULES+=("${__RPI_TEST_RUNNER_DISCOVERED_TEST_FILE}")
-  done < <(find "${RPI_WORKING_DIRECTORY}"/lib -name "test_*" -type f -print0)
+  done < <(find "${RPI_WORKING_DIRECTORY}"/{lib,stdlib} -name "test_*" -type f -print0)
 }
 
 _test_runner_execute() {
@@ -54,10 +54,16 @@ _test_runner_load_project() {
   source "${RPI_WORKING_DIRECTORY}/lib/__fixtures__/__all__.sh"
 }
 
+_test_runner_load_stdlib() {
+  # shellcheck source=lib/__all__.sh
+  source "${RPI_WORKING_DIRECTORY}/stdlib/__lib__.sh"
+}
+
 _test_runner_main() {
   local __RPI_TEST_RUNNER_DISCOVERED_TEST_MODULES=()
   local __RPI_TEST_RUNNER_EXIT_CODE
 
+  _test_runner_load_stdlib
   _test_runner_load_framework_support
   _test_runner_load_project
 

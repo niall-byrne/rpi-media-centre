@@ -1,0 +1,62 @@
+#!/bin/bash
+
+# shellcheck disable=SC2034
+setup() {
+  ARRAY1=("sandwiches" "pizza" "wraps")
+  NOT_ARRAY="not an array"
+  EMPTY_ARRAY=()
+
+  _mock.create stdlib.logger.error
+}
+
+@parametrize_with_arg_combos() {
+  # $1: test function to parametrize
+
+  @parametrize \
+    "${1}" \
+    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
+    "no_args__________returns_status_code_127,,127" \
+    "extra_arg________returns_status_code_127,ARRAY1|extra_arg,127" \
+    "arg_is_string____returns_status_code_126,NOT_ARRAY,126" \
+    "empty_array______returns_status_code___1,EMPTY_ARRAY,1" \
+    "populated_array__returns_status_code___0,ARRAY1,0"
+}
+
+@parametrize_with_error_messages() {
+  # $1: test function to parametrize
+
+  @parametrize \
+    "${1}" \
+    "TEST_ARGS_DEFINITION,TEST_EXPECTED_LOG_MESSAGE" \
+    "arg_is_string__,NOT_ARRAY,The value 'NOT_ARRAY' is not an array!" \
+    "empty_array____,EMPTY_ARRAY,The array 'EMPTY_ARRAY' is empty!"
+}
+
+test_stdlib_array_assert_is_not_empty__@vary() {
+  local args=()
+
+  IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
+
+  _capture_rc stdlib.array.assert.is_not_empty "${args[@]}" > /dev/null
+
+  assert_rc "${TEST_EXPECTED_RC}"
+}
+
+@parametrize_with_arg_combos \
+  test_stdlib_array_assert_is_not_empty__@vary
+
+test_stdlib_array_assert_is_not_empty__@vary__logs_an_error() {
+  local args=()
+  local expected_log_messages=()
+
+  IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
+  IFS="|" read -ra expected_log_messages <<< "${TEST_EXPECTED_LOG_MESSAGE}"
+
+  _capture_rc stdlib.array.assert.is_not_empty "${args[@]}" > /dev/null
+
+  stdlib.logger.error.mock.assert_calls_are \
+    "${expected_log_messages[@]}"
+}
+
+@parametrize_with_error_messages \
+  test_stdlib_array_assert_is_not_empty__@vary__logs_an_error
