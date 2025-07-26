@@ -1,0 +1,25 @@
+${THEME_ENTITY} RPI_BACKUP_JOB_NAME                           ${THEME_NC}- a unique name for the backup job 
+${THEME_ENTITY} RPI_BACKUP_JOB_GROUP                          ${THEME_NC}- a group for the backup job 
+                                                 (daily, weekly, monthly) 
+${THEME_ENTITY} RPI_BACKUP_JOB_LOCAL_SOURCE                   ${THEME_NC}- the local path to the backup source 
+${THEME_ENTITY} RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER             ${THEME_NC}- an optional local path to rsync the data to 
+                                                 (--delete is used) 
+                                                 (required when ${THEME_QUOTES}RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER${THEME_NC} 
+                                                 is blank and ${THEME_QUOTES}RPI_BACKUP_JOB_REMOTE_TARGET${THEME_NC} is also 
+                                                 blank) 
+${THEME_ENTITY} RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER           ${THEME_NC}- an optional local path to keep a tarball copy at 
+                                                 (required when ${THEME_QUOTES}RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER${THEME_NC} is 
+                                                 blank and ${THEME_QUOTES}RPI_BACKUP_JOB_REMOTE_TARGET${THEME_NC} is also blank) 
+                                                 (required when ${THEME_QUOTES}RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS${THEME_NC} 
+                                                 is set) 
+${THEME_ENTITY} RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS         ${THEME_NC}- an optional count of local tarball versions to keep 
+                                                 (required when ${THEME_QUOTES}RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER${THEME_NC} 
+                                                 is set) 
+${THEME_ENTITY} RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH     ${THEME_NC}- an optional local path to an encryption key file 
+${THEME_ENTITY} RPI_BACKUP_JOB_REMOTE_TARGET                  ${THEME_NC}- an optional remote target for archival 
+                                                 (required when ${THEME_QUOTES}RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER${THEME_NC} is 
+                                                 blank and ${THEME_QUOTES}RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER${THEME_NC} is also 
+                                                 blank) 
+${THEME_ENTITY} RPI_BACKUP_JOB_REMOTE_PARAMETER               ${THEME_NC}- optional extra parameters for remote archival 
+                                                 (only permitted when ${THEME_QUOTES}RPI_BACKUP_JOB_REMOTE_TARGET${THEME_NC} 
+                                                 is set) 

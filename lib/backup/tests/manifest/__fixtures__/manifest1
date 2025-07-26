@@ -1,0 +1,2 @@
+test1,yearly,/path/folder1,/path/rsync1,,,/path/key1,s3://bucket/path1,,
+test2,daily,/path/folder2,,/path/tarball1,4,,s3://bucket/path1/path2,,

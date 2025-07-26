@@ -56,3 +56,12 @@ repos:
           - "--schemafile"
           - ".github/config/schemas/workflows/workflow-push.json"
         stages: [pre-commit]
+  - repo: local
+    hooks:
+      - id: bash-unit-tests
+        name: bash-unit-tests
+        entry: bash -c 'TEST_CONTAINER_CI=1 ./testing/container.sh t'
+        language: system
+        stages: [manual]
+        pass_filenames: false
+        require_serial: true

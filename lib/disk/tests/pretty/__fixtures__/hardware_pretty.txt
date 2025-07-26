@@ -1,0 +1,8 @@
+${THEME_DEVICE}/dev/sda${THEME_NC}:
+ drive state is:  ${THEME_DISK_INDICATOR_IDLE}standby${THEME_NC}
+${THEME_DEVICE}/dev/sdb${THEME_NC}:
+ drive state is:  ${THEME_DISK_INDICATOR_IDLE}standby${THEME_NC}
+${THEME_DEVICE}/dev/sdc${THEME_NC}:
+ drive state is:  ${THEME_DISK_INDICATOR_IDLE}standby${THEME_NC}
+${THEME_DEVICE}/dev/sdd${THEME_NC}:
+ drive state is:  ${THEME_DISK_INDICATOR_ACTIVE}active/idle${THEME_NC}

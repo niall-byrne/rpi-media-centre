@@ -1,0 +1,4 @@
+${THEME_HEADER}Valid Queues:${THEME_NC}
+   - ${THEME_ENTITY}rsync     ${THEME_NC}${THEME_INFO}- create rsync copy${THEME_NC}
+   - ${THEME_ENTITY}tar       ${THEME_NC}${THEME_INFO}- create tar bundle${THEME_NC}
+   - ${THEME_ENTITY}upload    ${THEME_NC}${THEME_INFO}- upload tar bundle to remote storage${THEME_NC}
