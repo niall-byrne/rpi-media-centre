@@ -31,7 +31,7 @@ _security_defaults_set_groupname() {
     # Group has been specified, check if it exists.
     if ! getent group "${RPI_SVC_GROUPNAME}" > /dev/null 2>&1; then
       _cli_log_error "SECURITY: The specified group '${RPI_SVC_GROUPNAME}' (RPI_SVC_GROUPNAME) does not exist!"
-      echo "Please consider using the 'account' command to provision it."
+      _cli_log_info "Please consider using the 'account' command to provision it."
       return 127
     fi
   else
@@ -44,7 +44,7 @@ _security_defaults_set_username() {
   if [[ -n "${RPI_SVC_USERNAME}" ]]; then
     if ! id "${RPI_SVC_USERNAME}" > /dev/null 2>&1; then
       _cli_log_error "SECURITY: The specified user '${RPI_SVC_USERNAME}' (RPI_SVC_USERNAME) does not exist!"
-      echo "Please consider using the 'account' command to provision it."
+      _cli_log_info "Please consider using the 'account' command to provision it."
       return 127
     fi
     return 0

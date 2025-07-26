@@ -115,7 +115,7 @@ _backup_scheduler_validate_schedule() {
   if (("${RPI_SCHEDULER_START_EPOCH}" >= "${RPI_SCHEDULER_END_EPOCH}")); then
     _cli_log_error "BACKUP SCHEDULER: Scheduling error !"
     _cli_log_error "The value for RPI_BACKUP_SCHEDULER_START_TIME must come before the value for RPI_BACKUP_SCHEDULER_END_TIME !"
-    echo "Please revise your /etc/rpi/config file."
+    _cli_log_info "Please revise your /etc/rpi/config file."
     return 127
   fi
 }
