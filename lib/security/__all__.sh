@@ -12,6 +12,8 @@ source "${RPI_WORKING_DIRECTORY}/lib/security/id.sh"
 source "${RPI_WORKING_DIRECTORY}/lib/security/path.sh"
 # shellcheck source=lib/security/root.sh
 source "${RPI_WORKING_DIRECTORY}/lib/security/root.sh"
+# shellcheck source=lib/security/sanitize.sh
+source "${RPI_WORKING_DIRECTORY}/lib/security/sanitize.sh"
 # shellcheck source=lib/security/validation.sh
 source "${RPI_WORKING_DIRECTORY}/lib/security/validation.sh"
 # shellcheck source=lib/security/warning.sh
