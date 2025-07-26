@@ -26,12 +26,14 @@ _security_validate_ids_relationship() {
   # $2: the name of the required variable
   # $3: the name of the associated entity
 
+  _io_ensure_vars_set "3" "${@}"
+
   if [[ -n "${!1}" ]] &&
     [[ -z "${!2}" ]]; then
     _cli_log_error "SECURITY: invalid configuration!"
     _cli_log_error "The config cannot specify ${1} without a value for ${2}:"
-    echo " - ${1} may be used with the 'account' command to provision a new ${3}"
-    echo " - ${2} may be used to specify an existing ${3}"
+    _cli_log_info " - ${1} may be used with the 'account' command to provision a new ${3}"
+    _cli_log_info " - ${2} may be used to specify an existing ${3}"
     return 127
   fi
 

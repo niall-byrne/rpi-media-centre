@@ -51,7 +51,7 @@ _disk_unlock() {
     if [[ -n "${RPI_DISK_CRYPT_GROUP}" ]]; then
       _disk_unlock_with_crypt_group
     else
-      cryptsetup luksOpen "/dev/disk/by-uuid/${RPI_DISK_UUID}" "${RPI_DISK_NAME}"
+      _disk_unlock_without_crypt_group
     fi
 
     _cli_log_warning "Checking data on disk '${RPI_DISK_NAME}' ..."
@@ -80,4 +80,8 @@ _disk_unlock_with_crypt_group() {
 
   echo "${RPI_DISK_CRYPT_PASSWORD}" |
     cryptsetup luksOpen "/dev/disk/by-uuid/${RPI_DISK_UUID}" "${RPI_DISK_NAME}"
+}
+
+_disk_unlock_without_crypt_group() {
+  cryptsetup luksOpen "/dev/disk/by-uuid/${RPI_DISK_UUID}" "${RPI_DISK_NAME}"
 }
