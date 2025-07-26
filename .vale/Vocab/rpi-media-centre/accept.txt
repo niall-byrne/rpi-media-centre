@@ -4,6 +4,7 @@ Plex|plex
 Samba|samba
 Syncthing|syncthing
 dockerized
+eval
 fstab
 hostname
 ip
