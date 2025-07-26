@@ -29,8 +29,8 @@ _security_account_provision_service_account() {
   _security_account_provision_service_account_username "${RPI_SVC_USERNAME}"
 
   _cli_log_success "SECURITY: The service account has been successfully provisioned."
-  echo "If this is the service account you wish to use it must be able to read your media file."
-  echo "Please consider: sudo chown -R ${RPI_SVC_USERNAME}:${RPI_SVC_GROUPNAME} ${RPI_ROOT}/shared/media"
+  _cli_log_info "If this is the service account you wish to use it must be able to read your media file."
+  _cli_log_info "Please consider: sudo chown -R ${RPI_SVC_USERNAME}:${RPI_SVC_GROUPNAME} ${RPI_ROOT}/shared/media"
 }
 
 _security_account_provision_service_account_group() {
@@ -64,7 +64,7 @@ _security_account_provision_service_account_group() {
 _security_account_provision_service_account_username() {
   # $1: the user to create
 
-  if ! getent passwd "${RPI_SVC_USERNAME}" > /dev/null; then
+  if ! getent passwd "${1}" > /dev/null; then
     _cli_log_warning "SECURITY: Adding the service account user '${1}' ..."
 
     _io_prompt_confirmation
@@ -89,7 +89,7 @@ _security_account_provision_service_account_username() {
     _cli_log_success "SECURITY: The service account user '${1}' has been created with uid '${RPI_SVC_UID}' !"
 
   else
-    _cli_log_notice "SECURITY: The username '${1}' already exists, nothing to do."
+    _cli_log_notice "SECURITY: The user '${1}' already exists, nothing to do."
     _security_defaults_set_uid
   fi
 }

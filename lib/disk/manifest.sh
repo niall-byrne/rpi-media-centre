@@ -20,7 +20,7 @@ _disk_manifest_all_command() {
     _dependencies_group_disks_crypt
 
     for ((RPI_DISK_INDEX = 0; RPI_DISK_INDEX < "${#RPI_DISK_UUID_SET[@]}"; RPI_DISK_INDEX++)); do
-      _disk_manifest_all_command_wrapper \
+      __disk_manifest_all_command_wrapper \
         "${1}" \
         "${RPI_DISK_UUID_SET[RPI_DISK_INDEX]}" \
         "${RPI_DISK_NAME_SET[RPI_DISK_INDEX]}" \
@@ -30,7 +30,7 @@ _disk_manifest_all_command() {
   fi
 }
 
-_disk_manifest_all_command_wrapper() {
+__disk_manifest_all_command_wrapper() {
   local RPI_DISK_MANIFEST_ALL_COMMAND="${1}"
   local RPI_DISK_UUID="${2}"
   local RPI_DISK_NAME="${3}"
@@ -52,7 +52,7 @@ _disk_manifest_help() {
 
 _disk_manifest_line_invalid() {
   {
-    echo "The /etc/rpi/crypt file is improperly formatted!"
+    echo "The ${RPI_MANIFEST_CRYPT} file is improperly formatted!"
     echo "Input Line: ${FILE_LINE}"
     _disk_manifest_line_log
     _disk_manifest_help
@@ -76,10 +76,17 @@ _disk_manifest_line_log_all() {
 _disk_manifest_line_validate() {
   # $1: the help function to call in the event that the line is invalid
 
-  if ! _filesystem_check_is_folder "${RPI_DISK_MOUNT_POINT}" ||
-    ! _security_path_check "${RPI_DISK_MOUNT_POINT}" "${RPI_SVC_USERNAME}" "${RPI_SVC_GROUPNAME}" "700"; then
+  if ! _filesystem_check_is_folder "${RPI_DISK_MOUNT_POINT}"; then
     "${1}"
     return 127
+  fi
+
+  if [[ "${RPI_RUNTIME_ENVIRONMENT}" != "service" ]]; then
+    # TODO: investigate a better way of handling service mode for these exceptions
+    if ! _security_path_check "${RPI_DISK_MOUNT_POINT}" "${RPI_SVC_USERNAME}" "${RPI_SVC_GROUPNAME}" "700"; then
+      "${1}"
+      return 127
+    fi
   fi
 
   if [[ -z "${RPI_DISK_UUID}" ]] ||
@@ -102,9 +109,9 @@ _disk_manifest_load() {
   local RPI_DISK_CRYPT_GROUP
   local RPI_DISK_MOUNT_POINT
 
-  _cli_log_notice "-- loading /etc/rpi/crypt file ... --"
+  _cli_log_notice "-- loading ${RPI_MANIFEST_CRYPT} file ... --"
 
-  _security_path_check /etc/rpi/crypt "root" "root" "600"
+  _security_path_check "${RPI_MANIFEST_CRYPT}" "root" "root" "600"
 
   while IFS= read -r FILE_LINE; do
     IFS="," read -r \
@@ -139,7 +146,7 @@ _disk_manifest_load() {
     RPI_DISK_MOUNT_POINT_SET+=("${RPI_DISK_MOUNT_POINT}")
     RPI_DISK_CRYPT_PASSWORD_SET+=($'\\0')
 
-  done < /etc/rpi/crypt
+  done < "${RPI_MANIFEST_CRYPT}"
 }
 
 _disk_manifest_mount_all() {
