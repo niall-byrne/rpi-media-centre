@@ -25,13 +25,16 @@ This project requires the following hardware:
 
 This project combines the following software:
 
-1. [greensheep/plex-server-docker-rpi](https://github.com/greensheep/plex-server-docker-rpi)
-    - a dockerized implementation of [Plex](https://www.plex.tv/)
-    - facilitates access to your media via the Plex family of native and web applications
-2. [crazymax/samba](https://github.com/crazy-max/docker-samba)
+1. [pihole/pihole](https://github.com/pi-hole/pi-hole)
+   - a managed ad-blocking DNS server
+   - an optional managed DHCP server for your local LAN
+2. [greensheep/plex-server-docker-rpi](https://github.com/greensheep/plex-server-docker-rpi)
+   - a dockerized implementation of [Plex](https://www.plex.tv/)
+   - facilitates access to your media via the Plex family of native and web applications
+3.[crazymax/samba](https://github.com/crazy-max/docker-samba)
    - a dockerized implementation of [Samba](https://www.samba.org/)
    - facilitates loading and downloading media to/from computers and mobile phones
-3. [syncthing/syncthing](https://github.com/syncthing/syncthing/blob/main/README-Docker.md)
+4.[syncthing/syncthing](https://github.com/syncthing/syncthing/blob/main/README-Docker.md)
    - a dockerized implementation of [Syncthing](https://syncthing.net/)
    - a self-hosted Google Drive or Dropbox type file synchronization solution
 
@@ -113,20 +116,24 @@ It is imperative to keep this file secure, as it generally will contain sensitiv
 
 The [docker-compose.yml](services/docker-compose.yml) is configured by series of `RPI` prefixed environment variables:
 
-| Variable              | Value                                                                                                                                           |
-|-----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
-| `RPI_MANIFEST_EDITOR` | defaults to `/usr/bin/vi`                                                                                                                       |
-| `RPI_RESTART_POLICY`  | defaults to `no` (See the [documentation](https://github.com/compose-spec/compose-spec/blob/main/spec.md#restart) for details on this setting.) |
-| `RPI_ROOT`            | defaults to `/mnt/media`                                                                                                                        |
-| `RPI_SVC_GID`         | defaults to the current user's `gid`, if customizing consider what `gid` your disk is mounted with or accessible by                             |
-| `RPI_SVC_GROUPNAME`   | defaults to the group associated with `RPI_SVC_GID` or create a new group `nas` with this `gid`                                                 |
-| `RPI_SVC_UID`         | defaults to the current user's `uid`, if customizing consider what `uid` your disk is mounted with or accessible by                             |
-| `RPI_SVC_USERNAME`    | defaults the user associated with `RPI_SVC_UID` or create a new user `nas` with this `uid`                                                      |
-| `RPI_SVC_UID_RO`      | defaults to the current user's `uid` incremented by 1, used by Samba as the `uid` of the read-only `android` user                               |
+| Variable              | Value                                                                                                                                                                           |
+|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `RPI_HOST_IP`         | defaults to the first ip address found with `hostname -I` or will fallback to `127.0.0.1`                                                                                       |
+| `RPI_HOST_TZ`         | defaults to the contents of `/etc/timezone` or will fallback to `UTC` (See this [article](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for a list of options.) |
+| `RPI_MANIFEST_EDITOR` | defaults to `/usr/bin/vi`                                                                                                                                                       |
+| `RPI_RESTART_POLICY`  | defaults to `no` (See the [documentation](https://github.com/compose-spec/compose-spec/blob/main/spec.md#restart) for details on this setting.)                                 |
+| `RPI_ROOT`            | defaults to `/mnt/media`                                                                                                                                                        |
+| `RPI_SVC_GID`         | defaults to the current user's `gid`, if customizing consider what `gid` your disk is mounted with or accessible by                                                             |
+| `RPI_SVC_GROUPNAME`   | defaults to the group associated with `RPI_SVC_GID` or create a new group `nas` with this `gid`                                                                                 |
+| `RPI_SVC_UID`         | defaults to the current user's `uid`, if customizing consider what `uid` your disk is mounted with or accessible by                                                             |
+| `RPI_SVC_USERNAME`    | defaults the user associated with `RPI_SVC_UID` or create a new user `nas` with this `uid`                                                                                      |
+| `RPI_SVC_UID_RO`      | defaults to the current user's `uid` incremented by 1, used by Samba as the `uid` of the read-only `android` user                                                               |
 
 Store one or more of these variables as successive lines in the `/etc/rpi/config` file:
 
   ```bash
+  RPI_HOST_IP="192.168.1.10"
+  RPI_HOST_TZ="America/Toronto"
   RPI_MANIFEST_EDITOR="/usr/bin/nano"
   RPI_RESTART_POLICY="unless-stopped"
   RPI_ROOT="/mnt/my_custom_name"
@@ -149,10 +156,12 @@ To enable a single service, such as Plex, add a line like following:
   RPI_SERVICES=("plex")
   ```
 
-To enable multiple services, add them to the array definition as quoted, space separated, strings:
+To enable multiple services, add them to the array definition as quoted, space separated, strings.
+
+All services can be enabled with the following:
 
   ```bash
-  RPI_SERVICES=("plex" "samba" "syncthing")
+  RPI_SERVICES=("pihole" "plex" "samba" "syncthing")
   ```
 
 #### Event Scripts
@@ -181,6 +190,30 @@ This would work in tandem with the default Samba configuration to ensure the `an
 
 It is recommended to keep these event scripts secure and executable:
    - `$ chmod 700 /etc/rpi/events/event-disk-after-mounted.sh`
+
+#### Pi-hole Configuration
+
+Pi-hole is generally configured through its web interface, but some settings are able for customization.
+
+| Variable                          | Value                                                   |
+|-----------------------------------|---------------------------------------------------------|
+| `RPI_PIHOLE_CREDENTIALS_PASSWORD` | managed by `pictl`, but defaults to `nobody` for no-ops |
+| `RPI_PIHOLE_PATH_CONFIG`          | defaults to `${RPI_ROOT}/pihole/config`                 |
+| `RPI_PIHOLE_PATH_DNSMASQ`         | defaults to `${RPI_ROOT}/pihole/dnsmasq`                |
+
+These values can be customized by storing one or more of them as successive lines in the `/etc/rpi/config` file:
+
+  ```bash
+  RPI_PIHOLE_CREDENTIALS_PASSWORD="!*secret1234"
+  RPI_PIHOLE_PATH_CONFIG="/var/local/rpi/pihole/config"
+  RPI_PIHOLE_PATH_DNSMASQ="/var/local/rpi/pihole/dnsmasq"
+  ```
+
+This service is *not* enabled by default.  To use it, add it to an `RPI_SERVICES` array definition in the `/etc/rpi/config` file
+
+  ```bash
+  RPI_SERVICES=("pihole" "plex" "samba")
+  ```
 
 #### Plex Configuration
 

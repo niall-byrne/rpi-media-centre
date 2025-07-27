@@ -8,6 +8,8 @@ set -eo pipefail
 RPI_PROJECT_REPOSITORY="https://github.com/niall-byrne/rpi-media-centre"
 
 export RPI_EXECUTION_DIRECTORY="${RPI_EXECUTION_DIRECTORY:-"${PWD}"}"
+export RPI_HOST_IP="${RPI_HOST_IP:-"$(hostname -I | cut -f 1 -d ' ' || "127.0.0.1")"}"
+export RPI_HOST_TZ="${RPI_HOST_TZ:-"$(cat /etc/timezone || "UTC")"}"
 export RPI_MANIFEST_EDITOR="${RPI_MANIFEST_EDITOR:-"/usr/bin/vi"}"
 export RPI_PATH_BACKUP="${RPI_PATH_BACKUP}"
 export RPI_RESTART_POLICY="${RPI_RESTART_POLICY:-no}"
@@ -24,6 +26,11 @@ export RPI_BACKUP_PATH_QUEUE_ROOT="${RPI_BACKUP_PATH_QUEUE_ROOT:-"/var/local/rpi
 export RPI_BACKUP_SCHEDULER_START_TIME="${RPI_BACKUP_SCHEDULER_START_TIME:-"00:00:00"}"
 export RPI_BACKUP_SCHEDULER_END_TIME="${RPI_BACKUP_SCHEDULER_END_TIME:-"06:00:00"}"
 export RPI_BACKUP_SCHEDULING_HOUR="${RPI_BACKUP_SCHEDULING_HOUR:-"12"}"
+
+# Pihole Environment Variable Defaults
+export RPI_PIHOLE_CREDENTIALS_PASSWORD="${RPI_PIHOLE_CREDENTIALS_PASSWORD}"
+export RPI_PIHOLE_PATH_CONFIG="${RPI_PIHOLE_PATH_CONFIG:-"${RPI_ROOT}/pihole/config"}"
+export RPI_PIHOLE_PATH_DNSMASQ="${RPI_PIHOLE_PATH_DNSMASQ:-"${RPI_ROOT}/pihole/dnsmasq"}"
 
 # Plex Environment Variable Defaults
 export RPI_PLEX_PATH_CONFIG="${RPI_PLEX_PATH_CONFIG:-${RPI_ROOT}/plex/config}"

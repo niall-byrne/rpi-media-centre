@@ -62,6 +62,10 @@ _configuration_pictl_secure_load() {
   fi
 }
 
+_configuration_pihole() {
+  _io_prompt "Enter PiHole Password: " "RPI_PIHOLE_CREDENTIALS_PASSWORD" "password"
+}
+
 _configuration_samba() {
   if [[ -f /etc/rpi/samba.yml ]]; then
     echo "-- loading /etc/rpi/samba.yml file ... --"
