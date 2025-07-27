@@ -76,6 +76,10 @@ _service_start() {
     _configuration_samba
   fi
 
+  if _is_service_selected "pihole"; then
+    _configuration_pihole
+  fi
+
   _docker_compose_command up -d
 
   if _is_service_selected "syncthing"; then

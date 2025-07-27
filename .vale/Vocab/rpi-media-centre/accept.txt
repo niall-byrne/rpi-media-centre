@@ -6,5 +6,7 @@ Syncthing|syncthing
 dockerized
 fstab
 hostname
+ip
+pihole
 rpi-media-centre
 sudo
