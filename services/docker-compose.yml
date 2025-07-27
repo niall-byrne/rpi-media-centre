@@ -2,6 +2,30 @@
 
 services:
 
+  pihole:
+    image: pihole/pihole:latest
+    cap_add:
+      - CHOWN
+      - NET_ADMIN
+      - NET_RAW
+      - SYS_NICE
+      - SYS_TIME
+    container_name: pihole
+    network_mode: host
+    profiles:
+      - pihole
+    environment:
+      - "FTLCONF_webserver_api_password=${RPI_PIHOLE_CREDENTIALS_PASSWORD}"
+      - "FTLCONF_REPLY_ADDR4=${RPI_HOST_IP}"
+      - "PIHOLE_GID=${RPI_SVC_GID}"
+      - "PIHOLE_UID=${RPI_SVC_UID}"
+      - "TZ=${RPI_HOST_TZ}"
+    restart: "${RPI_RESTART_POLICY}"
+    volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "${RPI_PIHOLE_PATH_CONFIG}:/etc/pihole"
+      - "${RPI_PIHOLE_PATH_DNSMASQ}:/etc/dnsmasq.d"
+
   plex:
     image: niallbyrne/plex-server-docker-rpi:latest
     container_name: plex

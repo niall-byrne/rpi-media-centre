@@ -5,6 +5,11 @@
 set -eo pipefail
 
 _disk_initialize_mounts() {
+  if _is_service_selected "pihole"; then
+    _security_path_mkdir "${RPI_PIHOLE_PATH_CONFIG}" "${RPI_SVC_USERNAME}" "${RPI_SVC_GROUPNAME}" "700"
+    _security_path_mkdir "${RPI_PIHOLE_PATH_DNSMASQ}" "${RPI_SVC_USERNAME}" "${RPI_SVC_GROUPNAME}" "700"
+  fi
+
   if _is_service_selected "plex"; then
     _security_path_mkdir "${RPI_PLEX_PATH_CONFIG}" "${RPI_SVC_USERNAME}" "${RPI_SVC_GROUPNAME}" "700"
     _security_path_mkdir "${RPI_PLEX_PATH_TRANSCODE}" "${RPI_SVC_USERNAME}" "${RPI_SVC_GROUPNAME}" "700"
