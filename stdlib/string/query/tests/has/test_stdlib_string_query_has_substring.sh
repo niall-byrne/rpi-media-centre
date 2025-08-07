@@ -26,7 +26,7 @@ test_stdlib_string_query_has_substring__@vary() {
 
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.string.query.has_substring "${args[@]}" > /dev/null
+  _capture.rc stdlib.string.query.has_substring "${args[@]}" > /dev/null
 
   assert_rc "${TEST_EXPECTED_RC}"
 }

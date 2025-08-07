@@ -24,7 +24,7 @@ test_stdlib_security_path_make_dir__invalid_args__@vary() {
 
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.security.path.make.dir "${args[@]}"
+  _capture.rc stdlib.security.path.make.dir "${args[@]}"
 
   assert_rc "${TEST_EXPECTED_RC}"
 }
@@ -45,7 +45,7 @@ test_stdlib_security_path_make_dir__valid_args____calls_secure() {
 }
 
 test_stdlib_security_path_make_dir__valid_args____returns_status_code_0() {
-  _capture_rc stdlib.security.path.make.dir "MOCK_PATH" "MOCK_USER" "MOCK_GROUP" "MOCK_PERM"
+  _capture.rc stdlib.security.path.make.dir "MOCK_PATH" "MOCK_USER" "MOCK_GROUP" "MOCK_PERM"
 
   assert_rc "0"
 }

@@ -22,7 +22,7 @@ test_stdlib_colour_substrings_@vary() {
 
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.string.colour.substrings "${args[@]}" > /dev/null
+  _capture.rc stdlib.string.colour.substrings "${args[@]}" > /dev/null
 
   assert_rc "${TEST_EXPECTED_RC}"
 }
@@ -34,7 +34,7 @@ test_stdlib_colour_substrings__valid_args_____red___________correct_output() {
   TEST_EXPECTED="test ${STDLIB_COLOUR_RED}string${STDLIB_COLOUR_NC} 2 ${STDLIB_COLOUR_RED}string${STDLIB_COLOUR_NC}s coloured"$'\n'
   TEST_INPUT="test string 2 strings coloured"
 
-  _capture_stdout_raw stdlib.string.colour.substrings "RED" "string" "${TEST_INPUT}"
+  _capture.stdout_raw stdlib.string.colour.substrings "RED" "string" "${TEST_INPUT}"
 
   assert_output "${TEST_EXPECTED}"
 }
@@ -43,7 +43,7 @@ test_stdlib_colour_substrings__valid_args_____green_________correct_output() {
   TEST_EXPECTED="test ${STDLIB_COLOUR_GREEN}string${STDLIB_COLOUR_NC} 2 ${STDLIB_COLOUR_GREEN}string${STDLIB_COLOUR_NC}s coloured"$'\n'
   TEST_INPUT="test string 2 strings coloured"
 
-  _capture_stdout_raw stdlib.string.colour.substrings "GREEN" "string" "${TEST_INPUT}"
+  _capture.stdout_raw stdlib.string.colour.substrings "GREEN" "string" "${TEST_INPUT}"
 
   assert_output "${TEST_EXPECTED}"
 }
@@ -51,7 +51,7 @@ test_stdlib_colour_substrings__valid_args_____green_________correct_output() {
 test_stdlib_colour_substrings__valid_args_____non_existent__correct_output() {
   TEST_INPUT="test string 2 strings coloured"
 
-  _capture_stdout_raw stdlib.string.colour.substrings "NON_EXISTENT" "string" "${TEST_INPUT}"
+  _capture.stdout_raw stdlib.string.colour.substrings "NON_EXISTENT" "string" "${TEST_INPUT}"
 
   stdlib.logger.warning.mock.assert_called_once_with \
     "The colour 'STDLIB_COLOUR_NON_EXISTENT' is not defined!"

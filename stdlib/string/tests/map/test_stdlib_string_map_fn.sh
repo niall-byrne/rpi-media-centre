@@ -27,7 +27,7 @@ test_stdlib_string_map_fn__@vary() {
 
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.string.map.fn "${args[@]}" > /dev/null
+  _capture.rc stdlib.string.map.fn "${args[@]}" > /dev/null
 
   assert_rc "${TEST_EXPECTED_RC}"
 }
@@ -36,25 +36,25 @@ test_stdlib_string_map_fn__@vary() {
   test_stdlib_string_map_fn__@vary
 
 test_stdlib_string_map_fn__valid_args____________default_delimiter__single_line__applies_fn() {
-  _capture_output_raw stdlib.string.map.fn _uppercase "new line"
+  _capture.output_raw stdlib.string.map.fn _uppercase "new line"
 
   assert_output "UPPERCASE: NEW LINE"$'\n'
 }
 
 test_stdlib_string_map_fn__valid_args____________default_delimiter__multi_line___applies_fn() {
-  _capture_output_raw stdlib.string.map.fn _uppercase "new line"$'\n'"delimited"$'\n'"line"
+  _capture.output_raw stdlib.string.map.fn _uppercase "new line"$'\n'"delimited"$'\n'"line"
 
   assert_output "UPPERCASE: NEW LINE"$'\n'"UPPERCASE: DELIMITED"$'\n'"UPPERCASE: LINE"$'\n'
 }
 
 test_stdlib_string_map_fn__valid_args____________custom__delimiter__single_line__applies_fn() {
-  _DELIMITER="|" _capture_output_raw stdlib.string.map.fn _uppercase "new line"
+  _DELIMITER="|" _capture.output_raw stdlib.string.map.fn _uppercase "new line"
 
   assert_output "UPPERCASE: NEW LINE"$'\n'
 }
 
 test_stdlib_string_map_fn__valid_args____________custom__delimiter__multi_line___applies_fn() {
-  _DELIMITER="|" _capture_output_raw stdlib.string.map.fn _uppercase "pipe|delimited|line"
+  _DELIMITER="|" _capture.output_raw stdlib.string.map.fn _uppercase "pipe|delimited|line"
 
   assert_output "UPPERCASE: PIPE|UPPERCASE: DELIMITED|UPPERCASE: LINE"$'\n'
 }

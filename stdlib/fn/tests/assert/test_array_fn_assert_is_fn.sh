@@ -42,7 +42,7 @@ test_stdlib_fn_assert_is_fn__@vary() {
 
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.fn.assert.is_fn "${args[@]}" > /dev/null
+  _capture.rc stdlib.fn.assert.is_fn "${args[@]}" > /dev/null
 
   assert_rc "${TEST_EXPECTED_RC}"
 }
@@ -57,7 +57,7 @@ test_stdlib_fn_assert_is_fn__@vary__logs_an_error() {
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
   IFS="|" read -ra expected_log_messages <<< "${TEST_EXPECTED_LOG_MESSAGE}"
 
-  _capture_rc stdlib.fn.assert.is_fn "${args[@]}" > /dev/null
+  _capture.rc stdlib.fn.assert.is_fn "${args[@]}" > /dev/null
 
   stdlib.logger.error.mock.assert_calls_are \
     "${expected_log_messages[@]}"

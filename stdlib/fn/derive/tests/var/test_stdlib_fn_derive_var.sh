@@ -30,7 +30,7 @@ test_stdlib_fn_derive_var__@vary_____________________returns_expected_status_cod
   stdlib.array.make.from_string "args" "|" "${TEST_ARGS_DEFINITION}"
 
   # shellcheck disable=SC2154
-  _capture_rc stdlib.fn.derive.var "${args[@]}"
+  _capture.rc stdlib.fn.derive.var "${args[@]}"
 
   assert_rc "${EXPECTED_RC}"
 }

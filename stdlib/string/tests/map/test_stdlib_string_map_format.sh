@@ -22,7 +22,7 @@ test_stdlib_string_map_format__@vary() {
 
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.string.map.format "${args[@]}" > /dev/null
+  _capture.rc stdlib.string.map.format "${args[@]}" > /dev/null
 
   assert_rc "${TEST_EXPECTED_RC}"
 }
@@ -31,25 +31,25 @@ test_stdlib_string_map_format__@vary() {
   test_stdlib_string_map_format__@vary
 
 test_stdlib_string_map_format__valid_args_______________default_delimiter__single_line__applies_printf() {
-  _capture_output_raw stdlib.string.map.format "# %s" "new line"
+  _capture.output_raw stdlib.string.map.format "# %s" "new line"
 
   assert_output "# new line"$'\n'
 }
 
 test_stdlib_string_map_format__valid_args_______________default_delimiter__multi_line___applies_printf() {
-  _capture_output_raw stdlib.string.map.format "# %s" "new line"$'\n'"delimited"$'\n'"line"
+  _capture.output_raw stdlib.string.map.format "# %s" "new line"$'\n'"delimited"$'\n'"line"
 
   assert_output "# new line"$'\n'"# delimited"$'\n'"# line"$'\n'
 }
 
 test_stdlib_string_map_format__valid_args_______________custom__delimiter__single_line__applies_printf() {
-  _DELIMITER="|" _capture_output_raw stdlib.string.map.format "# %s" "new line"
+  _DELIMITER="|" _capture.output_raw stdlib.string.map.format "# %s" "new line"
 
   assert_output "# new line"$'\n'
 }
 
 test_stdlib_string_map_format__valid_args_______________custom__delimiter__multi_line___applies_printf() {
-  _DELIMITER="|" _capture_output_raw stdlib.string.map.format "# %s" "pipe|delimited|line"
+  _DELIMITER="|" _capture.output_raw stdlib.string.map.format "# %s" "pipe|delimited|line"
 
   assert_output "# pipe|# delimited|# line"$'\n'
 }

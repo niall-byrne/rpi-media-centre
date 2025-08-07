@@ -41,7 +41,7 @@ test_stdlib_array_query_equals__@vary() {
 
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.array.query.equals "${args[@]}" > /dev/null
+  _capture.rc stdlib.array.query.equals "${args[@]}" > /dev/null
 
   assert_rc "${TEST_EXPECTED_RC}"
 }

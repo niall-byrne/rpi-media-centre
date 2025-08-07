@@ -22,7 +22,7 @@ test_stdlib_array_make_from_file__@vary() {
 
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.array.make.from_file "${args[@]}"
+  _capture.rc stdlib.array.make.from_file "${args[@]}"
 
   assert_rc "${TEST_EXPECTED_RC}"
 }
@@ -31,7 +31,7 @@ test_stdlib_array_make_from_file__@vary() {
   test_stdlib_array_make_from_file__@vary
 
 test_stdlib_array_make_from_file__valid_arguments__file_does_not_exist__returns_status_code_126() {
-  _capture_rc stdlib.array.make.from_file "array_name" "|" "non_existent.txt"
+  _capture.rc stdlib.array.make.from_file "array_name" "|" "non_existent.txt"
 
   assert_rc "126"
 }
@@ -44,7 +44,7 @@ test_stdlib_array_make_from_file__valid_arguments__file_does_not_exist__logs_err
 }
 
 test_stdlib_array_make_from_file__valid_arguments__file_exists__returns_status_code_0() {
-  _capture_rc stdlib.array.make.from_file \
+  _capture.rc stdlib.array.make.from_file \
     "array_name" \
     "|" \
     "__fixtures__/array_as_file.txt"
@@ -56,7 +56,7 @@ test_stdlib_array_make_from_file__valid_arguments__file_exists__returns_status_c
 test_stdlib_array_make_from_file__valid_arguments__file_exists__creates_new_array() {
   local expected_array=("field1" "field2" "field3")
 
-  _capture_rc stdlib.array.make.from_file \
+  _capture.rc stdlib.array.make.from_file \
     "array_name" \
     "|" \
     "__fixtures__/array_as_file.txt"

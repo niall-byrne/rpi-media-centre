@@ -8,7 +8,7 @@ setup() {
 test_stdlib_io_filesystem_assert_is_folder__invalid_args___returns_status_code_126() {
   stdlib.io.filesystem.query.is_folder.mock.set.rc "126"
 
-  _capture_rc stdlib.io.filesystem.assert.is_folder
+  _capture.rc stdlib.io.filesystem.assert.is_folder
 
   assert_rc "126"
 }
@@ -26,7 +26,7 @@ test_stdlib_io_filesystem_assert_is_folder__invalid_args___logs_an_error() {
 test_stdlib_io_filesystem_assert_is_folder__is_not_folder__returns_status_code_1() {
   stdlib.io.filesystem.query.is_folder.mock.set.rc "1"
 
-  _capture_rc stdlib.io.filesystem.assert.is_folder "/mock/path"
+  _capture.rc stdlib.io.filesystem.assert.is_folder "/mock/path"
 
   assert_rc "1"
 }
@@ -44,7 +44,7 @@ test_stdlib_io_filesystem_assert_is_folder__is_not_folder__logs_an_error() {
 test_stdlib_io_filesystem_assert_is_folder__is_folder______returns_status_code_0() {
   stdlib.io.filesystem.query.is_folder.mock.set.rc "0"
 
-  _capture_rc stdlib.io.filesystem.assert.is_folder "/mock/path"
+  _capture.rc stdlib.io.filesystem.assert.is_folder "/mock/path"
 
   assert_rc "0"
 }

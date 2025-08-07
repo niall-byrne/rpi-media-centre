@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# stdlib logger test fixtures
+# stdlib testing logger fixtures
 
 set -eo pipefail
 
-_fixture_mock_stdlib_logger() {
+_testing.fixtures.mock.logger() {
   _mock.create stdlib.logger.error
   _mock.create stdlib.logger.warning
   _mock.create stdlib.logger.info

@@ -25,7 +25,7 @@ test_stdlib_security_path_assert_has_permissions__@vary___________returns_expect
 
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.security.path.assert.has_permissions "${args[@]}" > /dev/null
+  _capture.rc stdlib.security.path.assert.has_permissions "${args[@]}" > /dev/null
 
   assert_rc "${TEST_EXPECTED_RC}"
 }
@@ -59,13 +59,13 @@ test_stdlib_security_path_assert_has_permissions__valid_args_________non_matchin
 }
 
 test_stdlib_security_path_assert_has_permissions__valid_args_________non_matching__returns_status_code_1() {
-  _capture_rc stdlib.security.path.assert.has_permissions "/etc" "644" 2> /dev/null
+  _capture.rc stdlib.security.path.assert.has_permissions "/etc" "644" 2> /dev/null
 
   assert_rc "1"
 }
 
 test_stdlib_security_path_assert_has_permissions__valid_args_________matching______returns_status_code_0() {
-  _capture_rc stdlib.security.path.assert.has_permissions "/etc" "755"
+  _capture.rc stdlib.security.path.assert.has_permissions "/etc" "755"
 
   assert_rc "0"
 }

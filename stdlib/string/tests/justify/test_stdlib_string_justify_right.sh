@@ -19,7 +19,7 @@ test_stdlib_string_justify_right__@vary() {
 
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.string.justify.right "${args[@]}" > /dev/null
+  _capture.rc stdlib.string.justify.right "${args[@]}" > /dev/null
 
   assert_rc "${TEST_EXPECTED_RC}"
 }
@@ -31,7 +31,7 @@ test_stdlib_string_justify_right__valid_args__arg___width_10__correct_output() {
   TEST_EXPECTED="    string"
   TEST_INPUT="string"
 
-  _capture_output stdlib.string.justify.right "10" "${TEST_INPUT}"
+  _capture.output stdlib.string.justify.right "10" "${TEST_INPUT}"
 
   assert_output "${TEST_EXPECTED}"
 }
@@ -40,7 +40,7 @@ test_stdlib_string_justify_right__valid_args__arg___width_11__correct_output() {
   TEST_EXPECTED="     string"
   TEST_INPUT="string"
 
-  _capture_output stdlib.string.justify.right "11" "${TEST_INPUT}"
+  _capture.output stdlib.string.justify.right "11" "${TEST_INPUT}"
 
   assert_output "${TEST_EXPECTED}"
 }

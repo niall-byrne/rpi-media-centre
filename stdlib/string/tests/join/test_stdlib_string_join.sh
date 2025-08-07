@@ -21,7 +21,7 @@ test_stdlib_string_join__@vary() {
 
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.string.join "${args[@]}" > /dev/null
+  _capture.rc stdlib.string.join "${args[@]}" > /dev/null
 
   assert_rc "${TEST_EXPECTED_RC}"
 }
@@ -33,7 +33,7 @@ test_stdlib_string_join__valid_args_____arg___default_line_ending__correct_outpu
   TEST_EXPECTED="string1 string2 string3 "
   TEST_INPUT="string1 "$'\n'"string2 "$'\n'"string3 "$'\n'
 
-  _capture_output stdlib.string.join "${TEST_INPUT}"
+  _capture.output stdlib.string.join "${TEST_INPUT}"
 
   assert_output "${TEST_EXPECTED}"
 }
@@ -42,7 +42,7 @@ test_stdlib_string_join__valid_args_____arg___windows_line_ending__correct_outpu
   TEST_EXPECTED="string1 string2 string3 "
   TEST_INPUT="string1 "$'\r\n'"string2 "$'\r\n'"string3 "$'\r\n'
 
-  _DELIMITER=$'\r\n' _capture_output stdlib.string.join "${TEST_INPUT}"
+  _DELIMITER=$'\r\n' _capture.output stdlib.string.join "${TEST_INPUT}"
 
   assert_output "${TEST_EXPECTED}"
 }

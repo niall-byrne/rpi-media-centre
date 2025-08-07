@@ -2,7 +2,7 @@
 
 # This test is unfortunately coupled to the test runner as FUNCNAME cannot be set.
 test_stdlib_logger_traceback__mock_call_stack__generates_correct_stdout() {
-  _capture_stdout_raw stdlib.logger.traceback
+  _capture.stdout_raw stdlib.logger.traceback
 
   assert_output "Callstack:
 >  main

@@ -8,7 +8,7 @@ setup() {
 test_stdlib_security_assert_is_root_user__invalid_args__returns_status_code_126() {
   stdlib.security.query.is_root_user.mock.set.rc "127"
 
-  _capture_rc stdlib.security.assert.is_root_user
+  _capture.rc stdlib.security.assert.is_root_user
 
   assert_rc "127"
 }
@@ -34,7 +34,7 @@ test_stdlib_security_assert_is_root_user__valid_args____euid_not_zero__logs_erro
 test_stdlib_security_assert_is_root_user__valid_args____euid_not_zero__returns_status_code_1() {
   stdlib.security.query.is_root_user.mock.set.rc 1
 
-  _capture_rc stdlib.security.assert.is_root_user
+  _capture.rc stdlib.security.assert.is_root_user
 
   assert_rc "1"
 }
@@ -42,7 +42,7 @@ test_stdlib_security_assert_is_root_user__valid_args____euid_not_zero__returns_s
 test_stdlib_security_assert_is_root_user__valid_args____euid_zero______returns_status_code_0() {
   stdlib.security.query.is_root_user.mock.set.rc 0
 
-  _capture_rc stdlib.security.assert.is_root_user
+  _capture.rc stdlib.security.assert.is_root_user
 
   assert_rc "0"
 }

@@ -27,7 +27,7 @@ test_stdlib_string_query_is_string__@vary() {
 
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.string.query.is_string "${args[@]}" > /dev/null
+  _capture.rc stdlib.string.query.is_string "${args[@]}" > /dev/null
 
   assert_rc "${TEST_EXPECTED_RC}"
 }

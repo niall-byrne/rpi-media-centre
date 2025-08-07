@@ -17,7 +17,7 @@ test_stdlib_string_trim_right__@vary() {
 
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.string.trim.right "${args[@]}" > /dev/null
+  _capture.rc stdlib.string.trim.right "${args[@]}" > /dev/null
 
   assert_rc "${TEST_EXPECTED_RC}"
 }
@@ -29,7 +29,7 @@ test_stdlib_string_trim_right__valid_args_____arg___correct_output() {
   TEST_EXPECTED="string"
   TEST_INPUT="string          "$'\n'$'\t'
 
-  _capture_output stdlib.string.trim.right "${TEST_INPUT}"
+  _capture.output stdlib.string.trim.right "${TEST_INPUT}"
 
   assert_output "${TEST_EXPECTED}"
 }

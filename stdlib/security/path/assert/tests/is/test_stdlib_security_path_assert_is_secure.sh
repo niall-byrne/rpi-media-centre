@@ -34,7 +34,7 @@ test_stdlib_security_path_assert_is_secure__invalid_args__@vary() {
 
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.security.path.assert.is_secure "${args[@]}"
+  _capture.rc stdlib.security.path.assert.is_secure "${args[@]}"
 
   assert_rc "${TEST_EXPECTED_RC}"
 }
@@ -65,7 +65,7 @@ test_stdlib_security_path_assert_is_secure__valid_args____@vary() {
   stdlib.security.path.assert.has_group.mock.set.rc "${TEST_HAS_GROUP_RC}"
   stdlib.security.path.assert.has_permissions.mock.set.rc "${TEST_HAS_PERMS_RC}"
 
-  _capture_rc stdlib.security.path.assert.is_secure "MOCK_PATH" "MOCK_USER" "MOCK_GROUP" "MOCK_PERM"
+  _capture.rc stdlib.security.path.assert.is_secure "MOCK_PATH" "MOCK_USER" "MOCK_GROUP" "MOCK_PERM"
 
   assert_rc "${TEST_EXPECTED_RC}"
 }

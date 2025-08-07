@@ -28,7 +28,7 @@ test_stdlib_string_query_has_char_n__@vary() {
 
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.string.query.has_char_n "${args[@]}" > /dev/null
+  _capture.rc stdlib.string.query.has_char_n "${args[@]}" > /dev/null
 
   assert_rc "${TEST_EXPECTED_RC}"
 }

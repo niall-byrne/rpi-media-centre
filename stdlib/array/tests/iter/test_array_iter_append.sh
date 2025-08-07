@@ -6,7 +6,7 @@ setup() {
 
 # shellcheck disable=SC2034
 test_stdlib_array_iter_append__no_args________returns_status_code_127() {
-  _capture_rc stdlib.array.iter.append
+  _capture.rc stdlib.array.iter.append
 
   assert_rc "127"
 }
@@ -15,7 +15,7 @@ test_stdlib_array_iter_append__no_args________returns_status_code_127() {
 test_stdlib_array_iter_append__extra_arg______returns_status_code_127() {
   local test_array=("1" "2" "3")
 
-  _capture_rc stdlib.array.iter.append " " "test_array" "extra_arg"
+  _capture.rc stdlib.array.iter.append " " "test_array" "extra_arg"
 
   assert_rc "127"
 }
@@ -24,7 +24,7 @@ test_stdlib_array_iter_append__extra_arg______returns_status_code_127() {
 test_stdlib_array_iter_append__empty_string___returns_status_code_126() {
   local test_array=("1" "2" "3")
 
-  _capture_rc stdlib.array.iter.append "" "test_array"
+  _capture.rc stdlib.array.iter.append "" "test_array"
 
   assert_rc "126"
 }
@@ -33,7 +33,7 @@ test_stdlib_array_iter_append__empty_string___returns_status_code_126() {
 test_stdlib_array_iter_append__not_array______returns_status_code_126() {
   local not_array="123"
 
-  _capture_rc stdlib.array.iter.append " " "not_array"
+  _capture.rc stdlib.array.iter.append " " "not_array"
 
   assert_rc "126"
 }
@@ -42,7 +42,7 @@ test_stdlib_array_iter_append__not_array______returns_status_code_126() {
 test_stdlib_array_iter_append__not_array______logs_error() {
   local not_array="123"
 
-  _capture_rc stdlib.array.iter.append " " "not_array"
+  _capture.rc stdlib.array.iter.append " " "not_array"
 
   stdlib.logger.error.mock.assert_called_once_with \
     "The value 'not_array' is not an array!"
@@ -52,7 +52,7 @@ test_stdlib_array_iter_append__not_array______logs_error() {
 test_stdlib_array_iter_append__simple_array___returns_status_code_0() {
   local test_array=("1" "2" "3")
 
-  _capture_rc stdlib.array.iter.append " " "test_array"
+  _capture.rc stdlib.array.iter.append " " "test_array"
 
   assert_rc "0"
 }

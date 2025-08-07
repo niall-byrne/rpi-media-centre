@@ -30,7 +30,7 @@ test_security_get_gid__@vary() {
 
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.security.get.gid "${args[@]}"
+  _capture.rc stdlib.security.get.gid "${args[@]}"
 
   assert_rc "${TEST_EXPECTED_RC}"
 }
@@ -47,7 +47,7 @@ test_security_get_gid__valid_args__calls_getent() {
 test_security_get_gid__valid_args__group_found______@vary__emits_parsed_getent_output() {
   getent.mock.set.stdout "${GETENT_STDOUT}"
 
-  _capture_output stdlib.security.get.gid "mock_groupname"
+  _capture.output stdlib.security.get.gid "mock_groupname"
 
   assert_equals "${EXPECTED_GID}" "${TEST_OUTPUT}"
 }
@@ -58,7 +58,7 @@ test_security_get_gid__valid_args__group_found______@vary__emits_parsed_getent_o
 test_security_get_gid__valid_args__group_found______@vary__returns_status_code_0() {
   getent.mock.set.stdout "${GETENT_STDOUT}"
 
-  _capture_rc stdlib.security.get.gid "mock_groupname" > /dev/null
+  _capture.rc stdlib.security.get.gid "mock_groupname" > /dev/null
 
   assert_rc "0"
 }
@@ -69,7 +69,7 @@ test_security_get_gid__valid_args__group_found______@vary__returns_status_code_0
 test_security_get_gid__valid_args__group_not_found__returns_status_code_126() {
   getent.mock.set.rc 1
 
-  _capture_rc stdlib.security.get.gid "mock_groupname"
+  _capture.rc stdlib.security.get.gid "mock_groupname"
 
   assert_rc "126"
 }

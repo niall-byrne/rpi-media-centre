@@ -24,7 +24,7 @@ test_stdlib_security_path_query_has_group__invalid_args__@vary() {
 
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.security.path.query.has_group "${args[@]}"
+  _capture.rc stdlib.security.path.query.has_group "${args[@]}"
 
   assert_rc "${TEST_EXPECTED_RC}"
 }
@@ -48,7 +48,7 @@ test_stdlib_security_path_query_has_group__valid_args____non_matching_group___re
   stdlib.security.get.gid.mock.set.stdout 501
   stat.mock.set.stdout 1000
 
-  _capture_rc stdlib.security.path.query.has_group "/etc" "group1"
+  _capture.rc stdlib.security.path.query.has_group "/etc" "group1"
 
   assert_rc "1"
 }
@@ -57,7 +57,7 @@ test_stdlib_security_path_query_has_group__valid_args____matching_group_______re
   stdlib.security.get.gid.mock.set.stdout 501
   stat.mock.set.stdout 501
 
-  _capture_rc stdlib.security.path.query.has_group "/etc" "group1"
+  _capture.rc stdlib.security.path.query.has_group "/etc" "group1"
 
   assert_rc "0"
 }

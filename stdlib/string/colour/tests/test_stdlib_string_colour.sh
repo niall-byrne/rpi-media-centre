@@ -22,7 +22,7 @@ test_stdlib_colour__@vary() {
 
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.string.colour "${args[@]}" > /dev/null
+  _capture.rc stdlib.string.colour "${args[@]}" > /dev/null
 
   assert_rc "${TEST_EXPECTED_RC}"
 }
@@ -34,7 +34,7 @@ test_stdlib_colour__valid_args______red_____________correct_output() {
   TEST_EXPECTED="${STDLIB_COLOUR_RED}test string${STDLIB_COLOUR_NC}"$'\n'
   TEST_INPUT="test string"
 
-  _capture_stdout_raw stdlib.string.colour "RED" "${TEST_INPUT}"
+  _capture.stdout_raw stdlib.string.colour "RED" "${TEST_INPUT}"
 
   assert_output "${TEST_EXPECTED}"
 }
@@ -43,7 +43,7 @@ test_stdlib_colour__valid_args______green___________correct_output() {
   TEST_EXPECTED="${STDLIB_COLOUR_GREEN}test string${STDLIB_COLOUR_NC}"$'\n'
   TEST_INPUT="test string"
 
-  _capture_stdout_raw stdlib.string.colour "GREEN" "${TEST_INPUT}"
+  _capture.stdout_raw stdlib.string.colour "GREEN" "${TEST_INPUT}"
 
   assert_output "${TEST_EXPECTED}"
 }
@@ -51,7 +51,7 @@ test_stdlib_colour__valid_args______green___________correct_output() {
 test_stdlib_colour__valid_args______invalid_colour__logs_warning() {
   TEST_INPUT="test string"
 
-  _capture_stdout_raw stdlib.string.colour "NON_EXISTENT" "${TEST_INPUT}"
+  _capture.stdout_raw stdlib.string.colour "NON_EXISTENT" "${TEST_INPUT}"
 
   stdlib.logger.warning.mock.assert_called_once_with \
     "The colour 'STDLIB_COLOUR_NON_EXISTENT' is not defined!"

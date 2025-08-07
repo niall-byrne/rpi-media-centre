@@ -3,7 +3,6 @@
 set -eo pipefail
 
 export RPI_WORKING_DIRECTORY="/rpi-media-centre"
-export TEST_FORMAT="${TEST_FORMAT:-"%s"}"
 
 # $1: a filter to match tests by
 
@@ -37,21 +36,9 @@ _test_runner_execute() {
   set -e
 }
 
-_test_runner_load_framework_support() {
-  # shellcheck source=lib/io.sh
-  source "${RPI_WORKING_DIRECTORY}/lib/io.sh"
-  # shellcheck source=lib/cli/pretty/__all__.sh
-  source "${RPI_WORKING_DIRECTORY}/lib/cli/pretty/__all__.sh"
+_test_runner_load_testing_framework() {
   # shellcheck source=lib/testing/__all__.sh
-  source "${RPI_WORKING_DIRECTORY}/lib/testing/__all__.sh"
-  _mock.compile
-}
-
-_test_runner_load_project() {
-  # shellcheck source=lib/__all__.sh
-  source "${RPI_WORKING_DIRECTORY}/lib/__all__.sh"
-  # shellcheck source=lib/__fixtures__/__all__.sh
-  source "${RPI_WORKING_DIRECTORY}/lib/__fixtures__/__all__.sh"
+  source "${RPI_WORKING_DIRECTORY}/stdlib/testing/__lib__.sh"
 }
 
 _test_runner_load_stdlib() {
@@ -64,10 +51,7 @@ _test_runner_main() {
   local __RPI_TEST_RUNNER_EXIT_CODE
 
   _test_runner_load_stdlib
-  _test_runner_load_framework_support
-  _test_runner_load_project
-
-  _io_colours_escape
+  _test_runner_load_testing_framework
 
   __mock.persistence.registry.create
   trap __mock.persistence.registry.cleanup SIGINT

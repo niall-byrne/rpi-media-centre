@@ -26,7 +26,7 @@ test_stdlib_fn_derive_clone__invalid_args__@vary__returns_expected_status_code()
   stdlib.array.make.from_string "args" "|" "${TEST_ARGS_DEFINITION}"
 
   # shellcheck disable=SC2154
-  _capture_rc stdlib.fn.derive.clone "${args[@]}"
+  _capture.rc stdlib.fn.derive.clone "${args[@]}"
 
   assert_rc "${TEST_EXPECTED_RC}"
 }
@@ -37,7 +37,7 @@ test_stdlib_fn_derive_clone__invalid_args__@vary__returns_expected_status_code()
 test_stdlib_fn_derive_clone__valid_args____maintains_old_function() {
   stdlib.fn.derive.clone "_example_add_fn" "_example_add_fn_reference"
 
-  _capture_output _example_add_fn "2" "3"
+  _capture.output _example_add_fn "2" "3"
 
   assert_output "5"
   stdlib.fn.assert.is_fn _example_add_fn
@@ -46,7 +46,7 @@ test_stdlib_fn_derive_clone__valid_args____maintains_old_function() {
 test_stdlib_fn_derive_clone__valid_args____creates_new_function_with_reference() {
   stdlib.fn.derive.clone "_example_add_fn" "_example_add_fn_reference"
 
-  _capture_output _example_add_fn_reference "2" "3"
+  _capture.output _example_add_fn_reference "2" "3"
 
   assert_output "5"
   stdlib.fn.assert.is_fn _example_add_fn_reference

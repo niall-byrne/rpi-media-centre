@@ -8,7 +8,7 @@ setup() {
 test_stdlib_io_filesystem_assert_is_file__invalid_args__returns_status_code_126() {
   stdlib.io.filesystem.query.is_file.mock.set.rc "126"
 
-  _capture_rc stdlib.io.filesystem.assert.is_file
+  _capture.rc stdlib.io.filesystem.assert.is_file
 
   assert_rc "126"
 }
@@ -26,7 +26,7 @@ test_stdlib_io_filesystem_assert_is_file__invalid_args__logs_an_error() {
 test_stdlib_io_filesystem_assert_is_file__valid_args____is_not_file__returns_status_code_1() {
   stdlib.io.filesystem.query.is_file.mock.set.rc "1"
 
-  _capture_rc stdlib.io.filesystem.assert.is_file "/mock/path"
+  _capture.rc stdlib.io.filesystem.assert.is_file "/mock/path"
 
   assert_rc "1"
 }
@@ -44,7 +44,7 @@ test_stdlib_io_filesystem_assert_is_file__valid_args____is_not_file__logs_an_err
 test_stdlib_io_filesystem_assert_is_file__valid_args____is_file______returns_status_code_0() {
   stdlib.io.filesystem.query.is_file.mock.set.rc "0"
 
-  _capture_rc stdlib.io.filesystem.assert.is_file "/mock/path"
+  _capture.rc stdlib.io.filesystem.assert.is_file "/mock/path"
 
   assert_rc "0"
 }

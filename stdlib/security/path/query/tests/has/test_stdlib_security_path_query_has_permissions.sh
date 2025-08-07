@@ -23,7 +23,7 @@ test_stdlib_security_path_query_has_permissions__invalid_args__@vary() {
 
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.security.path.query.has_permissions "${args[@]}"
+  _capture.rc stdlib.security.path.query.has_permissions "${args[@]}"
 
   assert_rc "${TEST_EXPECTED_RC}"
 }
@@ -40,7 +40,7 @@ test_stdlib_security_path_query_has_permissions__valid_args____calls_stat_as_exp
 test_stdlib_security_path_query_has_permissions__valid_args____non_matching_perms__returns_status_code_1() {
   stat.mock.set.stdout 755
 
-  _capture_rc stdlib.security.path.query.has_permissions "/etc" "644"
+  _capture.rc stdlib.security.path.query.has_permissions "/etc" "644"
 
   assert_rc "1"
 }
@@ -48,7 +48,7 @@ test_stdlib_security_path_query_has_permissions__valid_args____non_matching_perm
 test_stdlib_security_path_query_has_permissions__valid_args____matching_perms______returns_status_code_0() {
   stat.mock.set.stdout 644
 
-  _capture_rc stdlib.security.path.query.has_permissions "/etc" "644"
+  _capture.rc stdlib.security.path.query.has_permissions "/etc" "644"
 
   assert_rc "0"
 }

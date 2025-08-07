@@ -21,7 +21,7 @@ test_stdlib_io_filesystem_query_exists__@vary__________return_expected_status_co
 
   IFS="|" read -ra args <<< "${ARGS_DEFINITION}"
 
-  _capture_rc stdlib.io.filesystem.query.exists "${args[@]}"
+  _capture.rc stdlib.io.filesystem.query.exists "${args[@]}"
 
   assert_rc "${TEST_EXPECTED_RC}"
 }
@@ -32,7 +32,7 @@ test_stdlib_io_filesystem_query_exists__@vary__________return_expected_status_co
 test_stdlib_io_filesystem_query_exists__valid_args_________test_passes__return_status_code_0() {
   test.mock.set.rc "0"
 
-  _capture_rc stdlib.io.filesystem.query.exists "/some/file"
+  _capture.rc stdlib.io.filesystem.query.exists "/some/file"
 
   assert_rc "0"
 }
@@ -40,7 +40,7 @@ test_stdlib_io_filesystem_query_exists__valid_args_________test_passes__return_s
 test_stdlib_io_filesystem_query_exists__valid_args_________test_fails___return_status_code_1() {
   test.mock.set.rc "1"
 
-  _capture_rc stdlib.io.filesystem.query.exists "/some/file"
+  _capture.rc stdlib.io.filesystem.query.exists "/some/file"
 
   assert_rc "1"
 }

@@ -9,13 +9,13 @@ setup() {
 }
 
 test_stdlib_io_stdin_pause__null_prompt__returns_expected_status_code() {
-  _capture_rc stdlib.io.stdin.pause ""
+  _capture.rc stdlib.io.stdin.pause ""
 
   assert_rc "126"
 }
 
 test_stdlib_io_stdin_pause__extra_arg____returns_expected_status_code() {
-  _capture_rc stdlib.io.stdin.pause "mock_prompt" "extra_arg"
+  _capture.rc stdlib.io.stdin.pause "mock_prompt" "extra_arg"
 
   assert_rc "127"
 }
@@ -30,13 +30,13 @@ test_stdlib_io_stdin_pause__valid_args___calls_read_as_expected() {
 }
 
 test_stdlib_io_stdin_pause__valid_args___default_prompt__displays_prompt_as_expected() {
-  _capture_output stdlib.io.stdin.pause <<< " "
+  _capture.output stdlib.io.stdin.pause <<< " "
 
   assert_output "Press any key to continue ... "
 }
 
 test_stdlib_io_stdin_pause__valid_args___custom_prompt___displays_prompt_as_expected() {
-  _capture_output stdlib.io.stdin.pause "custom prompt" <<< " "
+  _capture.output stdlib.io.stdin.pause "custom prompt" <<< " "
 
   assert_output "custom prompt"
 }

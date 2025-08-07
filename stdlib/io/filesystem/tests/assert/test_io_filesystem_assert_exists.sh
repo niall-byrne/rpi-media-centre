@@ -8,7 +8,7 @@ setup() {
 test_stdlib_io_filesystem_assert_exists__invalid_args__returns_status_code_126() {
   stdlib.io.filesystem.query.exists.mock.set.rc "126"
 
-  _capture_rc stdlib.io.filesystem.assert.exists
+  _capture.rc stdlib.io.filesystem.assert.exists
 
   assert_rc "126"
 }
@@ -26,7 +26,7 @@ test_stdlib_io_filesystem_assert_exists__invalid_args__logs_an_error() {
 test_stdlib_io_filesystem_assert_exists__valid_args____does_not_exist__returns_status_code_1() {
   stdlib.io.filesystem.query.exists.mock.set.rc "1"
 
-  _capture_rc stdlib.io.filesystem.assert.exists "/mock/path"
+  _capture.rc stdlib.io.filesystem.assert.exists "/mock/path"
 
   assert_rc "1"
 }
@@ -44,7 +44,7 @@ test_stdlib_io_filesystem_assert_exists__valid_args____does_not_exist__logs_an_e
 test_stdlib_io_filesystem_assert_exists__valid_args____exists__________returns_status_code_0() {
   stdlib.io.filesystem.query.exists.mock.set.rc "0"
 
-  _capture_rc stdlib.io.filesystem.assert.exists "/mock/path"
+  _capture.rc stdlib.io.filesystem.assert.exists "/mock/path"
 
   assert_rc "0"
 }

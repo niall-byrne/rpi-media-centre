@@ -26,7 +26,7 @@ test_stdlib_array_map_format__@vary() {
 
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.array.map.format "${args[@]}" > /dev/null
+  _capture.rc stdlib.array.map.format "${args[@]}" > /dev/null
 
   assert_rc "${TEST_EXPECTED_RC}"
 }
@@ -38,7 +38,7 @@ test_stdlib_array_map_format__@vary() {
 test_stdlib_array_map_format__valid_args_____________default_delimiter__single_element_____applies_printf() {
   test_array=("single element")
 
-  _capture_output_raw stdlib.array.map.format "# %s" test_array
+  _capture.output_raw stdlib.array.map.format "# %s" test_array
 
   assert_output "# single element"$'\n'
 }
@@ -47,7 +47,7 @@ test_stdlib_array_map_format__valid_args_____________default_delimiter__single_e
 test_stdlib_array_map_format__valid_args_____________default_delimiter__multiple_elements__applies_printf() {
   test_array=("one element" "two elements" "three elements")
 
-  _capture_output_raw stdlib.array.map.format "# %s" test_array
+  _capture.output_raw stdlib.array.map.format "# %s" test_array
 
   assert_output "# one element"$'\n'"# two elements"$'\n'"# three elements"$'\n'
 }

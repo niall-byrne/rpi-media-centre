@@ -22,7 +22,7 @@ test_stdlib_string_wrap__@vary() {
 
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.string.wrap "${args[@]}" > /dev/null
+  _capture.rc stdlib.string.wrap "${args[@]}" > /dev/null
 
   assert_rc "${TEST_EXPECTED_RC}"
 }
@@ -34,7 +34,7 @@ test_stdlib_string_wrap__valid_args_______arg___short_string____pad_width_10__wr
   TEST_EXPECTED="don't wrap"
   TEST_INPUT="don't wrap"
 
-  _capture_output stdlib.string.wrap "10" "20" "${TEST_INPUT}"
+  _capture.output stdlib.string.wrap "10" "20" "${TEST_INPUT}"
 
   assert_output "${TEST_EXPECTED}"
 }
@@ -43,7 +43,7 @@ test_stdlib_string_wrap__valid_args_______arg___wrapped_string__pad_width_10__wr
   TEST_EXPECTED="this is a"$'\n'"          string of"$'\n'"          text that"$'\n'"          i would"$'\n'"          like to"$'\n'"          wrap"
   TEST_INPUT="this is a string of text that i would like to wrap"
 
-  _capture_output stdlib.string.wrap "10" "20" "${TEST_INPUT}"
+  _capture.output stdlib.string.wrap "10" "20" "${TEST_INPUT}"
 
   assert_output "${TEST_EXPECTED}"
 }
@@ -52,7 +52,7 @@ test_stdlib_string_wrap__valid_args_______arg___wrapped_string__pad_width_5__wra
   TEST_EXPECTED="this is a"$'\n'"     string of text"$'\n'"     that i would"$'\n'"     like to wrap"
   TEST_INPUT="this is a string of text that i would like to wrap"
 
-  _capture_output stdlib.string.wrap "5" "20" "${TEST_INPUT}"
+  _capture.output stdlib.string.wrap "5" "20" "${TEST_INPUT}"
 
   assert_output "${TEST_EXPECTED}"
 }
@@ -61,7 +61,7 @@ test_stdlib_string_wrap__valid_args_______arg___wrapped_string__pad_width_10__wr
   TEST_EXPECTED="this is a"$'\n'"          string of"$'\n'"          text"$'\n'"          that i"$'\n'"          would like"$'\n'"          to wrap"
   TEST_INPUT="this is a string of text *that i would like to wrap"
 
-  _capture_output stdlib.string.wrap "10" "20" "${TEST_INPUT}"
+  _capture.output stdlib.string.wrap "10" "20" "${TEST_INPUT}"
 
   assert_output "${TEST_EXPECTED}"
 }

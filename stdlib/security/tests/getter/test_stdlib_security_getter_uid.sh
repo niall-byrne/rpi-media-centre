@@ -30,7 +30,7 @@ test_security_get_uid__@vary() {
 
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.security.get.uid "${args[@]}"
+  _capture.rc stdlib.security.get.uid "${args[@]}"
 
   assert_rc "${TEST_EXPECTED_RC}"
 }
@@ -47,7 +47,7 @@ test_security_get_uid__valid_args__calls_id() {
 test_security_get_uid__valid_args__id_found______@vary__emits_id_output() {
   id.mock.set.stdout "${ID_STDOUT}"
 
-  _capture_output stdlib.security.get.uid "mock_username"
+  _capture.output stdlib.security.get.uid "mock_username"
 
   assert_equals "${ID_STDOUT}" "${TEST_OUTPUT}"
 }
@@ -58,7 +58,7 @@ test_security_get_uid__valid_args__id_found______@vary__emits_id_output() {
 test_security_get_uid__valid_args__id_found______@vary__returns_status_code_0() {
   id.mock.set.stdout "${ID_STDOUT}"
 
-  _capture_rc stdlib.security.get.uid "mock_username" > /dev/null
+  _capture.rc stdlib.security.get.uid "mock_username" > /dev/null
 
   assert_rc "0"
 }
@@ -69,7 +69,7 @@ test_security_get_uid__valid_args__id_found______@vary__returns_status_code_0() 
 test_security_get_uid__valid_args__id_not_found__returns_status_code_126() {
   id.mock.set.rc 1
 
-  _capture_rc stdlib.security.get.uid "mock_username" > /dev/null
+  _capture.rc stdlib.security.get.uid "mock_username" > /dev/null
 
   assert_rc "126"
 }

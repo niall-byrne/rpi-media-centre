@@ -26,7 +26,7 @@ test_stdlib_security_path_secure__@vary() {
 
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.security.path.secure "${args[@]}"
+  _capture.rc stdlib.security.path.secure "${args[@]}"
 
   assert_rc "${TEST_EXPECTED_RC}"
 }

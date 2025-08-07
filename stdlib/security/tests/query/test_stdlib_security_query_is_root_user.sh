@@ -26,7 +26,7 @@ test_stdlib_security_query_is_root_user__@vary() {
   stdlib.security.get.euid.mock.set.stdout "${TEST_EUID}"
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.security.query.is_root_user "${args[@]}" > /dev/null
+  _capture.rc stdlib.security.query.is_root_user "${args[@]}" > /dev/null
 
   assert_rc "${TEST_EXPECTED_RC}"
 }

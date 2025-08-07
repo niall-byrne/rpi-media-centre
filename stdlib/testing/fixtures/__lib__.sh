@@ -4,5 +4,7 @@
 
 set -eo pipefail
 
-# shellcheck source=stdlib/testing/fixtures/__lib__.sh
-source "${STDLIB_DIRECTORY}/testing/fixtures/__lib__.sh"
+# shellcheck source=stdlib/testing/fixtures/debug.sh
+source "${STDLIB_DIRECTORY}/testing/fixtures/debug.sh"
+# shellcheck source=stdlib/testing/fixtures/random.sh
+source "${STDLIB_DIRECTORY}/testing/fixtures/random.sh"

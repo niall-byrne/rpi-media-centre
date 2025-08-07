@@ -5,7 +5,7 @@ setup() {
 }
 
 test_stdlib_array_get_length__no_args______returns_status_code_127() {
-  _capture_rc stdlib.array.get.length
+  _capture.rc stdlib.array.get.length
 
   assert_rc "127"
 }
@@ -14,7 +14,7 @@ test_stdlib_array_get_length__no_args______returns_status_code_127() {
 test_stdlib_array_get_length__extra_arg____returns_status_code_127() {
   local test_array=()
 
-  _capture_rc stdlib.array.get.length "test_array" "extra_arg"
+  _capture.rc stdlib.array.get.length "test_array" "extra_arg"
 
   assert_rc "127"
 }
@@ -23,7 +23,7 @@ test_stdlib_array_get_length__extra_arg____returns_status_code_127() {
 test_stdlib_array_get_length__not_array____returns_status_code_126() {
   local not_array="123"
 
-  _capture_rc stdlib.array.get.length "not_array"
+  _capture.rc stdlib.array.get.length "not_array"
 
   assert_rc "126"
 }
@@ -32,7 +32,7 @@ test_stdlib_array_get_length__not_array____returns_status_code_126() {
 test_stdlib_array_get_length__not_array____logs_error() {
   local not_array="123"
 
-  _capture_rc stdlib.array.get.length "not_array"
+  _capture.rc stdlib.array.get.length "not_array"
 
   stdlib.logger.error.mock.assert_called_once_with \
     "The value 'not_array' is not an array!"
@@ -42,7 +42,7 @@ test_stdlib_array_get_length__not_array____logs_error() {
 test_stdlib_array_get_length__empty_array__returns_status_code_0() {
   local test_array=()
 
-  _capture_rc _capture_output stdlib.array.get.length "test_array"
+  _capture.rc _capture.output stdlib.array.get.length "test_array"
 
   assert_rc "0"
 }
@@ -51,7 +51,7 @@ test_stdlib_array_get_length__empty_array__returns_status_code_0() {
 test_stdlib_array_get_length__empty_array__returns_0() {
   local test_array=()
 
-  _capture_output stdlib.array.get.length "test_array"
+  _capture.output stdlib.array.get.length "test_array"
 
   assert_output "0"
 }
@@ -60,7 +60,7 @@ test_stdlib_array_get_length__empty_array__returns_0() {
 test_stdlib_array_get_length__3_elements___returns_status_code_0() {
   local test_array=("1" "2" "3")
 
-  _capture_rc _capture_output stdlib.array.get.length "test_array"
+  _capture.rc _capture.output stdlib.array.get.length "test_array"
 
   assert_rc "0"
 }
@@ -69,7 +69,7 @@ test_stdlib_array_get_length__3_elements___returns_status_code_0() {
 test_stdlib_array_get_length__3_elements___returns_3() {
   local test_array=("1" "2" "3")
 
-  _capture_output stdlib.array.get.length "test_array"
+  _capture.output stdlib.array.get.length "test_array"
 
   assert_output "3"
 }

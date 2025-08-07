@@ -38,12 +38,12 @@ test_stdlib.fn.args.require__@vary__@vary() {
 
   IFS="|" read -ra args <<< "${ARGS_DEFINITION}"
 
-  _capture_rc stdlib.fn.args.require "${ARGS_REQUIRED}" "${ARGS_OPTIONAL}" "${args[@]}"
+  _capture.rc stdlib.fn.args.require "${ARGS_REQUIRED}" "${ARGS_OPTIONAL}" "${args[@]}"
 
   assert_rc "${EXPECTED_RC}"
 }
 
-@parametrize_apply \
+@parametrize.apply \
   test_stdlib.fn.args.require__@vary__@vary \
   @parametrize_with_required_arg_returns_codes \
   @parametrize_with_optional_arg_return_codes

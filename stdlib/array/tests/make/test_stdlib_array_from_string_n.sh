@@ -23,7 +23,7 @@ test_stdlib_array_make_from_string_n__@vary() {
 
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.array.make.from_string_n "${args[@]}"
+  _capture.rc stdlib.array.make.from_string_n "${args[@]}"
 
   assert_rc "${TEST_EXPECTED_RC}"
 }
@@ -32,7 +32,7 @@ test_stdlib_array_make_from_string_n__@vary() {
   test_stdlib_array_make_from_string_n__@vary
 
 test_stdlib_array_make_from_string_n__valid_arguments__returns_status_code_0() {
-  _capture_rc stdlib.array.make.from_string_n \
+  _capture.rc stdlib.array.make.from_string_n \
     "array_name" \
     "3" \
     "##########"
@@ -44,7 +44,7 @@ test_stdlib_array_make_from_string_n__valid_arguments__returns_status_code_0() {
 test_stdlib_array_make_from_string_n__valid_arguments__creates_new_array() {
   local expected_array=("##########" "##########" "##########")
 
-  _capture_rc stdlib.array.make.from_string_n \
+  _capture.rc stdlib.array.make.from_string_n \
     "array_name" \
     "3" \
     "##########"

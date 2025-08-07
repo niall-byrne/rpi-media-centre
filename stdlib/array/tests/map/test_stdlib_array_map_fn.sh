@@ -31,7 +31,7 @@ test_stdlib_string_array_map_fn__@vary() {
 
   IFS="|" read -ra args <<< "${TEST_ARGS_DEFINITION}"
 
-  _capture_rc stdlib.array.map.fn "${args[@]}" > /dev/null
+  _capture.rc stdlib.array.map.fn "${args[@]}" > /dev/null
 
   assert_rc "${TEST_EXPECTED_RC}"
 }
@@ -43,7 +43,7 @@ test_stdlib_string_array_map_fn__@vary() {
 test_stdlib_string_array_map_fn__valid_args__________default_delimiter__single_element_____applies_fn() {
   test_array=("single element")
 
-  _capture_output_raw stdlib.array.map.fn _uppercase test_array
+  _capture.output_raw stdlib.array.map.fn _uppercase test_array
 
   assert_output "UPPERCASE: SINGLE ELEMENT"$'\n'
 }
@@ -52,7 +52,7 @@ test_stdlib_string_array_map_fn__valid_args__________default_delimiter__single_e
 test_stdlib_string_array_map_fn__valid_args__________default_delimiter__multiple_elements__applies_fn() {
   test_array=("one element" "two elements" "three elements")
 
-  _capture_output_raw stdlib.array.map.fn _uppercase test_array
+  _capture.output_raw stdlib.array.map.fn _uppercase test_array
 
   assert_output "UPPERCASE: ONE ELEMENT"$'\n'"UPPERCASE: TWO ELEMENTS"$'\n'"UPPERCASE: THREE ELEMENTS"$'\n'
 }
