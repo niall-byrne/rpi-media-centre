@@ -5,7 +5,7 @@ TEST_GROUPNAME="test_group"
 setup() {
   _fixture_mock_logs
   _mock.create getent
-  _mock.create _io_prompt_confirmation
+  _mock.create stdlib.io.stdin.confirmation
   _mock.create groupadd
   _mock.create _security_defaults_set_gid
 }
@@ -55,17 +55,17 @@ test_security_account_provision_service_account_group__group_exists__________set
   assert_equals "" "$(_security_defaults_set_gid.mock.get.call "1")"
 }
 
-test_security_account_provision_service_account_group__group_does_not_exist__@vary__calls_io_prompt_confirmation() {
+test_security_account_provision_service_account_group__group_does_not_exist__@vary__calls_stdlib_io_stdin_confirmation() {
   getent.mock.set.rc 1
 
   _security_account_provision_service_account_group "${TEST_GROUPNAME}"
 
-  assert_equals "1" "$(_io_prompt_confirmation.mock.get.count)"
-  assert_equals "" "$(_io_prompt_confirmation.mock.get.call "1")"
+  assert_equals "1" "$(stdlib.io.stdin.confirmation.mock.get.count)"
+  assert_equals "" "$(stdlib.io.stdin.confirmation.mock.get.call "1")"
 }
 
 @parametrize_vary_gid_set \
-  test_security_account_provision_service_account_group__group_does_not_exist__@vary__calls_io_prompt_confirmation
+  test_security_account_provision_service_account_group__group_does_not_exist__@vary__calls_stdlib_io_stdin_confirmation
 
 test_security_account_provision_service_account_group__group_does_not_exist__@vary__calls_groupadd() {
   getent.mock.set.rc 1

@@ -34,7 +34,7 @@ _configuration_pictl_debug() {
     grep -v "COLOUR" |
     sed 's/^declare -. //g' |
     sort |
-    _cli_pretty_env_var
+    _cli_pretty_env_var_pipe
 }
 
 _configuration_pictl_help() {
@@ -57,29 +57,29 @@ _configuration_pictl_secure_load() {
     if [[ "${RPI_CONFIGURATION_QUIET_LOAD}" -ne "1" ]]; then
       _cli_log_notice "-- loading /etc/rpi/config file ... --"
     fi
-    _security_path_check /etc/rpi/config "root" "root" "600"
+    stdlib.security.path.query.is_secure /etc/rpi/config "root" "root" "600"
     "$@"
   fi
 }
 
 _configuration_pihole() {
-  _io_prompt "Enter PiHole Password: " "RPI_PIHOLE_CREDENTIALS_PASSWORD" "password"
+  stdlib.io.stdin.prompt "Enter PiHole Password: " "RPI_PIHOLE_CREDENTIALS_PASSWORD" "password"
 }
 
 _configuration_samba() {
   if [[ -f /etc/rpi/samba.yml ]]; then
     _cli_log_notice "-- loading /etc/rpi/samba.yml file ... --"
-    _security_path_check /etc/rpi/samba.yml "root" "root" "600"
+    stdlib.security.path.query.is_secure /etc/rpi/samba.yml "root" "root" "600"
     cp -a /etc/rpi/samba.yml "${RPI_SAMBA_PATH_CONFIG}"/config.yml
   else
     cp -a ./services/samba/config.yml "${RPI_SAMBA_PATH_CONFIG}"/config.yml
   fi
 
-  _io_prompt "Enter Samba Username: " "RPI_SAMBA_CREDENTIALS_USERNAME"
-  _io_prompt "Enter Samba Password: " "RPI_SAMBA_CREDENTIALS_PASSWORD" "password"
-  _io_prompt "Enter Samba Network CIDR: " "RPI_SAMBA_SUBNET"
+  stdlib.io.stdin.prompt "Enter Samba Username: " "RPI_SAMBA_CREDENTIALS_USERNAME"
+  stdlib.io.stdin.prompt "Enter Samba Password: " "RPI_SAMBA_CREDENTIALS_PASSWORD" "password"
+  stdlib.io.stdin.prompt "Enter Samba Network CIDR: " "RPI_SAMBA_SUBNET"
 
-  _security_path_mkdir "/var/run/rpi" "root" "root" "700"
+  stdlib.security.path.make.dir "/var/run/rpi" "root" "root" "700"
   _docker_create_filtered_env "SAMBA_" "/var/run/rpi/samba.env"
 }
 

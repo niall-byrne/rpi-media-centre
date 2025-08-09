@@ -47,4 +47,4 @@ _cli_pretty_wrap_column() {
   echo -e "$RPI_CLI_PRETTY_WRAP_PRETTIFIED_STRING"
 }
 
-_io_make_pipeable "_cli_pretty_wrap_column" "3"
+stdlib.fn.derive.pipeable "_cli_pretty_wrap_column" "3"

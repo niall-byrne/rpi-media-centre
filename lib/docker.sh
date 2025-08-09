@@ -27,7 +27,7 @@ _docker_create_filtered_env() {
     sed 's/^declare -. //g' \
       > "${2}" || true
 
-  _security_path_secure "${2}" "root" "root" "600"
+  stdlib.security.path.secure "${2}" "root" "root" "600"
 
   RPI_EXIT_CLEANUP_PATHS+=("${2}")
 }

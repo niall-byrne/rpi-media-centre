@@ -31,7 +31,7 @@ _backup_job_task_tarball_filesystem_build() {
   tar cf "${RPI_BACKUP_JOB_LOCAL_TARBALL_INCOMPLETE_FILENAME}" "$(basename "${RPI_BACKUP_JOB_LOCAL_SOURCE}")"
   mv "${RPI_BACKUP_JOB_LOCAL_TARBALL_INCOMPLETE_FILENAME}" "${RPI_BACKUP_JOB_LOCAL_TARBALL_FINISHED_FILENAME}"
 
-  _security_path_secure \
+  stdlib.security.path.secure \
     "${RPI_BACKUP_JOB_LOCAL_TARBALL_FINISHED_FILENAME}" \
     "${RPI_SVC_USERNAME}" \
     "${RPI_SVC_GROUPNAME}" \

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/__fakes__/crypt_data.sh"
+_testing.load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/__fakes__/crypt_data.sh"
 
 setup() {
   fake_disk_1
@@ -8,7 +8,7 @@ setup() {
 }
 
 test_disk_manifest_line_log__generates_expected_output() {
-  _capture_stdout _disk_manifest_line_log
+  _capture.stdout _disk_manifest_line_log
 
   assert_output \
     "RPI_DISK_UUID='${TEST_MOCK_UUID_1}'

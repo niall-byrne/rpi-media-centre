@@ -38,7 +38,7 @@ test_security_validate_ids__@vary__does_not_call_security_validate_ids_relations
   test_security_validate_ids__@vary__does_not_call_security_validate_ids_relationship
 
 test_security_validate_ids__@vary__returns_correct_status_code() {
-  _capture_rc _security_validate_ids
+  _capture.rc _security_validate_ids
 
   assert_rc "127"
 }
@@ -67,7 +67,7 @@ test_security_validate_ids__valid_gid____valid_uid____returns_correct_status_cod
   # shellcheck disable=SC2034
   local RPI_SVC_UID=1000
 
-  _capture_rc _security_validate_ids
+  _capture.rc _security_validate_ids
 
   assert_rc "0"
 }

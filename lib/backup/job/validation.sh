@@ -55,17 +55,17 @@ _backup_job_validation() {
 _backup_job_validation_key_file() {
   # $1: the path to check
 
-  _filesystem_check_exists "${1}"
-  _security_path_check "${1}" "root" "root" "400"
+  stdlib.io.filesystem.assert.exists "${1}"
+  stdlib.security.path.query.is_secure "${1}" "root" "root" "400"
 }
 
 _backup_job_validation_path() {
   # $1: the path to check
 
-  _filesystem_check_is_folder "${1}"
+  stdlib.io.filesystem.assert.is_folder "${1}"
   # TODO: NOT SURE ABOUT THIS
   if [[ "${RPI_RUNTIME_ENVIRONMENT}" != "service" ]]; then
-    _security_path_check "${1}" "${RPI_SVC_USERNAME}" "${RPI_SVC_GROUPNAME}" "700"
+    stdlib.security.path.query.is_secure "${1}" "${RPI_SVC_USERNAME}" "${RPI_SVC_GROUPNAME}" "700"
   fi
 }
 
@@ -138,7 +138,7 @@ _backup_job_validation_remote_target() {
 _backup_job_validation_source() {
   # $1: the path to check
 
-  _filesystem_check_exists "${1}"
+  stdlib.io.filesystem.assert.exists "${1}"
 }
 
 _backup_job_validation_tarball_versions() {

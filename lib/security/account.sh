@@ -39,7 +39,7 @@ _security_account_provision_service_account_group() {
   if ! getent group "${1}" > /dev/null; then
     _cli_log_warning "SECURITY: Adding the service account group '${1}' ..."
 
-    _io_prompt_confirmation
+    stdlib.io.stdin.confirmation
 
     if [[ -n "${RPI_SVC_GID}" ]]; then
       groupadd \
@@ -67,7 +67,7 @@ _security_account_provision_service_account_username() {
   if ! getent passwd "${1}" > /dev/null; then
     _cli_log_warning "SECURITY: Adding the service account user '${1}' ..."
 
-    _io_prompt_confirmation
+    stdlib.io.stdin.confirmation
 
     if [[ -n "${RPI_SVC_UID}" ]]; then
       useradd \

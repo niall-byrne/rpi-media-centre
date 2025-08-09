@@ -6,7 +6,7 @@ RPI_SVC_GID="99"
 setup() {
   _fixture_mock_logs
   _mock.create getent
-  _mock.create _io_prompt_confirmation
+  _mock.create stdlib.io.stdin.confirmation
   _mock.create useradd
   _mock.create _security_defaults_set_uid
 }
@@ -56,17 +56,17 @@ test_security_account_provision_service_account_username__user_exists__________s
   assert_equals "" "$(_security_defaults_set_uid.mock.get.call "1")"
 }
 
-test_security_account_provision_service_account_username__user_does_not_exist__@vary__calls_io_prompt_confirmation() {
+test_security_account_provision_service_account_username__user_does_not_exist__@vary__calls_stdlib_io_stdin_confirmation() {
   getent.mock.set.rc 1
 
   _security_account_provision_service_account_username "${TEST_USERNAME}"
 
-  assert_equals "1" "$(_io_prompt_confirmation.mock.get.count)"
-  assert_equals "" "$(_io_prompt_confirmation.mock.get.call "1")"
+  assert_equals "1" "$(stdlib.io.stdin.confirmation.mock.get.count)"
+  assert_equals "" "$(stdlib.io.stdin.confirmation.mock.get.call "1")"
 }
 
 @parametrize_vary_uid_set \
-  test_security_account_provision_service_account_username__user_does_not_exist__@vary__calls_io_prompt_confirmation
+  test_security_account_provision_service_account_username__user_does_not_exist__@vary__calls_stdlib_io_stdin_confirmation
 
 test_security_account_provision_service_account_username__user_does_not_exist__@vary__calls_useradd() {
   getent.mock.set.rc 1

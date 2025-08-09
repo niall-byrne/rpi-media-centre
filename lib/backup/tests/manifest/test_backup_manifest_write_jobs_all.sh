@@ -1,7 +1,7 @@
 #!/bin/bash
 
-load "${RPI_WORKING_DIRECTORY}/lib/backup/tests/__fakes__/backup_data.sh"
-load "${RPI_WORKING_DIRECTORY}/lib/backup/tests/__fixtures__/queue.sh"
+_testing.load "${RPI_WORKING_DIRECTORY}/lib/backup/tests/__fakes__/backup_data.sh"
+_testing.load "${RPI_WORKING_DIRECTORY}/lib/backup/tests/__fixtures__/queue.sh"
 
 setup_suite() {
   _fixture_mock_backup_queues
@@ -18,7 +18,7 @@ teardown_suite() {
 setup() {
   _fixture_mock_logs
   _mock.create _backup_job_args
-  _mock.create _security_path_secure
+  _mock.create stdlib.security.path.secure
 }
 
 teardown() {
@@ -75,6 +75,6 @@ test_backup_manifest_write_jobs_all__secures_the_new_job_file() {
 
   _backup_manifest_write_jobs_all
 
-  _security_path_secure.mock.assert_called_once_with \
+  stdlib.security.path.secure.mock.assert_called_once_with \
     "${RPI_BACKUP_PATH_QUEUE_ROOT}/${RPI_BACKUP_QUEUE_NAMES[0]}/${RPI_BACKUP_JOB_NAME} root root 700"
 }

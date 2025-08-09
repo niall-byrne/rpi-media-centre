@@ -6,6 +6,9 @@ set -eo pipefail
 RPI_HOSTNAME="$(hostname)"
 RPI_WORKING_DIRECTORY="$(realpath "$(dirname "$0")")"
 
+# shellcheck source=stdlib/__lib__.sh
+source "${RPI_WORKING_DIRECTORY}/stdlib/__lib__.sh"
+
 # shellcheck source=lib/__all__.sh
 source "${RPI_WORKING_DIRECTORY}/lib/__all__.sh"
 

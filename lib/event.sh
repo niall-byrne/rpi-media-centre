@@ -12,8 +12,8 @@ _event_script() {
 
     # Don't halt execution if the event script fails.
 
-    if ! _security_path_check "/etc/rpi/events" "root" "root" "700" ||
-      ! _security_path_check "/etc/rpi/events/${1}" "root" "root" "700"; then
+    if ! stdlib.security.path.query.is_secure "/etc/rpi/events" "root" "root" "700" ||
+      ! stdlib.security.path.query.is_secure "/etc/rpi/events/${1}" "root" "root" "700"; then
       return 0
     fi
 

@@ -10,7 +10,7 @@ _disk_cli_filesystem() {
   _cli_pretty_title "-- rpi-media-centre disk filesystem status --"
 
   lsblk -f |
-    _disk_pretty_filesystem_status
+    _disk_pretty_filesystem_status_pipe
 }
 
 _disk_cli_hardware() {

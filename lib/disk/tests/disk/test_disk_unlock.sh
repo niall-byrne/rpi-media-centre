@@ -1,6 +1,6 @@
 #!/bin/bash
 
-load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/__fakes__/crypt_data.sh"
+_testing.load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/__fakes__/crypt_data.sh"
 
 setup_suite() {
   _fixture_escape_rpi_vars
@@ -8,7 +8,7 @@ setup_suite() {
 
 setup() {
   _mock.create _is_disk_mounted
-  _mock.create _security_path_mkdir
+  _mock.create stdlib.security.path.make.dir
   _mock.create _disk_unlock_with_crypt_group
   _mock.create _disk_unlock_without_crypt_group
   _mock.create fsck
@@ -60,10 +60,10 @@ test_disk_lock__not_mounted__@vary__secures_disk_mount_point() {
 
   _capture_logs _disk_unlock
 
-  assert_equals "1" "$(_security_path_mkdir.mock.get.count)"
+  assert_equals "1" "$(stdlib.security.path.make.dir.mock.get.count)"
   assert_equals \
     "${RPI_DISK_MOUNT_POINT} ${RPI_SVC_USERNAME}  700" \
-    "$(_security_path_mkdir.mock.get.call "1")"
+    "$(stdlib.security.path.make.dir.mock.get.call "1")"
 }
 
 @parametrize_vary_crypt_group \

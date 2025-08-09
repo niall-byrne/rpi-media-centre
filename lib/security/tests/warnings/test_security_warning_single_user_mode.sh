@@ -31,7 +31,7 @@ test_security_warning_single_user_mode__@vary__@vary__calls_security_defaults_se
   _security_defaults_set.mock.assert_called_once_with ""
 }
 
-@parametrize_apply \
+@parametrize.apply \
   test_security_warning_single_user_mode__@vary__@vary__calls_security_defaults_set \
   @parametrize_with_sum_warning \
   @parametrize_with_sum_warning_bypass

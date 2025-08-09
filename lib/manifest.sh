@@ -36,11 +36,14 @@ _manifest_cli_details_crypt() {
 
 _manifest_cli_edit_backup() {
   if [[ ! -f "${RPI_MANIFEST_BACKUP}" ]]; then
-    _manifest_cli_details_backup |
-      _io_comment_lines_stdin |
-      _io_append_newline_stdin \
-        > "${RPI_MANIFEST_BACKUP}"
+    _io_colours_unload
+    {
+      echo
+      _manifest_cli_details_backup |
+        stdlib.string.map.format_pipe "# %s"
+    } > "${RPI_MANIFEST_BACKUP}"
     chmod "600" "${RPI_MANIFEST_BACKUP}"
+    _io_colours_load
   fi
 
   "${RPI_MANIFEST_EDITOR}" "${RPI_MANIFEST_BACKUP}"
@@ -49,11 +52,14 @@ _manifest_cli_edit_backup() {
 
 _manifest_cli_edit_config() {
   if [[ ! -f /etc/rpi/config ]]; then
-    _manifest_cli_details_config |
-      _io_comment_lines_stdin |
-      _io_append_newline_stdin \
-        > /etc/rpi/config
+    _io_colours_unload
+    {
+      echo
+      _manifest_cli_details_config |
+        stdlib.string.map.format_pipe "# %s"
+    } > /etc/rpi/config
     chmod "600" /etc/rpi/config
+    _io_colours_load
   fi
 
   "${RPI_MANIFEST_EDITOR}" /etc/rpi/config
@@ -62,11 +68,14 @@ _manifest_cli_edit_config() {
 
 _manifest_cli_edit_crypt() {
   if [[ ! -f "${RPI_MANIFEST_CRYPT}" ]]; then
-    _manifest_cli_details_crypt |
-      _io_comment_lines_stdin |
-      _io_append_newline_stdin \
-        > "${RPI_MANIFEST_CRYPT}"
+    _io_colours_unload
+    {
+      echo
+      _manifest_cli_details_crypt |
+        stdlib.string.map.format_pipe "# %s"
+    } > "${RPI_MANIFEST_CRYPT}"
     chmod "600" "${RPI_MANIFEST_CRYPT}"
+    _io_colours_load
   fi
 
   "${RPI_MANIFEST_EDITOR}" "${RPI_MANIFEST_CRYPT}"

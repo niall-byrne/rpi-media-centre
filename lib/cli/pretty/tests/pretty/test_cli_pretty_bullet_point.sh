@@ -14,7 +14,7 @@ test_cli_pretty_bullet_point__arg____default_indent__correct_output() {
   TEST_EXPECTED="- ${THEME_ENTITY}bullet point${THEME_NC}"
   TEST_INPUT="bullet point"
 
-  _capture_output _cli_pretty_bullet_point "${TEST_INPUT}"
+  _capture.output _cli_pretty_bullet_point "${TEST_INPUT}"
 
   assert_output "${TEST_EXPECTED}"
 }
@@ -23,7 +23,7 @@ test_cli_pretty_bullet_point__arg____@vary___correct_output() {
   TEST_EXPECTED="${EXPECTED_INDENT}- ${THEME_ENTITY}bullet point${THEME_NC}"
   TEST_INPUT="bullet point"
 
-  _capture_output _cli_pretty_bullet_point "${TEST_INPUT}" "${TEST_INDENT_SIZE}"
+  _capture.output _cli_pretty_bullet_point "${TEST_INPUT}" "${TEST_INDENT_SIZE}"
 
   assert_output "${TEST_EXPECTED}"
 }
@@ -35,7 +35,7 @@ test_cli_pretty_bullet_point__pipe___@vary___correct_output() {
   TEST_EXPECTED="${EXPECTED_INDENT}- ${THEME_ENTITY}bullet point${THEME_NC}"
   TEST_INPUT="bullet point"
 
-  TEST_OUTPUT="$(echo "${TEST_INPUT}" | _cli_pretty_bullet_point - "${TEST_INDENT_SIZE}")"
+  TEST_OUTPUT="$(echo "${TEST_INPUT}" | _cli_pretty_bullet_point_pipe - "${TEST_INDENT_SIZE}")"
 
   assert_equals "${TEST_EXPECTED}" "${TEST_OUTPUT}"
 }

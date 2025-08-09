@@ -76,7 +76,7 @@ _backup_manifest_help() {
     echo " RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH |an optional local path to an encryption key file"
     echo " RPI_BACKUP_JOB_REMOTE_TARGET              |an optional remote target for archival *(required when \`RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER\` is blank and \`RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER\` is also blank)"
     echo " RPI_BACKUP_JOB_REMOTE_PARAMETER           |optional extra parameters for remote archival *(only permitted when \`RPI_BACKUP_JOB_REMOTE_TARGET\` is set)"
-  } | _cli_pretty_columns
+  } | _cli_pretty_columns_pipe
 }
 
 _backup_manifest_line_invalid() {
@@ -118,7 +118,7 @@ _backup_manifest_load() {
     return 127
   fi
 
-  _security_path_check "${RPI_MANIFEST_BACKUP}" "root" "root" "600"
+  stdlib.security.path.query.is_secure "${RPI_MANIFEST_BACKUP}" "root" "root" "600"
 
   while IFS= read -r FILE_LINE; do
 
@@ -192,5 +192,5 @@ _backup_manifest_write_jobs_all() {
     echo "pictl backup service job ${RPI_BACKUP_JOB_DATA} -q \"\${1}\""
   } > "${RPI_BACKUP_PATH_NEW_JOB}"
 
-  _security_path_secure "${RPI_BACKUP_PATH_NEW_JOB}" "root" "root" "700"
+  stdlib.security.path.secure "${RPI_BACKUP_PATH_NEW_JOB}" "root" "root" "700"
 }

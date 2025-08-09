@@ -1,7 +1,7 @@
 #!/bin/bash
 
-load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/cli/__fixtures__/disk_cli_hardware.sh"
-load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/__fakes__/block_devices.sh"
+_testing.load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/cli/__fixtures__/disk_cli_hardware.sh"
+_testing.load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/__fakes__/block_devices.sh"
 
 setup() {
   _fixture_disk_cli_hardware
@@ -36,7 +36,7 @@ test_disk_cli_hardware__hdparm_succeeds__zero_exit_code() {
   _fake_block_devices
   hdparm.mock.set.rc "0"
 
-  _capture_pretty _capture_rc _disk_cli_hardware
+  _capture_pretty _capture.rc _disk_cli_hardware
 
   assert_equals "0" "${TEST_RC}"
 }
@@ -45,7 +45,7 @@ test_disk_cli_hardware__hdparm_fails__zero_exit_code() {
   _fake_block_devices
   hdparm.mock.set.rc "1"
 
-  _capture_pretty _capture_rc _disk_cli_hardware
+  _capture_pretty _capture.rc _disk_cli_hardware
 
   assert_rc "0"
 }

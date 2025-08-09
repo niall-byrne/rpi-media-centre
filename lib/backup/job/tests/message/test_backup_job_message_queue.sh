@@ -5,7 +5,7 @@ setup() {
 }
 
 test_backup_job_message_queue() {
-  _capture_output _backup_job_message_queue
+  _capture.output _backup_job_message_queue
 
   assert_snapshot "__fixtures__/message_queue.txt"
 }

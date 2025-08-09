@@ -1,8 +1,8 @@
 #!/bin/bash
 
 _fixture_disk_initialize_mounts() {
-  _mock.create _security_path_mkdir
-  _security_path_mkdir.mock.clear
+  _mock.create stdlib.security.path.make.dir
+  stdlib.security.path.make.dir.mock.clear
 }
 
 _fixture_disk_initialize_mounts__plex__calls() {

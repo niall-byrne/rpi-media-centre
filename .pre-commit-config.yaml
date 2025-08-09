@@ -59,6 +59,13 @@ repos:
         stages: [pre-commit]
   - repo: local
     hooks:
+      - id: bash-coverage-lib
+        name: bash-unit-tests
+        entry: bash -c 'TEST_CONTAINER_CI=1 ./testing/container.sh bashcov --root lib t lib/'
+        language: system
+        stages: [manual]
+        pass_filenames: false
+        require_serial: true
       - id: bash-coverage-stdlib
         name: bash-unit-tests
         entry: bash -c 'TEST_CONTAINER_CI=1 ./testing/container.sh bashcov --root stdlib t stdlib'
@@ -92,13 +99,13 @@ repos:
         args: [--multiline]
         language: pygrep
         files: "^lib/.+\\.sh$"
-        exclude: "^(.+tests/.+\\.sh|.+/__all__.sh|lib/defaults.sh|lib/trap.sh)$"
+        exclude: "^(.+tests/.+\\.sh|.+/__all__.sh|lib/defaults.sh)$"
       - id: headers-source-files-exporting-traps
         name: headers-source-files-exporting-traps
-        entry: "\\A(?!#!/bin/bash\n(# shellcheck disable=.+\n){0,1}\n# (pictl|stdlib).+\nset -Eeo pipefail\n).+\\Z"
+        entry: "\\A(?!#!/bin/bash\n(# shellcheck disable=.+\n){0,1}\n# stdlib.+\nset -Eeo pipefail\n).+\\Z"
         args: [--multiline]
         language: pygrep
-        files: "^(lib/trap.sh|stdlib/trap/trap.sh)$"
+        files: "^stdlib/trap/trap.sh$"
       - id: headers-stdlib-source-files
         name: headers-stdlib-source-files
         entry: "\\A(?!#!/bin/bash\n(# shellcheck disable=.+\n){0,1}\n# stdlib.+\nset -eo pipefail\n).+\\Z"

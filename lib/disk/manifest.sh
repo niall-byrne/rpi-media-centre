@@ -47,7 +47,7 @@ _disk_manifest_help() {
     echo " RPI_DISK_NAME        |a unique name for this disk"
     echo " RPI_DISK_CRYPT_GROUP |an optional identifier for disks that share a luks password"
     echo " RPI_DISK_MOUNT_POINT |a valid mount point for this disk on the filesystem"
-  } | _cli_pretty_columns
+  } | _cli_pretty_columns_pipe
 }
 
 _disk_manifest_line_invalid() {
@@ -76,14 +76,14 @@ _disk_manifest_line_log_all() {
 _disk_manifest_line_validate() {
   # $1: the help function to call in the event that the line is invalid
 
-  if ! _filesystem_check_is_folder "${RPI_DISK_MOUNT_POINT}"; then
+  if ! stdlib.io.filesystem.assert.is_folder "${RPI_DISK_MOUNT_POINT}"; then
     "${1}"
     return 127
   fi
 
   if [[ "${RPI_RUNTIME_ENVIRONMENT}" != "service" ]]; then
     # TODO: investigate a better way of handling service mode for these exceptions
-    if ! _security_path_check "${RPI_DISK_MOUNT_POINT}" "${RPI_SVC_USERNAME}" "${RPI_SVC_GROUPNAME}" "700"; then
+    if ! stdlib.security.path.query.is_secure "${RPI_DISK_MOUNT_POINT}" "${RPI_SVC_USERNAME}" "${RPI_SVC_GROUPNAME}" "700"; then
       "${1}"
       return 127
     fi
@@ -111,7 +111,7 @@ _disk_manifest_load() {
 
   _cli_log_notice "-- loading ${RPI_MANIFEST_CRYPT} file ... --"
 
-  _security_path_check "${RPI_MANIFEST_CRYPT}" "root" "root" "600"
+  stdlib.security.path.query.is_secure "${RPI_MANIFEST_CRYPT}" "root" "root" "600"
 
   while IFS= read -r FILE_LINE; do
     IFS="," read -r \

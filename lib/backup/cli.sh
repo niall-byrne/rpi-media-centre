@@ -15,9 +15,9 @@ _backup_cli_keyfile-s3() {
 
   _cli_log_warning "BACKUP SCHEDULER: Generating a new AWS S3 encryption key ..."
 
-  _filesystem_check_does_not_exist "${1}"
+  stdlib.io.filesystem.assert.not_exists "${1}"
   openssl rand 32 > "${1}"
-  _security_path_secure "${1}" "root" "root" "600"
+  stdlib.security.path.secure "${1}" "root" "root" "600"
 
   _cli_log_success "BACKUP SCHEDULER: Successfully generated '${1}' !"
 }
@@ -50,7 +50,7 @@ _backup_cli_queue_cli_remove() {
 
   _backup_scheduler_make_queues
 
-  _io_prompt_confirmation
+  stdlib.io.stdin.confirmation
   find "${RPI_BACKUP_PATH_QUEUE_ROOT}" -type f -name "${1}" -delete
 
   _cli_log_success "BACKUP SCHEDULER: Queued backup jobs matching '${1}' have been removed !"
@@ -61,7 +61,7 @@ _backup_cli_queue_cli_remove-all() {
 
   _backup_scheduler_make_queues
 
-  _io_prompt_confirmation
+  stdlib.io.stdin.confirmation
   find "${RPI_BACKUP_PATH_QUEUE_ROOT}" -type f -delete
 
   _cli_log_success "BACKUP SCHEDULER: All queued backup jobs have been removed !"

@@ -27,7 +27,7 @@ _cli_bootstrap() {
     # shellcheck disable=SC2034
     RPI_CLI_JUST_COMPILED_BOOLEAN="1"
 
-    _security_path_secure \
+    stdlib.security.path.secure \
       "${RPI_PATH_COMPILED_CLI}" \
       "${RPI_SVC_USERNAME}" \
       "${RPI_SVC_GROUPNAME}" \
@@ -47,7 +47,7 @@ _cli_completion() {
   _cli_make_build_folder
   _cli_compiler_completion
 
-  _security_path_secure \
+  stdlib.security.path.secure \
     "${RPI_PATH_COMPILED_COMPLETION}" \
     "${RPI_SVC_USERNAME}" \
     "${RPI_SVC_GROUPNAME}" \
@@ -58,7 +58,7 @@ _cli_completion() {
 }
 
 _cli_make_build_folder() {
-  _security_path_mkdir \
+  stdlib.security.path.make.dir \
     "${RPI_PATH_COMPILED_ROOT}" \
     "${RPI_SVC_USERNAME}" \
     "${RPI_SVC_GROUPNAME}" \

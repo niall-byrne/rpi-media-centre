@@ -12,7 +12,7 @@ _cli_pretty_string_first_char_is() {
   [[ "${2:0:1}" == "${1}" ]]
 }
 
-_io_make_pipeable "_cli_pretty_string_first_char_is" "2"
+stdlib.fn.derive.pipeable "_cli_pretty_string_first_char_is" "2"
 
 _cli_pretty_string_starts_with() {
   # $1 the value to check for
@@ -21,4 +21,4 @@ _cli_pretty_string_starts_with() {
   [[ "${2}" == "${1}"* ]]
 }
 
-_io_make_pipeable "_cli_pretty_string_starts_with" "2"
+stdlib.fn.derive.pipeable "_cli_pretty_string_starts_with" "2"

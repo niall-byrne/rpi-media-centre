@@ -1,6 +1,6 @@
 #!/bin/bash
 
-load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/__fakes__/crypt_data.sh"
+_testing.load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/__fakes__/crypt_data.sh"
 ORIGINAL_RPI_WORKING_DIRECTORY="${RPI_WORKING_DIRECTORY}"
 
 setup_suite() {
@@ -9,7 +9,7 @@ setup_suite() {
 
 setup() {
   _fixture_mock_logs
-  _mock.create _security_path_check
+  _mock.create stdlib.security.path.query.is_secure
   _mock.create _disk_manifest_line_validate
   _mock.create _disk_manifest_line_invalid
 
@@ -61,10 +61,10 @@ test_disk_manifest_load__@vary__logs_info_message() {
 test_disk_manifest_load__@vary__checks_manifest_permissions() {
   _disk_manifest_load
 
-  assert_equals "1" "$(_security_path_check.mock.get.count)"
+  assert_equals "1" "$(stdlib.security.path.query.is_secure.mock.get.count)"
   assert_equals \
     "${RPI_MANIFEST_CRYPT} root root 600" \
-    "$(_security_path_check.mock.get.call "1")"
+    "$(stdlib.security.path.query.is_secure.mock.get.call "1")"
 }
 
 @parametrize_with_mock_manifests \
@@ -87,7 +87,7 @@ test_disk_manifest_load__@vary__checks_each_line_for_validity() {
 test_disk_manifest_load__@vary__sets_environment_variables_for_validity_check() {
   _disk_manifest_line_validate.mock.set.subcommand _disk_manifest_line_log
 
-  _capture_output _disk_manifest_load
+  _capture.output _disk_manifest_load
 
   assert_output "$(cat "${RPI_MANIFEST_CRYPT}".log)"
 }
@@ -99,7 +99,7 @@ test_disk_manifest_load__@vary__@vary__is_correctly_populated() {
   # shellcheck disable=SC2034
   local TEST_VALUE_ARRAY=()
 
-  _array_from_string TEST_VALUE_ARRAY "|" "${!EXPECTED_VALUE_ENV_VAR_NAME}"
+  stdlib.array.make.from_string TEST_VALUE_ARRAY "|" "${!EXPECTED_VALUE_ENV_VAR_NAME}"
 
   _disk_manifest_load
 
@@ -108,7 +108,7 @@ test_disk_manifest_load__@vary__@vary__is_correctly_populated() {
   assert_array_equals TEST_VALUE_ARRAY "${ENV_VAR_NAME}"
 }
 
-@parametrize_compose \
+@parametrize.compose \
   test_disk_manifest_load__@vary__@vary__is_correctly_populated \
   @parametrize_with_mock_manifests \
   @parametrize_with_each_env_var

@@ -2,7 +2,7 @@
 
 setup() {
   _fixture_mock_logs
-  _mock.create _io_ensure_vars_set
+  _mock.create stdlib.fn.args.require
 }
 
 @parametrize_with_valid_combos() {
@@ -17,16 +17,17 @@ setup() {
 
 }
 
-test_security_validate_ids_relationship__@vary__calls_io_ensure_vars_set() {
-  _array_from_string TEST_ARGUMENTS "|" "${TEST_ARGUMENT_DEFINITION}"
+test_security_validate_ids_relationship__@vary__calls_stdlib_fn_args_require() {
+  stdlib.array.make.from_string TEST_ARGUMENTS "|" "${TEST_ARGUMENT_DEFINITION}"
+  stdlib.fn.args.require.mock.clear
 
   _security_validate_ids_relationship "${TEST_ARGUMENTS[@]}"
 
-  _io_ensure_vars_set.mock.assert_called_once_with "3 ${EXPECTED_ARGS}"
+  stdlib.fn.args.require.mock.assert_called_once_with "3 0 ${EXPECTED_ARGS}"
 }
 
 @parametrize \
-  "test_security_validate_ids_relationship__@vary__calls_io_ensure_vars_set" \
+  test_security_validate_ids_relationship__@vary__calls_stdlib_fn_args_require \
   "TEST_ARGUMENT_DEFINITION,EXPECTED_ARGS" \
   "valid_arguments_,optional_varname|required_varname|entity_name,optional_varname required_varname entity_name" \
   "omitted_required,optional_varname||entity_name,optional_varname  entity_name" \
@@ -58,7 +59,7 @@ test_security_validate_ids_relationship__valid_arguments___optional_unset__requi
   local TEST_REQUIRED=""
   local TEST_ENTITY="entity"
 
-  _capture_rc _security_validate_ids_relationship "TEST_OPTIONAL" "TEST_REQUIRED" "TEST_ENTITY"
+  _capture.rc _security_validate_ids_relationship "TEST_OPTIONAL" "TEST_REQUIRED" "TEST_ENTITY"
   assert_rc "0"
 }
 
@@ -66,7 +67,7 @@ test_security_validate_ids_relationship__valid_arguments___optional_unset__requi
 test_security_validate_ids_relationship__valid_arguments___@vary__returns_status_code_0() {
   local TEST_ENTITY="entity"
 
-  _capture_rc _security_validate_ids_relationship "TEST_OPTIONAL" "TEST_REQUIRED" "TEST_ENTITY"
+  _capture.rc _security_validate_ids_relationship "TEST_OPTIONAL" "TEST_REQUIRED" "TEST_ENTITY"
 
   assert_rc "0"
 }

@@ -23,7 +23,7 @@ _fixture_escape_rpi_vars() {
     if [[ " ${RPI_ENV_VARS_WHITE_LIST[*]} " =~ " ${RPI_ENV_VAR} " ]]; then
       continue
     fi
-    if _array_is_array "${RPI_ENV_VAR}"; then
+    if stdlib.array.query.is_array "${RPI_ENV_VAR}"; then
       continue
     fi
     printf -v "${RPI_ENV_VAR}" '%s' "\${${RPI_ENV_VAR}}"

@@ -11,9 +11,9 @@ _cli_pretty_justify_left() {
   printf "%-${1}b"$'\n' "${2}"
 }
 
-_io_make_pipeable "_cli_pretty_justify_left" "2"
+stdlib.fn.derive.pipeable "_cli_pretty_justify_left" "2"
 
-_io_make_var_function "_cli_pretty_justify_left"
+stdlib.fn.derive.var "_cli_pretty_justify_left"
 
 _cli_pretty_justify_right() {
   # $1: the column width to justify with
@@ -22,6 +22,6 @@ _cli_pretty_justify_right() {
   printf "%${1}s"$'\n' "${2}"
 }
 
-_io_make_pipeable "_cli_pretty_justify_right" "2"
+stdlib.fn.derive.pipeable "_cli_pretty_justify_right" "2"
 
-_io_make_var_function "_cli_pretty_justify_right"
+stdlib.fn.derive.var "_cli_pretty_justify_right"

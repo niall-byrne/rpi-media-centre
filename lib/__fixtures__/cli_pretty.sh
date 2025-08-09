@@ -14,6 +14,14 @@ _fixture_mock_logs() {
 
 _fixture_mock_pretty() {
   _mock.create _cli_pretty_columns
+  _mock.create _cli_pretty_columns_pipe
+  _cli_pretty_columns_pipe.mock.set.pipeable "1"
+
   _mock.create _cli_pretty_highlight
+  _mock.create _cli_pretty_highlight_pipe
+  _cli_pretty_highlight_pipe.mock.set.pipeable "1"
+
   _mock.create _cli_pretty_title
+  _mock.create _cli_pretty_title_pipe
+  _cli_pretty_title_pipe.mock.set.pipeable "1"
 }

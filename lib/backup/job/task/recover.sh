@@ -33,7 +33,7 @@ _backup_job_task_recover_s3() {
     "${RPI_BACKUP_JOB_RECOVERED_FILENAME}" \
     "${RPI_BACKUP_JOB_UPLOAD_OPTIONS[@]}"
 
-  _security_path_secure \
+  stdlib.security.path.secure \
     "${RPI_BACKUP_JOB_RECOVERED_FILENAME}" \
     "${RPI_SVC_USERNAME}" \
     "${RPI_SVC_GROUPNAME}" \

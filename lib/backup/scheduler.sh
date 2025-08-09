@@ -94,14 +94,14 @@ _backup_scheduler_make_queues() {
   local RPI_BACKUP_PATH_SELECTED_QUEUE
 
   for RPI_BACKUP_PATH_SELECTED_QUEUE in "${RPI_BACKUP_QUEUE_NAMES[@]}"; do
-    _security_path_mkdir \
+    stdlib.security.path.make.dir \
       "${RPI_BACKUP_PATH_QUEUE_ROOT}/${RPI_BACKUP_PATH_SELECTED_QUEUE}" \
       "${RPI_SVC_USERNAME}" \
       "${RPI_SVC_GROUPNAME}" \
       "700"
   done
 
-  _security_path_secure \
+  stdlib.security.path.secure \
     "${RPI_BACKUP_PATH_QUEUE_ROOT}" \
     "${RPI_SVC_USERNAME}" \
     "${RPI_SVC_GROUPNAME}" \

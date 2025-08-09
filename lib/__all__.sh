@@ -5,8 +5,6 @@ set -Eeo pipefail
 # shellcheck source=lib/io.sh
 source "${RPI_WORKING_DIRECTORY}/lib/io.sh"
 
-# shellcheck source=lib/array.sh
-source "${RPI_WORKING_DIRECTORY}/lib/array.sh"
 # shellcheck source=lib/defaults.sh
 source "${RPI_WORKING_DIRECTORY}/lib/defaults.sh"
 # shellcheck source=lib/backup/__all__.sh

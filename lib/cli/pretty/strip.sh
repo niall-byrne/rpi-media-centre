@@ -10,4 +10,4 @@ _cli_pretty_strip_trailing_newline() {
   echo -n "${1}"
 }
 
-_io_make_pipeable "_cli_pretty_strip_trailing_newline" "1"
+stdlib.fn.derive.pipeable "_cli_pretty_strip_trailing_newline" "1"
