@@ -11,27 +11,23 @@ _backup_job() {
   local RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER
   local RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS
   local RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH
+  local RPI_BACKUP_JOB_REMOTE_PARAMETER
   local RPI_BACKUP_JOB_REMOTE_TARGET
   local RPI_BACKUP_JOB_QUEUE
 
   _backup_job_args "$@"
 
-  echo " -- BACKUP JOB: Executing '${RPI_BACKUP_JOB_QUEUE}' task for job '${RPI_BACKUP_JOB_NAME}' ..."
+  _cli_log_notice " -- BACKUP JOB: Executing '${RPI_BACKUP_JOB_QUEUE}' task for job '${RPI_BACKUP_JOB_NAME}' ..."
 
-  case "${RPI_BACKUP_JOB_QUEUE}" in
-    rsync)
-      _backup_job_task_rsync
-      ;;
-    tarball)
-      _backup_job_task_tarball
-      ;;
-    upload)
-      _backup_job_task_upload
-      ;;
-    *) ;;
-  esac
+  if [[ "${RPI_BACKUP_JOB_QUEUE}" == "${RPI_BACKUP_QUEUE_FAILED_TASK_EVENT}" ]]; then
+    RPI_BACKUP_JOB_QUEUE="${RPI_BACKUP_JOB_FAILURE_QUEUE}"
+    _backup_job_task_event_wrapper "event-backup-job-task-error.sh"
+    return 0
+  fi
 
-  echo " -- BACKUP JOB: Completed '${RPI_BACKUP_JOB_QUEUE}' task for job '${RPI_BACKUP_JOB_NAME}' !"
+  _backup_job_cli "${RPI_BACKUP_JOB_QUEUE}"
+
+  _cli_log_notice " -- BACKUP JOB: Completed '${RPI_BACKUP_JOB_QUEUE}' task for job '${RPI_BACKUP_JOB_NAME}' !"
 }
 
 _backup_job_args() {
@@ -39,9 +35,9 @@ _backup_job_args() {
   local OPTIND
   local OPTION
 
-  echo " -- BACKUP JOB: Received: $(printf "%q " "$@")"
+  _cli_log_info " -- BACKUP JOB: Received: $(printf "%q " "$@")"
 
-  while getopts "b:k:n:s:q:r:t:v:" OPTION; do
+  while getopts "b:k:n:p:q:r:s:t:v:" OPTION; do
     case "$OPTION" in
       b)
         RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER="${OPTARG}"
@@ -51,6 +47,9 @@ _backup_job_args() {
         ;;
       n)
         RPI_BACKUP_JOB_NAME="${OPTARG}"
+        ;;
+      p)
+        RPI_BACKUP_JOB_REMOTE_PARAMETER="${OPTARG}"
         ;;
       q)
         RPI_BACKUP_JOB_QUEUE="${OPTARG}"
@@ -68,7 +67,7 @@ _backup_job_args() {
         RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS="${OPTARG}"
         ;;
       *)
-        _backup_job_usage >&2
+        _backup_job_usage
         ;;
     esac
   done
@@ -76,11 +75,10 @@ _backup_job_args() {
 
   _backup_job_validation "_backup_job_usage"
   _backup_job_validation_queue "${RPI_BACKUP_JOB_QUEUE}"
-
 }
 
 _backup_job_get_next_queue() {
-  # $1: The current queue
+  # $1: the current queue
 
   local RPI_BACKUP_PATH_SELECTED_QUEUE
   local RPI_BACKUP_JOB_QUEUE_MATCHING="0"
@@ -100,36 +98,6 @@ _backup_job_get_next_queue() {
   echo ""
 }
 
-_backup_job_help_queue() {
-  echo "Valid Queues:"
-  echo -e "\t- rsync    \t- create rsync copy"
-  echo -e "\t- tar      \t- create tar bundle"
-  echo -e "\t- upload   \t- upload tar bundle to remote storage"
-}
-
-_backup_job_help_remote_target() {
-  echo "Valid Targets:"
-  echo "  - s3://bucket_name/path_name"
-}
-
-_backup_job_help_tarball_versions() {
-  echo "Valid Version Count:"
-  echo "  - any number between 1 and 9 (inclusive)"
-}
-
-_backup_job_help_usage() {
-  echo "-- rpi-media-centre backup service job executor --"
-  echo "Usage:"
-  echo -e "\tpictl backup service job"
-  echo -e "\t           \t-s [RPI_BACKUP_JOB_LOCAL_SOURCE]"
-  echo -e "\t           \t-r [(optional) RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER]"
-  echo -e "\t           \t-b [(optional) RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER]"
-  echo -e "\t           \t-v [(optional) RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS]"
-  echo -e "\t           \t-k [(optional) RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH]"
-  echo -e "\t           \t-t [(optional) RPI_BACKUP_JOB_REMOTE_TARGET]"
-  echo -e "\t           \t-q [RPI_BACKUP_JOB_QUEUE]"
-}
-
 _backup_job_log() {
   echo "  RPI_BACKUP_JOB_NAME='${RPI_BACKUP_JOB_NAME}'"
   if [[ -n "${RPI_BACKUP_JOB_GROUP}" ]]; then
@@ -141,15 +109,19 @@ _backup_job_log() {
   echo "  RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS='${RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS}'"
   echo "  RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH='${RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH}'"
   echo "  RPI_BACKUP_JOB_REMOTE_TARGET='${RPI_BACKUP_JOB_REMOTE_TARGET}'"
+  echo "  RPI_BACKUP_JOB_REMOTE_PARAMETER='${RPI_BACKUP_JOB_REMOTE_PARAMETER}'"
   if [[ -n "${RPI_BACKUP_JOB_QUEUE}" ]]; then
     echo "  RPI_BACKUP_JOB_GROUP='${RPI_BACKUP_JOB_QUEUE}'"
   fi
 }
 
 _backup_job_usage() {
-  _backup_job_help_usage
-  _backup_job_help_queue
-  _backup_job_help_remote_target
-  _backup_job_help_tarball_versions
+  {
+    _backup_job_cli_usage
+    _backup_job_message_tarball_versions
+    _backup_job_message_remote_target
+    _backup_job_message_remote_param
+    _backup_job_message_queue
+  } >&2
   return 127
 }

@@ -5,7 +5,7 @@
 set -eo pipefail
 
 _is_service_selected() {
-  # $1: The service to check for selection
+  # $1: the service to check for selection
 
   local SERVICE
 
@@ -18,12 +18,28 @@ _is_service_selected() {
   return 1
 }
 
+_docker_create_filtered_env() {
+  # $1: the variable prefix to filter
+  # $2: the path to save as
+
+  declare -p |
+    grep "^declare -. ${1}" |
+    sed 's/^declare -. //g' \
+      > "${2}" || true
+
+  _security_path_secure "${2}" "root" "root" "600"
+
+  RPI_EXIT_CLEANUP_PATHS+=("${2}")
+}
+
 _docker_compose_command() {
-  # $@: The command to pass to docker compose
+  # $@: the command to pass to docker compose
   # set _SERVICE_REMOVE_CONTAINERS to 1 to ensure containers are removed
 
   local SERVICE
-  SELECTED_SERVICES=()
+  local SELECTED_SERVICES=()
+
+  _dependencies_group_containers
 
   for SERVICE in "${RPI_SERVICES[@]}"; do
     SELECTED_SERVICES+=("--profile")
@@ -41,9 +57,11 @@ _docker_compose_command() {
 }
 
 _docker_compose_exec() {
-  # $@: The command to pass to docker compose run
+  # $@: the command to pass to docker compose run
 
   local SERVICE="${1}"
+
+  _dependencies_group_containers
 
   shift
 
@@ -52,17 +70,4 @@ _docker_compose_exec() {
   docker compose exec "${SERVICE}" "$@"
 
   popd >> /dev/null
-}
-
-_docker_secure_bind_mounts() {
-  if _is_service_selected "plex"; then
-    chmod 700 "${RPI_PLEX_PATH_CONFIG}"
-    chmod 700 "${RPI_PLEX_PATH_TRANSCODE}"
-  fi
-  if _is_service_selected "samba"; then
-    chmod 700 "${RPI_SAMBA_PATH_CONFIG}"
-  fi
-  if _is_service_selected "syncthing"; then
-    chmod 700 "${RPI_SYNCTHING_PATH_CONFIG}"
-  fi
 }

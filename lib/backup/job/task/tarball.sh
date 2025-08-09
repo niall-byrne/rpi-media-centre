@@ -5,39 +5,52 @@
 set -eo pipefail
 
 _backup_job_task_tarball() {
-  local RPI_BACKUP_JOB_LOCAL_TARBALL_FILENAME
-
   if [[ -n "${RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER}" ]]; then
     _backup_job_task_wrapper "_backup_job_task_tarball_filesystem"
   else
-    echo " -- BACKUP JOB: No tarball required for this job !"
+    _cli_log_notice " -- BACKUP JOB: No tarball required for this job !"
   fi
 }
 
 _backup_job_task_tarball_filesystem() {
+  _backup_job_task_tarball_filesystem_clean
   _control_pushd "$(dirname "${RPI_BACKUP_JOB_LOCAL_SOURCE}")" "_backup_job_task_tarball_filesystem_build"
   _backup_job_task_tarball_filesystem_prune
 }
 
 _backup_job_task_tarball_filesystem_build() {
-  local RPI_BACKUP_JOB_LOCAL_TARBALL_FILENAME
+  local RPI_BACKUP_JOB_LOCAL_TARBALL_FINISHED_FILENAME
+  local RPI_BACKUP_JOB_LOCAL_TARBALL_INCOMPLETE_FILENAME
 
-  RPI_BACKUP_JOB_LOCAL_TARBALL_FILENAME="$(_backup_job_task_tarball_get_new_filename)"
-  echo " -- BACKUP JOB: Creating tarball '${RPI_BACKUP_JOB_LOCAL_TARBALL_FILENAME}' ..."
-  sudo tar cf "${RPI_BACKUP_JOB_LOCAL_TARBALL_FILENAME}" "$(basename "${RPI_BACKUP_JOB_LOCAL_SOURCE}")"
-  sudo chmod "600" "$(basename "${RPI_BACKUP_JOB_LOCAL_SOURCE}")"
-  sudo chown "${RPI_CONTAINER_UID}":"${RPI_CONTAINER_GID}" "$(basename "${RPI_BACKUP_JOB_LOCAL_SOURCE}")"
+  RPI_BACKUP_JOB_LOCAL_TARBALL_FINISHED_FILENAME="$(_backup_job_task_tarball_get_new_filename)"
+  RPI_BACKUP_JOB_LOCAL_TARBALL_INCOMPLETE_FILENAME="${RPI_BACKUP_JOB_LOCAL_TARBALL_FINISHED_FILENAME}.incomplete"
+
+  RPI_EXIT_CLEANUP_PATHS+=("${RPI_BACKUP_JOB_LOCAL_TARBALL_INCOMPLETE_FILENAME}")
+
+  _cli_log_notice " -- BACKUP JOB: Creating tarball '${RPI_BACKUP_JOB_LOCAL_TARBALL_FINISHED_FILENAME}' ..."
+  tar cf "${RPI_BACKUP_JOB_LOCAL_TARBALL_INCOMPLETE_FILENAME}" "$(basename "${RPI_BACKUP_JOB_LOCAL_SOURCE}")"
+  mv "${RPI_BACKUP_JOB_LOCAL_TARBALL_INCOMPLETE_FILENAME}" "${RPI_BACKUP_JOB_LOCAL_TARBALL_FINISHED_FILENAME}"
+
+  _security_path_secure \
+    "${RPI_BACKUP_JOB_LOCAL_TARBALL_FINISHED_FILENAME}" \
+    "${RPI_SVC_USERNAME}" \
+    "${RPI_SVC_GROUPNAME}" \
+    "600"
+}
+
+_backup_job_task_tarball_filesystem_clean() {
+  rm -f "${RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER}/"*"_"[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]_[0-9][0-9]-[0-9][0-9]-[0-9][0-9]".tar.incomplete"
 }
 
 _backup_job_task_tarball_filesystem_prune() {
   local RPI_BACKUP_JOB_PRUNE_INDEX
 
-  echo " -- BACKUP JOB: Restricting storage to '${RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS}' tarball version(s) ... "
+  _cli_log_warning " -- BACKUP JOB: Restricting storage to '${RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS}' tarball version(s) ... "
 
   ((RPI_BACKUP_JOB_PRUNE_INDEX = RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS + 1))
 
   # shellcheck disable=SC2012
-  ls -t1 "${RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER}/${RPI_BACKUP_JOB_NAME}_"[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]_[0-9][0-9]-[0-9][0-9]-[0-9][0-9].tar |
+  ls -t1 "${RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER}/${RPI_BACKUP_JOB_NAME}_"[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]_[0-9][0-9]-[0-9][0-9]-[0-9][0-9]".tar" |
     tail -n +${RPI_BACKUP_JOB_PRUNE_INDEX} |
     tr \\n \\0 |
     xargs -0 rm -f
@@ -49,6 +62,6 @@ _backup_job_task_tarball_get_new_filename() {
 
 _backup_job_task_tarball_get_latest_filename() {
   # shellcheck disable=SC2012
-  ls -t1 "${RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER}/${RPI_BACKUP_JOB_NAME}_"* |
+  ls -t1 "${RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER}/${RPI_BACKUP_JOB_NAME}_"[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]_[0-9][0-9]-[0-9][0-9]-[0-9][0-9]".tar" |
     head -n1
 }

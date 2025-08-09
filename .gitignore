@@ -1,8 +1,11 @@
 .backups
 .cicd-tools/boxes/*
 .cicd-tools/manifest.json
+.coverage
 .rpi
 .vale/*
 !.vale/Vocab
 *.key
+lib/cli/build
+stdlib/coverage
 poetry.lock

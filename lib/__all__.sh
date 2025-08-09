@@ -1,21 +1,26 @@
 #!/bin/bash
 
-set -eo pipefail
+set -Eeo pipefail
 
-if [[ -n "${RPI_DEBUG}" ]]; then
-  trap error_handler ERR
-fi
+# shellcheck source=lib/io.sh
+source "${RPI_WORKING_DIRECTORY}/lib/io.sh"
 
+# shellcheck source=lib/array.sh
+source "${RPI_WORKING_DIRECTORY}/lib/array.sh"
 # shellcheck source=lib/defaults.sh
 source "${RPI_WORKING_DIRECTORY}/lib/defaults.sh"
 # shellcheck source=lib/backup/__all__.sh
 source "${RPI_WORKING_DIRECTORY}/lib/backup/__all__.sh"
+# shellcheck source=lib/cli/__all__.sh
+source "${RPI_WORKING_DIRECTORY}/lib/cli/__all__.sh"
 # shellcheck source=lib/configuration.sh
 source "${RPI_WORKING_DIRECTORY}/lib/configuration.sh"
 # shellcheck source=lib/control.sh
 source "${RPI_WORKING_DIRECTORY}/lib/control.sh"
 # shellcheck source=lib/debug.sh
 source "${RPI_WORKING_DIRECTORY}/lib/debug.sh"
+# shellcheck source=lib/dependencies/__all__.sh
+source "${RPI_WORKING_DIRECTORY}/lib/dependencies/__all__.sh"
 # shellcheck source=lib/disk/__all__.sh
 source "${RPI_WORKING_DIRECTORY}/lib/disk/__all__.sh"
 # shellcheck source=lib/docker.sh
@@ -24,9 +29,13 @@ source "${RPI_WORKING_DIRECTORY}/lib/docker.sh"
 source "${RPI_WORKING_DIRECTORY}/lib/event.sh"
 # shellcheck source=lib/filesystem.sh
 source "${RPI_WORKING_DIRECTORY}/lib/filesystem.sh"
-# shellcheck source=lib/installer.sh
-source "${RPI_WORKING_DIRECTORY}/lib/installer.sh"
-# shellcheck source=lib/io.sh
-source "${RPI_WORKING_DIRECTORY}/lib/io.sh"
+# shellcheck source=lib/installer/cli.sh
+source "${RPI_WORKING_DIRECTORY}/lib/installer/cli.sh"
 # shellcheck source=lib/manifest.sh
 source "${RPI_WORKING_DIRECTORY}/lib/manifest.sh"
+# shellcheck source=lib/security/__all__.sh
+source "${RPI_WORKING_DIRECTORY}/lib/security/__all__.sh"
+# shellcheck source=lib/settings.sh
+source "${RPI_WORKING_DIRECTORY}/lib/settings.sh"
+# shellcheck source=lib/trap.sh
+source "${RPI_WORKING_DIRECTORY}/lib/trap.sh"

@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# stdlib array make library
+
+set -eo pipefail
+
+stdlib.array.make.from_file() {
+  # $1: the array name
+  # $2: the seperator
+  # $3: the source file
+
+  stdlib.fn.args.require "3" "0" "${@}" || return "$?"
+  stdlib.io.filesystem.assert.is_file "${3}" || return 126
+
+  IFS="${2}" read -ra "${1}" < "${3}"
+}
+
+stdlib.array.make.from_string() {
+  # $1: the array name
+  # $2: the seperator
+  # $3: the source string
+
+  stdlib.fn.args.require "3" "0" "${@}" || return "$?"
+
+  IFS="${2}" read -ra "${1}" <<< "${3}"
+}
+
+stdlib.array.make.from_string_n() {
+  # $1: the array name
+  # $2: the count of repeats
+  # $3: the string to repeat
+
+  local array_index
+
+  stdlib.fn.args.require "3" "0" "${@}" || return "$?"
+  stdlib.string.assert.is_digit "${2}" || return 126
+
+  for ((array_index = 0; array_index < "${2}"; array_index++)); do
+    printf -v "${1}[${array_index}]" "%s" "${3}"
+  done
+}

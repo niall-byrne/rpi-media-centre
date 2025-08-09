@@ -1,0 +1,8 @@
+/dev/sda:
+ drive state is:  standby
+/dev/sdb:
+ drive state is:  standby
+/dev/sdc:
+ drive state is:  standby
+/dev/sdd:
+ drive state is:  active/idle

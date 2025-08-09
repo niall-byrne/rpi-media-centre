@@ -15,17 +15,14 @@ _control_lock() {
     RPI_CONTROL_WAIT_TIME="$((RPI_CONTROL_WAIT_TIME + 1))"
 
     if (("${RPI_CONTROL_WAIT_TIME}" >= "${2}")); then
-      echo "CONTROL: another process has reported it is executing this command."
-      echo "If you believe it to be safe you may execute: sudo rm '/var/lock/${1}'"
+      _cli_log_error "CONTROL: another process has reported it is executing this command."
+      _cli_log_error "If you believe it to be safe you may execute: sudo rm '/var/lock/${1}'"
       return 127
     fi
   done
 
-  echo "${BASHPID}" |
-    sudo tee "/var/lock/${1}" > /dev/null
-
-  # shellcheck disable=SC2064
-  trap "sudo rm '/var/lock/${1}'" EXIT
+  echo "${BASHPID}" > "/var/lock/${1}"
+  RPI_EXIT_CLEANUP_PATHS+=("/var/lock/${1}")
 }
 
 _control_retries() {
@@ -42,13 +39,13 @@ _control_retries() {
     if "$@"; then
       return 0
     else
-      echo "CONTROL: An error occurred, retrying in ${RPI_CONTROL_RETRY_BACKOFF} second(s)..." >&2
+      _cli_log_error "CONTROL: An error occurred, retrying in ${RPI_CONTROL_RETRY_BACKOFF} second(s)..." >&2
       sleep "${RPI_CONTROL_RETRY_BACKOFF}"
       RPI_CONTROL_RETRY_RETRIES=$((RPI_CONTROL_RETRY_RETRIES + 1))
     fi
   done
 
-  echo "CONTROL: This command has failed, despite retries."
+  _cli_log_error "CONTROL: This command has failed, despite retries."
 
   return 127
 }

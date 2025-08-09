@@ -9,142 +9,89 @@ RPI_WORKING_DIRECTORY="$(realpath "$(dirname "$0")")"
 # shellcheck source=lib/__all__.sh
 source "${RPI_WORKING_DIRECTORY}/lib/__all__.sh"
 
-_help() {
-  echo "-- rpi-media-centre service manager --"
-  echo "Usage:"
-  echo -e "\tpictl\t(backup|help|install|kill|logs|manifest|pause|resume|start|status|stop|upgrade)\n"
-}
-
-_service_backup() {
-  # $1: the backup group to target
-  _disk_ensure_mounted
-  _backup_cli "$@"
-}
-
-_service_install() {
-  _installer_service_shim
-  _installer_service_backup
-}
-
-_service_kill() {
-  echo "Media centre now being killed ..."
+_pictl_cli_kill() {
+  _cli_log_warning "Media centre now being killed ..."
   _SERVICE_REMOVE_CONTAINERS=1
   _docker_compose_command kill
   _disk_manifest_unmount_all
 }
 
-_service_logs() {
+_pictl_cli_logs() {
   _docker_compose_command logs -f
 }
 
-_service_manifest() {
-  # $1: the manifest to check
-  _manifest_cli "$@"
-}
-
-_service_pause() {
-  echo "Media centre now being paused ..."
+_pictl_cli_pause() {
+  _cli_log_warning "Media centre now being paused ..."
   _SERVICE_REMOVE_CONTAINERS=0
   _docker_compose_command stop
 }
 
-_service_resume() {
-  _disk_ensure_mounted
+_pictl_cli_resume() {
+  _is_disk_mounted_all
 
-  echo "Media centre now being resumed ..."
+  _cli_log_warning "Media centre now being resumed ..."
   _docker_compose_command start
 }
 
-_service_start() {
-  echo "Media centre now starting ..."
+_pictl_cli_start() {
+  _cli_log_warning "Media centre now starting ..."
   _disk_manifest_mount_all
   _disk_initialize_mounts
 
   if _is_service_selected "samba"; then
-    _configure_samba
+    _configuration_samba
+  fi
+
+  if _is_service_selected "pihole"; then
+    _configuration_pihole
   fi
 
   _docker_compose_command up -d
 
-  _docker_secure_bind_mounts
-
   if _is_service_selected "syncthing"; then
-    _configure_syncthing
+    _configuration_syncthing
   fi
 }
 
-_service_status() {
+_pictl_cli_status() {
   _docker_compose_command ps -a
 }
 
-_service_stop() {
-  echo "Media centre now stopping ..."
+_pictl_cli_stop() {
+  _cli_log_warning "Media centre now stopping ..."
   _SERVICE_REMOVE_CONTAINERS=1
   _docker_compose_command stop
   _disk_manifest_unmount_all
 }
 
-_service_upgrade() {
-  echo "Media centre now being upgraded ..."
+_pictl_cli_upgrade() {
+  _cli_log_warning "Media centre now being upgraded ..."
   _SERVICE_REMOVE_CONTAINERS=1
   _docker_compose_command stop
   _docker_compose_command pull
-  _service_start
+  _pictl_cli_start
 }
 
-_with_configuration() {
-  # $1 the command to launch
-  _configure_pictl
-  "$@"
+_configuration_and_security() {
+  _dependencies_group_cli
+  _security_root_require
+  _configuration_pictl
+  _io_colours_load
+  _security_validate
+
+  if [[ "${1}" != "account" ]]; then
+    _security_defaults_set
+    _security_warning_single_user_mode
+  fi
 }
 
 main() {
   local _SERVICE_REMOVE_CONTAINERS=0
+  _configuration_and_security "$@"
 
-  case "${1}" in
-    backup)
-      shift
-      _with_configuration _service_backup "$@"
-      ;;
-    help)
-      _help
-      ;;
-    install)
-      _with_configuration _service_install
-      ;;
-    kill)
-      _with_configuration _service_kill
-      ;;
-    manifest)
-      shift
-      _with_configuration _service_manifest "$@"
-      ;;
-    logs)
-      _with_configuration _service_logs
-      ;;
-    pause)
-      _with_configuration _service_pause
-      ;;
-    resume)
-      _with_configuration _service_resume
-      ;;
-    start)
-      _with_configuration _service_start
-      ;;
-    status)
-      _with_configuration _service_status
-      ;;
-    stop)
-      _with_configuration _service_stop
-      ;;
-    upgrade)
-      _with_configuration _service_upgrade
-      ;;
-    *)
-      _help >&2
-      return 127
-      ;;
-  esac
+  _cli_bootstrap
+
+  _pictl_cli "$@"
+
 }
-
 main "$@"

@@ -10,6 +10,16 @@ _backup_job_task_wrapper() {
 
   export RPI_BACKUP_JOB_COMMAND=("${@}")
 
+  _backup_job_task_event_wrapper "event-backup-job-task-before.sh"
+  "${RPI_BACKUP_JOB_COMMAND[0]}" "${RPI_BACKUP_JOB_COMMAND[@]:1}"
+  _backup_job_task_event_wrapper "event-backup-job-task-after.sh"
+
+  export -n RPI_BACKUP_JOB_COMMAND
+}
+
+_backup_job_task_event_wrapper() {
+  # $1: the event script to call
+
   (
     export RPI_BACKUP_JOB_NAME
     export RPI_BACKUP_JOB_LOCAL_SOURCE
@@ -20,10 +30,6 @@ _backup_job_task_wrapper() {
     export RPI_BACKUP_JOB_REMOTE_TARGET
     export RPI_BACKUP_JOB_QUEUE
 
-    _event_script "event-backup-task-begin.sh"
-    "${RPI_BACKUP_JOB_COMMAND[0]}" "${RPI_BACKUP_JOB_COMMAND[@]:1}"
-    _event_script "event-backup-task-end.sh"
+    _event_script "${1}"
   )
-
-  export -n RPI_BACKUP_JOB_COMMAND
 }

@@ -4,6 +4,10 @@ Plex|plex
 Samba|samba
 Syncthing|syncthing
 dockerized
+eval
 fstab
 hostname
+ip
+pihole
 rpi-media-centre
+sudo
