@@ -42,7 +42,7 @@ test_backup_scheduler_job_run__@vary__@vary__calls_basename_to_identify_job() {
   basename.mock.assert_called_once_with "mock_job"
 }
 
-@parametrize_apply \
+@parametrize.apply \
   test_backup_scheduler_job_run__@vary__@vary__calls_basename_to_identify_job \
   @parametrize_with_successful_job \
   @parametrize_with_unsuccessful_job
@@ -57,7 +57,7 @@ test_backup_scheduler_job_run__@vary__starts_the_job() {
   test_backup_scheduler_job_run__@vary__starts_the_job
 
 test_backup_scheduler_job_run__@vary__returns_status_code_0() {
-  _capture_rc _backup_scheduler_job_run "${TEST_QUEUE1_NAME}" mock_job
+  _capture.rc _backup_scheduler_job_run "${TEST_QUEUE1_NAME}" mock_job
 
   assert_rc "0"
 }
@@ -126,7 +126,7 @@ test_backup_scheduler_job_run__job_fails_______retry_fails_____returns_status_co
   basename.mock.set.stdout "mock_failed_job"
   mock_job.mock.set.side_effects "return 1" "return 1"
 
-  _capture_rc _backup_scheduler_job_run "${TEST_QUEUE1_NAME}" mock_job
+  _capture.rc _backup_scheduler_job_run "${TEST_QUEUE1_NAME}" mock_job
 
   assert_rc "0"
 }
@@ -144,7 +144,7 @@ test_backup_scheduler_job_run__job_fails_______retry_succeeds__returns_status_co
   basename.mock.set.stdout "mock_failed_job"
   mock_job.mock.set.side_effects "return 1" "return 0"
 
-  _capture_rc _backup_scheduler_job_run "${TEST_QUEUE1_NAME}" mock_job
+  _capture.rc _backup_scheduler_job_run "${TEST_QUEUE1_NAME}" mock_job
 
   assert_rc "0"
 }

@@ -29,7 +29,7 @@ test_security_validate_names__@vary__logs_error_messages() {
   test_security_validate_names__@vary__logs_error_messages
 
 test_security_validate_names__@vary__return_status_code_127() {
-  _capture_rc _security_validate_names
+  _capture.rc _security_validate_names
 
   assert_rc "127"
 }
@@ -42,7 +42,7 @@ test_security_validate_names__valid_username____valid_group__return_status_code_
   RPI_SVC_USERNAME="user"
   RPI_SVC_GROUPNAME="group"
 
-  _capture_rc _security_validate_names
+  _capture.rc _security_validate_names
 
   assert_rc "0"
 }

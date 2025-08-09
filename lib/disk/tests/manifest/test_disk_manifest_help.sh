@@ -24,7 +24,7 @@ test_disk_manifest_help__outputs_expected_data() {
   _cli_pretty_highlight.mock.set.stdout "expected output1"
   _cli_pretty_columns.mock.set.stdout "expected output2"
 
-  _capture_stdout _disk_manifest_help
+  _capture.stdout _disk_manifest_help
 
   assert_output "expected output1"$'\n'"expected output2"
 }

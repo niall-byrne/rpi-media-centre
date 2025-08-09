@@ -1,6 +1,6 @@
 #!/bin/bash
 
-load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/__fakes__/crypt_data.sh"
+_testing.load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/__fakes__/crypt_data.sh"
 
 _fixture__3_disks__3_crypt_groups() {
   # shellcheck disable=SC2034

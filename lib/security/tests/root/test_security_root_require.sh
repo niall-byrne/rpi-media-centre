@@ -17,7 +17,7 @@ test_security_root_require__euid_not_zero__logs_error_messages() {
 test_security_root_require__euid_not_zero__returns_status_code_127() {
   local _RPI_SECURITY_EUID=1000
 
-  _capture_rc _security_root_require
+  _capture.rc _security_root_require
 
   assert_rc "127"
 }
@@ -40,7 +40,7 @@ test_security_root_require__euid_zero______sudo_user_not_set__username_not_set__
   local SUDO_USER=""
   RPI_SVC_USERNAME=""
 
-  _capture_rc _security_root_require
+  _capture.rc _security_root_require
 
   assert_rc "127"
 }
@@ -52,7 +52,7 @@ test_security_root_require__euid_zero______sudo_user_set______username_not_set__
   # shellcheck disable=SC2034
   local SUDO_USER="user_with_sudo"
 
-  _capture_rc _security_root_require
+  _capture.rc _security_root_require
 
   assert_rc "0"
 }
@@ -64,7 +64,7 @@ test_security_root_require__euid_zero______sudo_user_not_set__username_set______
   # shellcheck disable=SC2034
   local SUDO_USER=""
 
-  _capture_rc _security_root_require
+  _capture.rc _security_root_require
 
   assert_rc "0"
 }

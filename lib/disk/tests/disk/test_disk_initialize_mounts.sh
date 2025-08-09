@@ -1,6 +1,6 @@
 #!/bin/bash
 
-load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/disk/__fixtures__/disk_initialize_mounts.sh"
+_testing.load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/disk/__fixtures__/disk_initialize_mounts.sh"
 
 setup_suite() {
   _fixture_escape_rpi_vars

@@ -21,7 +21,7 @@ test_backup_scheduler_is_available__@vary__returns_correct_status_code() {
     "echo 1753020000" \
     "echo '${TEST_CURRENT_EPOCH}'"
 
-  _capture_rc _backup_scheduler_is_available
+  _capture.rc _backup_scheduler_is_available
 
   assert_rc "${EXPECTED_RC}"
 }

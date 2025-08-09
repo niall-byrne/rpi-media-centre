@@ -34,7 +34,7 @@ setup() {
 
 test_security_account_provision_service_account__username_@vary___return_code_127() {
 
-  _capture_rc _security_account_provision_service_account
+  _capture.rc _security_account_provision_service_account
 
   assert_rc "127"
 }

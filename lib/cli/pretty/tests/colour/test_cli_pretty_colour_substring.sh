@@ -4,7 +4,7 @@ test_cli_pretty_colour_substring__arg__highlight__correct_output() {
   TEST_EXPECTED="test ${THEME_HIGHLIGHT}string${THEME_NC} string"
   TEST_INPUT="test string string"
 
-  _capture_output _cli_pretty_colour_substring "HIGHLIGHT" "string" "${TEST_INPUT}"
+  _capture.output _cli_pretty_colour_substring "HIGHLIGHT" "string" "${TEST_INPUT}"
 
   assert_output "${TEST_EXPECTED}"
 }

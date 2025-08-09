@@ -32,7 +32,7 @@ test_security_defaults_set_username__username_not_set__groupname_set____________
   # shellcheck disable=SC2034
   RPI_SVC_GROUPNAME="mocked_groupname"
 
-  _capture_rc _security_defaults_set_username
+  _capture.rc _security_defaults_set_username
 
   assert_rc "127"
 }
@@ -50,7 +50,7 @@ test_security_defaults_set_username__username_set______username_exists__________
   RPI_SVC_USERNAME="mocked_username"
   id.mock.set.rc 0
 
-  _capture_rc _security_defaults_set_username
+  _capture.rc _security_defaults_set_username
 
   assert_rc "0"
 }
@@ -71,7 +71,7 @@ test_security_defaults_set_username__username_set______username_does_not_exist__
   RPI_SVC_USERNAME="mocked_username"
   id.mock.set.rc 1
 
-  _capture_rc _security_defaults_set_username
+  _capture.rc _security_defaults_set_username
 
   assert_rc "127"
 }

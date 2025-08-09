@@ -1,7 +1,7 @@
 #!/bin/bash
 
-load "${RPI_WORKING_DIRECTORY}/lib/backup/tests/__fakes__/backup_data.sh"
-load "${RPI_WORKING_DIRECTORY}/lib/backup/tests/__fixtures__/queue.sh"
+_testing.load "${RPI_WORKING_DIRECTORY}/lib/backup/tests/__fakes__/backup_data.sh"
+_testing.load "${RPI_WORKING_DIRECTORY}/lib/backup/tests/__fixtures__/queue.sh"
 
 setup_suite() {
   _fixture_mock_backup_queues

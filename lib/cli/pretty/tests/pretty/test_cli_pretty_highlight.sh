@@ -4,7 +4,7 @@ test_cli_pretty_highlight__arg__correct_output() {
   TEST_EXPECTED="${THEME_HIGHLIGHT}string${THEME_NC}"
   TEST_INPUT="string"
 
-  _capture_output _cli_pretty_highlight "${TEST_INPUT}"
+  _capture.output _cli_pretty_highlight "${TEST_INPUT}"
 
   assert_output "${TEST_EXPECTED}"
 }

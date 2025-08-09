@@ -1,6 +1,6 @@
 #!/bin/bash
 
-load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/__fakes__/crypt_data.sh"
+_testing.load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/__fakes__/crypt_data.sh"
 
 setup() {
   fake_disk_1
@@ -10,7 +10,7 @@ setup() {
 test_is_disk_mounted__invalid_mountpoint__calls_mountpoint_as_expected() {
   mountpoint.mock.set.rc "1"
 
-  _capture_logs _capture_rc _is_disk_mounted
+  _capture_logs _capture.rc _is_disk_mounted
 
   assert_equals "1" "$(mountpoint.mock.get.count)"
   assert_equals "${TEST_MOCK_MOUNT_POINT_1}" "$(mountpoint.mock.get.call "1")"
@@ -31,7 +31,7 @@ test_is_disk_mounted__invalid_mountpoint__logs_correct_message() {
 test_is_disk_mounted__valid_mountpoint__calls_mountpoint_as_expected() {
   mountpoint.mock.set.rc "0"
 
-  _capture_logs _capture_rc _is_disk_mounted
+  _capture_logs _capture.rc _is_disk_mounted
 
   assert_equals "1" "$(mountpoint.mock.get.count)"
   assert_equals "${TEST_MOCK_MOUNT_POINT_1}" "$(mountpoint.mock.get.call "1")"

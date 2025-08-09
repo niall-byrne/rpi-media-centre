@@ -76,7 +76,7 @@ test_security_path_check_ownership__valid_arguments__@vary__logs_error_message()
 test_security_path_check_ownership__valid_arguments__@vary__return_code_is_correct() {
   stat.mock.set.side_effects "echo ${TEST_STAT_UID}" "echo ${TEST_STAT_GID}"
 
-  _capture_rc _security_path_check_ownership "/mnt/path1" "MOCK_USERNAME" "MOCK_GROUP"
+  _capture.rc _security_path_check_ownership "/mnt/path1" "MOCK_USERNAME" "MOCK_GROUP"
 
   assert_rc "${TEST_EXPECTED_RC}"
 }

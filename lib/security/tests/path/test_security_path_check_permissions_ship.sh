@@ -53,7 +53,7 @@ test_security_path_check_permissions__valid_arguments__@vary__logs_error_message
 test_security_path_check_permissions__valid_arguments__@vary__returns_correct_status_code() {
   stat.mock.set.stdout "${TEST_STAT_PERMISSIONS}"
 
-  _capture_rc _security_path_check_permissions "/mnt/path1" "644"
+  _capture.rc _security_path_check_permissions "/mnt/path1" "644"
 
   assert_rc "${TEST_EXPECTED_RC}"
 }

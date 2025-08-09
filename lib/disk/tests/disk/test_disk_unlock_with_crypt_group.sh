@@ -1,6 +1,6 @@
 #!/bin/bash
 
-load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/disk/__fixtures__/disk_unlock_with_crypt_group.sh"
+_testing.load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/disk/__fixtures__/disk_unlock_with_crypt_group.sh"
 
 setup() {
   _mock.create _io_prompt

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-load "${RPI_WORKING_DIRECTORY}/lib/backup/tests/__fakes__/backup_data.sh"
+_testing.load "${RPI_WORKING_DIRECTORY}/lib/backup/tests/__fakes__/backup_data.sh"
 
 setup() {
   _mock.create _backup_manifest_load
@@ -27,7 +27,7 @@ test_backup_manifest_all_command__loads_manifest() {
 }
 
 test_backup_manifest_all_command__@vary__return_code_0() {
-  _capture_rc _backup_manifest_all_command mocked_backup_manifest_all_command "${MANIFEST_GROUP_FILTER}" "${MANIFEST_JOB_FILTER}"
+  _capture.rc _backup_manifest_all_command mocked_backup_manifest_all_command "${MANIFEST_GROUP_FILTER}" "${MANIFEST_JOB_FILTER}"
 
   assert_rc "0"
 }
@@ -53,7 +53,7 @@ test_backup_manifest_all_command__@vary__sets_environment() {
       "${FAKE_MANIFEST_GROUP_LIMIT}"
   )"
 
-  _capture_stdout _backup_manifest_all_command _backup_job_log "${MANIFEST_GROUP_FILTER}" "${MANIFEST_JOB_FILTER}"
+  _capture.stdout _backup_manifest_all_command _backup_job_log "${MANIFEST_GROUP_FILTER}" "${MANIFEST_JOB_FILTER}"
 
   assert_output "${TEST_EXPECTED}"
 }

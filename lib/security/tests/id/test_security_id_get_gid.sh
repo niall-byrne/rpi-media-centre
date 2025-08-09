@@ -13,7 +13,7 @@ test_security_id_get_gid__calls_getent() {
 test_security_id_get_gid__@vary__emits_parsed_getent_output() {
   getent.mock.set.stdout "${GETENT_STDOUT}"
 
-  _capture_output _security_id_get_gid "mock_groupname"
+  _capture.output _security_id_get_gid "mock_groupname"
 
   assert_equals "${EXPECTED_GID}" "${TEST_OUTPUT}"
 }

@@ -1,13 +1,13 @@
 #!/bin/bash
 
-load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/cli/__fixtures__/disk_cli_filesystem.sh"
+_testing.load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/cli/__fixtures__/disk_cli_filesystem.sh"
 
 setup() {
   _fixture_disk_cli_filesystem
 }
 
 test_disk_cli_filesystem__calls_correct_dependencies_group() {
-  _capture_pretty _capture_rc _disk_cli_filesystem
+  _capture_pretty _capture.rc _disk_cli_filesystem
 
   assert_equals "1" "$(_dependencies_group_disks_cli_filesystem.mock.get.count)"
   assert_equals "" "$(_dependencies_group_disks_cli_filesystem.mock.get.call "1")"
@@ -15,7 +15,7 @@ test_disk_cli_filesystem__calls_correct_dependencies_group() {
 }
 
 test_disk_cli_filesystem__calls_lsblk_and_pipes_correctly() {
-  _capture_pretty _capture_rc _disk_cli_filesystem
+  _capture_pretty _capture.rc _disk_cli_filesystem
 
   assert_equals "1" "$(lsblk.mock.get.count)"
   assert_equals "-f" "$(lsblk.mock.get.call "1")"

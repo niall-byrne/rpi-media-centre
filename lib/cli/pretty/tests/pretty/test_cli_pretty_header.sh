@@ -4,7 +4,7 @@ test_cli_pretty_header__arg__correct_output() {
   TEST_EXPECTED="${THEME_HEADER}string${THEME_NC}"
   TEST_INPUT="string"
 
-  _capture_output _cli_pretty_header "${TEST_INPUT}"
+  _capture.output _cli_pretty_header "${TEST_INPUT}"
 
   assert_output "${TEST_EXPECTED}"
 }

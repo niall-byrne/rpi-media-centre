@@ -1,6 +1,6 @@
 #!/bin/bash
 
-load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/__fakes__/crypt_data.sh"
+_testing.load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/__fakes__/crypt_data.sh"
 ORIGINAL_RPI_WORKING_DIRECTORY="${RPI_WORKING_DIRECTORY}"
 
 setup_suite() {
@@ -87,7 +87,7 @@ test_disk_manifest_load__@vary__checks_each_line_for_validity() {
 test_disk_manifest_load__@vary__sets_environment_variables_for_validity_check() {
   _disk_manifest_line_validate.mock.set.subcommand _disk_manifest_line_log
 
-  _capture_output _disk_manifest_load
+  _capture.output _disk_manifest_load
 
   assert_output "$(cat "${RPI_MANIFEST_CRYPT}".log)"
 }
@@ -108,7 +108,7 @@ test_disk_manifest_load__@vary__@vary__is_correctly_populated() {
   assert_array_equals TEST_VALUE_ARRAY "${ENV_VAR_NAME}"
 }
 
-@parametrize_compose \
+@parametrize.compose \
   test_disk_manifest_load__@vary__@vary__is_correctly_populated \
   @parametrize_with_mock_manifests \
   @parametrize_with_each_env_var

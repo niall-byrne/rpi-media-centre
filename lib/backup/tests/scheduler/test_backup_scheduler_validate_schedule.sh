@@ -45,13 +45,13 @@ test_backup_scheduler_validate_schedule__@vary__@vary__calls_date_correctly() {
     "-ud \${RPI_BACKUP_SCHEDULER_END_TIME} today +%s"
 }
 
-@parametrize_apply \
+@parametrize.apply \
   test_backup_scheduler_validate_schedule__@vary__@vary__calls_date_correctly \
   @parametrize_with_invalid_epoch_combos \
   @parametrize_with_valid___epoch_combos
 
 test_backup_scheduler_validate_schedule__@vary______logs_error_messages() {
-  _capture_rc _backup_scheduler_validate_schedule
+  _capture.rc _backup_scheduler_validate_schedule
 
   assert_rc "${EXPECTED_RC}"
 }
@@ -60,12 +60,12 @@ test_backup_scheduler_validate_schedule__@vary______logs_error_messages() {
   test_backup_scheduler_validate_schedule__@vary______logs_error_messages
 
 test_backup_scheduler_validate_schedule__@vary__@vary__returns_expected_status_code() {
-  _capture_rc _backup_scheduler_validate_schedule
+  _capture.rc _backup_scheduler_validate_schedule
 
   assert_rc "${EXPECTED_RC}"
 }
 
-@parametrize_apply \
+@parametrize.apply \
   test_backup_scheduler_validate_schedule__@vary__@vary__returns_expected_status_code \
   @parametrize_with_invalid_epoch_combos \
   @parametrize_with_valid___epoch_combos

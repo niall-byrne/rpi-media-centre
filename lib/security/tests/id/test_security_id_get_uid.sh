@@ -13,7 +13,7 @@ test_security_id_get_uid__calls_id() {
 test_security_id_get_uid__@vary__emits_id_output() {
   id.mock.set.stdout "${ID_STDOUT}"
 
-  _capture_output _security_id_get_uid "mock_username"
+  _capture.output _security_id_get_uid "mock_username"
 
   assert_equals "${ID_STDOUT}" "${TEST_OUTPUT}"
 }

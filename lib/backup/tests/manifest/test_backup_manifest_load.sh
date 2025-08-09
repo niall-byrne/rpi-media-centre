@@ -98,7 +98,7 @@ test_backup_manifest_load__@vary__calls_backup_manifest_help() {
 test_backup_manifest_load__@vary__returns_code_127() {
   RPI_MANIFEST_BACKUP="${ORIGINAL_RPI_WORKING_DIRECTORY}/lib/backup/tests/manifest/__fixtures__/non-existent-manifest"
 
-  _capture_rc _backup_manifest_load
+  _capture.rc _backup_manifest_load
 
   assert_rc "127"
 }
@@ -133,7 +133,7 @@ test_backup_manifest_load__@vary__checks_each_line_for_validity() {
 test_backup_manifest_load__@vary__sets_environment_variables_for_validity_check() {
   _backup_job_validation.mock.set.subcommand _backup_manifest_line_log_all
 
-  _capture_output _backup_manifest_load
+  _capture.output _backup_manifest_load
 
   assert_output "$(cat "${RPI_MANIFEST_BACKUP}.log")"
 }
@@ -154,7 +154,7 @@ test_backup_manifest_load__@vary__@vary__is_correctly_populated() {
   assert_array_equals TEST_VALUE_ARRAY "${ENV_VAR_NAME}"
 }
 
-@parametrize_compose \
+@parametrize.compose \
   test_backup_manifest_load__@vary__@vary__is_correctly_populated \
   @parametrize_with_mock_manifests \
   @parametrize_with_each_env_var

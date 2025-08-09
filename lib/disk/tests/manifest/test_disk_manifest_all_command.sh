@@ -1,6 +1,6 @@
 #!/bin/bash
 
-load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/__fakes__/crypt_data.sh"
+_testing.load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/__fakes__/crypt_data.sh"
 
 setup() {
   _mock.create _is_disk_encrypted
@@ -12,7 +12,7 @@ setup() {
 test_disk_manifest_all_command__not_encrypted__return_code_0() {
   _is_disk_encrypted.mock.set.rc "1"
 
-  _capture_rc _disk_manifest_all_command mocked_disk_all_command
+  _capture.rc _disk_manifest_all_command mocked_disk_all_command
 
   assert_rc "0"
 }
@@ -45,7 +45,7 @@ test_disk_manifest_all_command______encrypted__@vary__return_code_0() {
   _is_disk_encrypted.mock.set.rc "0"
   _disk_manifest_load.mock.set.subcommand fake_manifest_n_entries "${MANIFEST_ENTRIES}"
 
-  _capture_rc _disk_manifest_all_command mocked_disk_all_command
+  _capture.rc _disk_manifest_all_command mocked_disk_all_command
 
   assert_rc "0"
 }
@@ -71,7 +71,7 @@ test_disk_manifest_all_command______encrypted__2_manifest_entries__sets_environm
   _is_disk_encrypted.mock.set.rc "0"
   _disk_manifest_load.mock.set.subcommand fake_manifest_n_entries "2"
 
-  _capture_stdout _disk_manifest_all_command _disk_manifest_line_log
+  _capture.stdout _disk_manifest_all_command _disk_manifest_line_log
 
   assert_equals \
     "RPI_DISK_UUID='UUID0'
@@ -101,7 +101,7 @@ test_disk_manifest_all_command______encrypted__3_manifest_entries__sets_environm
   _is_disk_encrypted.mock.set.rc "0"
   _disk_manifest_load.mock.set.subcommand fake_manifest_n_entries "3"
 
-  _capture_stdout _disk_manifest_all_command _disk_manifest_line_log
+  _capture.stdout _disk_manifest_all_command _disk_manifest_line_log
 
   assert_equals \
     "RPI_DISK_UUID='UUID0'

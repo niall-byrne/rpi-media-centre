@@ -58,7 +58,7 @@ test_security_validate_ids_relationship__valid_arguments___optional_unset__requi
   local TEST_REQUIRED=""
   local TEST_ENTITY="entity"
 
-  _capture_rc _security_validate_ids_relationship "TEST_OPTIONAL" "TEST_REQUIRED" "TEST_ENTITY"
+  _capture.rc _security_validate_ids_relationship "TEST_OPTIONAL" "TEST_REQUIRED" "TEST_ENTITY"
   assert_rc "0"
 }
 
@@ -66,7 +66,7 @@ test_security_validate_ids_relationship__valid_arguments___optional_unset__requi
 test_security_validate_ids_relationship__valid_arguments___@vary__returns_status_code_0() {
   local TEST_ENTITY="entity"
 
-  _capture_rc _security_validate_ids_relationship "TEST_OPTIONAL" "TEST_REQUIRED" "TEST_ENTITY"
+  _capture.rc _security_validate_ids_relationship "TEST_OPTIONAL" "TEST_REQUIRED" "TEST_ENTITY"
 
   assert_rc "0"
 }

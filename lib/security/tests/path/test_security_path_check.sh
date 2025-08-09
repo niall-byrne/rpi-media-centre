@@ -50,7 +50,7 @@ test_security_path_check__valid_arguments__valid_ownership____valid_permissions_
 }
 
 test_security_path_check__valid_arguments__valid_ownership____valid_permissions____returns_0() {
-  _capture_rc _security_path_check "/mnt/path1" "MOCK_USERNAME" "MOCK_GROUP" "MOCK_PERMISSIONS"
+  _capture.rc _security_path_check "/mnt/path1" "MOCK_USERNAME" "MOCK_GROUP" "MOCK_PERMISSIONS"
 
   assert_rc "0"
 }
@@ -80,7 +80,7 @@ test_security_path_check__valid_arguments__@vary__returns_127() {
   _security_path_check_ownership.mock.set.rc "${OWNERSHIP_RC}"
   _security_path_check_permissions.mock.set.rc "${PERMISSION_RC}"
 
-  _capture_rc _security_path_check "/mnt/path1" "MOCK_USERNAME" "MOCK_GROUP" "MOCK_PERMISSIONS"
+  _capture.rc _security_path_check "/mnt/path1" "MOCK_USERNAME" "MOCK_GROUP" "MOCK_PERMISSIONS"
 
   assert_rc "127"
 }

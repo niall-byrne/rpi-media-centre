@@ -42,7 +42,7 @@ test_backup_scheduler_job_promote__@vary__@vary__calls_backup_job_get_next_queue
   _backup_job_get_next_queue.mock.assert_called_once_with "${_TEST_QUEUE1_NAME}"
 }
 
-@parametrize_apply \
+@parametrize.apply \
   test_backup_scheduler_job_promote__@vary__@vary__calls_backup_job_get_next_queue \
   @parametrize_with_finished_job \
   @parametrize_with_unfinished_job

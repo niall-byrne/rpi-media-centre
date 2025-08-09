@@ -3,7 +3,7 @@
 test_cli_pretty_string_first_char_is__arg__valid_char__no_match() {
   TEST_INPUT="baaaa"
 
-  _capture_rc _cli_pretty_string_first_char_is "a" "${TEST_INPUT}"
+  _capture.rc _cli_pretty_string_first_char_is "a" "${TEST_INPUT}"
 
   assert_rc "1"
 }
@@ -11,7 +11,7 @@ test_cli_pretty_string_first_char_is__arg__valid_char__no_match() {
 test_cli_pretty_string_first_char_is__arg__valid_char__matches() {
   TEST_INPUT="baaaa"
 
-  _capture_rc _cli_pretty_string_first_char_is "b" "${TEST_INPUT}"
+  _capture.rc _cli_pretty_string_first_char_is "b" "${TEST_INPUT}"
 
   assert_rc "0"
 }
@@ -19,7 +19,7 @@ test_cli_pretty_string_first_char_is__arg__valid_char__matches() {
 test_cli_pretty_string_first_char_is__arg__invalid_char__fails() {
   TEST_INPUT="baaaa"
 
-  _capture_rc _cli_pretty_string_first_char_is "ba" "${TEST_INPUT}"
+  _capture.rc _cli_pretty_string_first_char_is "ba" "${TEST_INPUT}"
 
   assert_rc "1"
 }

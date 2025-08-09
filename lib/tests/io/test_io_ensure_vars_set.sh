@@ -40,7 +40,7 @@ test_io_ensure_vars_set__@vary__incorrect_count__logs_error_message() {
 test_io_ensure_vars_set__@vary__incorrect_count__returns_127() {
   _array_from_string TEST_ARGUMENTS "|" "${TEST_ARGUMENT_DEFINITION}"
 
-  _capture_rc _io_ensure_vars_set "3" "${TEST_ARGUMENTS[@]}"
+  _capture.rc _io_ensure_vars_set "3" "${TEST_ARGUMENTS[@]}"
 
   assert_rc "127"
 }
@@ -51,7 +51,7 @@ test_io_ensure_vars_set__@vary__incorrect_count__returns_127() {
 test_io_ensure_vars_set__@vary__correct_count__variables_set____returns_0() {
   _array_from_string TEST_ARGUMENTS "|" "${TEST_ARGUMENT_DEFINITION}"
 
-  _capture_rc _io_ensure_vars_set "${#TEST_ARGUMENTS[@]}" "${TEST_ARGUMENTS[@]}"
+  _capture.rc _io_ensure_vars_set "${#TEST_ARGUMENTS[@]}" "${TEST_ARGUMENTS[@]}"
 
   assert_rc "0"
 }
@@ -77,7 +77,7 @@ test_io_ensure_vars_set__@vary__correct_count__variables_unset__logs_error_messa
 test_io_ensure_vars_set__@vary__correct_count__variables_unset__returns_127() {
   _array_from_string TEST_ARGUMENTS "|" "${TEST_ARGUMENT_DEFINITION}"
 
-  _capture_rc _io_ensure_vars_set "${#TEST_ARGUMENTS[@]}" "${TEST_ARGUMENTS[@]}"
+  _capture.rc _io_ensure_vars_set "${#TEST_ARGUMENTS[@]}" "${TEST_ARGUMENTS[@]}"
 
   assert_rc "127"
 }

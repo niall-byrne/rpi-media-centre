@@ -1,12 +1,12 @@
 #!/bin/bash
 
-load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/__fakes__/crypt_data.sh"
+_testing.load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/__fakes__/crypt_data.sh"
 
 test_is_disk_encrypted__file_exists__calls_test_as_expected() {
   _mock.create test
   test.mock.set.rc 0
 
-  _capture_rc _is_disk_encrypted
+  _capture.rc _is_disk_encrypted
 
   assert_equals "1" "$(test.mock.get.count)"
   assert_equals "-f ${RPI_MANIFEST_CRYPT}" "$(test.mock.get.call "1")"
@@ -17,7 +17,7 @@ test_is_disk_encrypted__file_does_not_exist__calls_test_as_expected() {
   _mock.create test
   test.mock.set.rc 1
 
-  _capture_rc _is_disk_encrypted
+  _capture.rc _is_disk_encrypted
 
   assert_equals "1" "$(test.mock.get.count)"
   assert_equals "-f ${RPI_MANIFEST_CRYPT}" "$(test.mock.get.call "1")"
@@ -29,7 +29,7 @@ test_is_disk_mounted__invalid_mountpoint__calls_mountpoint_as_expected() {
   _mock.create mountpoint
   mountpoint.mock.set.rc "1"
 
-  _capture_logs _capture_rc _is_disk_mounted
+  _capture_logs _capture.rc _is_disk_mounted
 
   assert_equals "1" "$(mountpoint.mock.get.count)"
   assert_equals "${TEST_MOCK_MOUNT_POINT_1}" "$(mountpoint.mock.get.call "1")"
@@ -54,7 +54,7 @@ test_is_disk_mounted__valid_mountpoint__calls_mountpoint_as_expected() {
   _mock.create mountpoint
   mountpoint.mock.set.rc "0"
 
-  _capture_logs _capture_rc _is_disk_mounted
+  _capture_logs _capture.rc _is_disk_mounted
 
   assert_equals "1" "$(mountpoint.mock.get.count)"
   assert_equals "${TEST_MOCK_MOUNT_POINT_1}" "$(mountpoint.mock.get.call "1")"

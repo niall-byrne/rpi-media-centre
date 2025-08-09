@@ -1,6 +1,6 @@
 #!/bin/bash
 
-load "${RPI_WORKING_DIRECTORY}/lib/backup/tests/__fakes__/backup_data.sh"
+_testing.load "${RPI_WORKING_DIRECTORY}/lib/backup/tests/__fakes__/backup_data.sh"
 
 setup() {
   _mock.create _backup_job_log
