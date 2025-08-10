@@ -1,13 +1,17 @@
 #!/bin/bash
+# @file compose.sh
+# @brief A library for composing parametrizations for test functions.
+# @description
+#   This library provides a function to compose a series of parametrizations for a test function.
 
 # stdlib testing parametrize compose library
 
 set -eo pipefail
 
+# @description Composes a series of parametrizations for a test function.
+# @arg $1 string The name of the test function to parametrize.
+# @arg $@ A series of parametrize functions to compose with this function.
 @parametrize.compose() {
-  # $1: the name of the test function to parametrize
-  # $@: a series of parametrize functions to compose with this function
-
   local _PARAMETRIZE_GENERATED_FUNCTIONS=()
   local _PC_COUNTER=0
   local _PC_CURRENT_FUNCTION

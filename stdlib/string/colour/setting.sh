@@ -1,4 +1,10 @@
 #!/bin/bash
+# @file setting.sh
+# @brief A library for defining ANSI colour codes.
+# @description
+#   This library defines a set of global variables that hold the ANSI escape codes
+#   for different colours. These variables are used by the other `colour` functions.
+
 # shellcheck disable=SC2034
 
 # stdlib string colour setting library

@@ -1,12 +1,22 @@
 #!/bin/bash
+# @file stdin.sh
+# @brief A library for interacting with stdin.
+# @description
+#   This library provides functions for interacting with the user via stdin,
+#   such as asking for confirmation, pausing the script, or prompting for input.
 
 # stdlib io stdin library
 
 set -eo pipefail
 
+# @description Asks the user for confirmation.
+# @arg $1 string (optional) The prompt to display. Defaults to "Are you sure you wish to proceed (Y/n) ? ".
+# @exitcode 0 If the user confirms (Y).
+# @exitcode 1 If the user denies (n).
+# @exitcode 126 If an argument is null when not allowed.
+# @exitcode 127 If an incorrect number of arguments have been passed.
+# @stdout The confirmation prompt.
 stdlib.io.stdin.confirmation() {
-  # 1: (optional) the prompt to display
-
   local input_char
   local prompt=${1:-"Are you sure you wish to proceed (Y/n) ? "}
 
@@ -27,9 +37,12 @@ stdlib.io.stdin.confirmation() {
   done
 }
 
+# @description Pauses the script and waits for the user to press any key.
+# @arg $1 string (optional) The prompt to display. Defaults to "Press any key to continue ... ".
+# @exitcode 126 If an argument is null when not allowed.
+# @exitcode 127 If an incorrect number of arguments have been passed.
+# @stdout The pause prompt.
 stdlib.io.stdin.pause() {
-  # 1: (optional) the prompt to display
-
   local input_char
   local prompt=${1:-"Press any key to continue ... "}
 
@@ -39,11 +52,14 @@ stdlib.io.stdin.pause() {
   read -rs -n 1 input_char
 }
 
+# @description Prompts the user for input and saves it to a variable.
+# @arg $1 string The name of the variable to save the input to.
+# @arg $2 string (optional) The prompt to display. Defaults to "Enter a value: ".
+# @arg $3 string (optional) If set to "password", the user's input will be hidden.
+# @exitcode 126 If an argument is null when not allowed.
+# @exitcode 127 If an incorrect number of arguments have been passed.
+# @stdout The input prompt.
 stdlib.io.stdin.prompt() {
-  # 1: the variable name to save
-  # 2: (optional) the prompt to display
-  # 3: (optional) set to "password" to suppress output
-
   local flags="-rp"
   local prompt=${2:-"Enter a value: "}
 

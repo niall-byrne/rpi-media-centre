@@ -1,12 +1,18 @@
 #!/bin/bash
+# @file snapshot.sh
+# @brief A library of snapshot assertions for testing.
+# @description
+#   This library provides a snapshot assertion function for use with a testing framework like `bash_unit`.
+#   It compares the captured output with the content of a snapshot file.
 
 # stdlib snapshot extensions to bash_unit assertions
 
 set -eo pipefail
 
+# @description Asserts that the captured output matches the content of a snapshot file.
+# @arg $1 string A path relative to the test directory containing a text file.
+# @env TEST_OUTPUT The captured output to check.
 assert_snapshot() {
-  # $1: a path relative to the test directory containing a text file
-
   local expected_output
   local snapshot_filename="${1}"
 

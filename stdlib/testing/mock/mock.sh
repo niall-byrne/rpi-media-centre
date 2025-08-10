@@ -1,40 +1,46 @@
 #!/bin/bash
+# @file mock.sh
+# @brief A library for creating and managing mocks for testing.
+# @description
+#   This library provides functions to create, manage, and assert on mocks for functions.
+#
+#   Mock Api (all other values/methods are not considered stable)
+#   -----------------------------------------------------------------------------------------------------
+#   _mock.create                             - creates a new mock
+#
+#   mock_object.mock.get.call (index)        - get the arguments as a $* string for the indexed mock call
+#   mock_object.mock.get.calls               - get string containing a newline separated $* line for each call
+#   mock_object.mock.get.count               - get a count of the number of times the mock was called
+#
+#
+#   mock_object.mock.set.pipeable            - set a boolean to allow the mock to receive piped input
+#   mock_object.mock.set.rc                  - set the return code the mock returns when called
+#   mock_object.mock.set.side_effects        - a (FIFO) queue of commands, one of each is executed for each
+#                                              call made to the mock
+#   mock_object.mock.set.stdout              - set the stdout content the mock generates when called
+#   mock_object.mock.set.stderr              - set the stderr content the mock generates when called
+#   mock_object.mock.set.subcommand          - set a subcommand function the mock will call with the same
+#                                              arguments it receives on each call
+#
+#   mock_object.clear                        - clear all calls made to this mock
+#   mock_object.reset                        - clear all calls, as well as all set values on this mock
+#
+#   Assertions
+#   -----------------------------------------------------------------------------------------------------
+#
+#   mock_object.mock.assert_any_call_is      - calls assert_equals against the given argument string
+#   mock_object.mock.assert_count_is         - calls assert_equals against the given call count
+#   mock_object.mock.assert_call_n_is        - calls assert_equals against a given call index, and argument string
+#   mock_object.mock.assert_calls_are        - calls assert_array_equals against the given array of argument strings
+#   mock_object.mock.assert_called_once_with - calls assert_equals against the given argument string
+#   mock_object.mock.assert_not_called       - calls assert_equals with 0 against the call count
 
 # stdlib testing mock library
 
 set -eo pipefail
 
-# Mock Api                                  (all other values/methods are not considered stable)
-# -----------------------------------------------------------------------------------------------------
-# _mock.create                             - creates a new mock
-#
-# mock_object.mock.get.call (index)        - get the arguments as a $* string for the indexed mock call
-# mock_object.mock.get.calls               - get string containing a newline separated $* line for each call
-# mock_object.mock.get.count               - get a count of the number of times the mock was called
-#
-#
-# mock_object.mock.set.pipeable            - set a boolean to allow the mock to receive piped input
-# mock_object.mock.set.rc                  - set the return code the mock returns when called
-# mock_object.mock.set.side_effects        - a (FIFO) queue of commands, one of each is executed for each
-#                                            call made to the mock
-# mock_object.mock.set.stdout              - set the stdout content the mock generates when called
-# mock_object.mock.set.stderr              - set the stderr content the mock generates when called
-# mock_object.mock.set.subcommand          - set a subcommand function the mock will call with the same
-#                                            arguments it receives on each call
-#
-# mock_object.clear                        - clear all calls made to this mock
-# mock_object.reset                        - clear all calls, as well as all set values on this mock
-#
-# Assertions
-# -----------------------------------------------------------------------------------------------------
-#
-# mock_object.mock.assert_any_call_is      - calls assert_equals against the given argument string
-# mock_object.mock.assert_count_is         - calls assert_equals against the given call count
-# mock_object.mock.assert_call_n_is        - calls assert_equals against a given call index, and argument string
-# mock_object.mock.assert_calls_are        - calls assert_array_equals against the given array of argument strings
-# mock_object.mock.assert_called_once_with - calls assert_equals against the given argument string
-# mock_object.mock.assert_not_called       - calls assert_equals with 0 against the call count
-
+# @description Compiles the mock generator function `_mock.__generate_mock`.
+# This is an internal function that assembles the mock components into a single function.
 _testing._mock.compile() {
   local MOCK_COMPONENT
   local MOCK_COMPONENT_FILE_SET=()
@@ -69,9 +75,10 @@ _testing._mock.compile() {
   #:nocov:
 }
 
+# @description Creates a mock for a function.
+# If the function already exists, it is backed up so it can be restored with `_mock.delete`.
+# @arg $1 string The name of the function to mock.
 _mock.create() {
-  # $1: the variable name to create
-
   local sanitized_variable_name
 
   sanitized_variable_name="$(_mock.__create_sanitized_function_name "${1}")"
@@ -83,9 +90,10 @@ _mock.create() {
   _mock.__generate_mock "${1}" "${sanitized_variable_name}"
 }
 
+# @description Deletes a mock and restores the original function if it existed.
+# @arg $1 string The name of the mock to delete.
+# @exitcode 127 If the argument is not a function or not a mock.
 _mock.delete() {
-  # $1: the mock name to delete (restoring the original implementation)
-
   stdlib.fn.assert.is_fn "${1}" || return 127
   stdlib.fn.assert.is_fn "${1}.mock.set.subcommand" || return 127
 
@@ -105,9 +113,11 @@ _mock.delete() {
   fi
 }
 
+# @description Sanitizes a function name to be used as a valid shell variable name.
+# This is an internal function.
+# @arg $1 string The function name to sanitize.
+# @stdout The sanitized function name.
 _mock.__create_sanitized_function_name() {
-  # $1: the function name to sanitize
-
   local _fn_name_sanitized
   local _fn_name_original="${1}"
 
@@ -117,10 +127,12 @@ _mock.__create_sanitized_function_name() {
   echo "${_fn_name_sanitized}_sanitized"
 }
 
+# @description Clears all calls for all mocks.
 _mock.clear_all() {
   __mock.persistence.registry.apply_to_all "clear"
 }
 
+# @description Resets all mocks to their initial state.
 _mock.reset_all() {
   __mock.persistence.registry.apply_to_all "reset"
 }

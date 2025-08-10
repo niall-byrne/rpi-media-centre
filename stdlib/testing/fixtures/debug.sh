@@ -1,13 +1,18 @@
 #!/bin/bash
+# @file debug.sh
+# @brief A library of debug fixtures for testing.
+# @description
+#   This library provides debug fixtures for testing, such as a diff function.
 
 # stdlib testing debug fixtures
 
 set -eo pipefail
 
+# @description Prints a diff between two values for debugging purposes.
+# @arg $1 string The expected value to compare against.
+# @arg $2 string The actual value to compare with.
+# @stdout A formatted diff of the two values.
 _testing.fixtures.debug.diff() {
-  # $1: the expected value to compare against
-  # $2: the actual value to compare with
-
   # shellcheck disable=SC2059
   echo "== Start Debug Diff =="
   echo -e "${STDLIB_COLOUR_GREY}EXPECTED:${STDLIB_COLOUR_NC}\n$(printf "%q" "${1}")"

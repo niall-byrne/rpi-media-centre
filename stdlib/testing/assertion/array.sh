@@ -1,13 +1,18 @@
 #!/bin/bash
+# @file array.sh
+# @brief A library of array assertions for testing.
+# @description
+#   This library provides array-related assertion functions for use with a testing framework like `bash_unit`.
 
 # stdlib array extensions to bash_unit assertions
 
 set -eo pipefail
 
+# @description Asserts that two arrays are equal.
+# It checks if both arrays have the same length and the same elements in the same order.
+# @arg $1 string The name of the first array to compare.
+# @arg $2 string The name of the second array to compare.
 assert_array_equals() {
-  # $1: the first array to compare
-  # $2: the second array to compare
-
   local indirect_reference_1
   local indirect_array_1=()
   local indirect_reference_2
@@ -55,11 +60,11 @@ assert_array_equals() {
   done
 }
 
+# @description Asserts that an array has a specific length.
+# @arg $1 integer The expected length.
+# @arg $2 string The name of the array.
+# @arg $3 string (optional) An optional message to display on failure.
 assert_array_length() {
-  # $1: the expected length
-  # $2: the variable name
-  # $3: an optional message
-
   local expected_length="${1}"
   local indirect_reference
   local indirect_array=()
@@ -74,9 +79,9 @@ assert_array_length() {
   assert_equals "${expected_length}" "${#indirect_array[*]}" "${3}"
 }
 
+# @description Asserts that a variable is an array.
+# @arg $1 string The name of the variable to check.
 assert_is_array() {
-  # $1: the variable to check
-
   local variable_name="${1}"
 
   _testing.__assertion.value.check "${variable_name}"

@@ -1,13 +1,20 @@
 #!/bin/bash
+# @file map.sh
+# @brief A library for applying functions or formats to array elements.
+# @description
+#   This library provides functions to map over an array and apply a format string or a function to each element.
 
 # stdlib array map library
 
 set -eo pipefail
 
+# @description Applies a printf format string to each element of an array.
+# @arg $1 string A valid printf format string.
+# @arg $2 string The name of the array to process.
+# @stdout The formatted elements, each on a new line.
+# @exitcode 126 If the second argument is not an array.
+# @exitcode ? Propagated from stdlib.fn.args.require.
 stdlib.array.map.format() {
-  # $1: a valid print format string to apply to each element
-  # $2: the array to process
-
   local element
   local indirect_reference
   local indirect_array=()
@@ -24,10 +31,13 @@ stdlib.array.map.format() {
   done
 }
 
+# @description Applies a function to each element of an array.
+# @arg $1 string The name of the function to apply.
+# @arg $2 string The name of the array to process.
+# @stdout The output of the function for each element.
+# @exitcode 126 If the first argument is not a function or the second is not an array.
+# @exitcode ? Propagated from stdlib.fn.args.require.
 stdlib.array.map.fn() {
-  # $1: a valid function to apply to each line
-  # $2: the array to process
-
   local element
   local indirect_reference
   local indirect_array=()

@@ -1,16 +1,22 @@
 #!/bin/bash
+# @file wrap.sh
+# @brief A library for wrapping text.
+# @description
+#   This library provides a function to wrap text to a specified width.
 
 # stdlib string wrap library
 
 set -eo pipefail
 
+# @description Wraps text to a specified width.
+# @arg $1 integer The left-side padding.
+# @arg $2 integer The right-side wrap limit.
+# @arg $3 string The text to wrap.
+# @env _LINE_BREAK_CHAR The character to use for forcing a line break. Defaults to "*".
+# @exitcode 126 If the padding or wrap limit are not digits.
+# @exitcode ? Propagated from stdlib.fn.args.require.
+# @stdout The wrapped text.
 stdlib.string.wrap() {
-  # $1: the left-side padding
-  # $2: the right-side wrap limit
-  # $3: the text to wrap
-  #
-  # _LINE_BREAK_CHAR: force a line break in the text
-
   local forced_line_break_char="${_LINE_BREAK_CHAR:-*}"
 
   local current_line=""

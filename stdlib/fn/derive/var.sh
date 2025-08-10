@@ -1,13 +1,22 @@
 #!/bin/bash
+# @file var.sh
+# @brief A library for creating functions that modify variables.
+# @description
+#   This library provides a function to create a new function that applies a given function to a variable
+#   and stores the result back in the same variable.
 
 # stdlib fn derive var library
 
 set -eo pipefail
 
+# @description Creates a new function that applies a source function to a variable.
+# The new function is named by appending '_var' to the source function's name, or by the name provided in the second argument.
+# The last argument to the new function is the name of the variable to be modified.
+# @arg $1 string The name of the source function.
+# @arg $2 string (optional) The name of the new function to create.
+# @exitcode 126 If the source function does not exist, or if the argument is null.
+# @exitcode 127 If an incorrect number of arguments have been passed.
 stdlib.fn.derive.var() {
-  # $1: the source function name
-  # $2: (optional) the new target function name
-
   local derive_source_fn_name="${1}"
   local derive_target_fn_name
 

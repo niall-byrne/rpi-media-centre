@@ -1,4 +1,8 @@
 #!/bin/bash
+# @file parametrize.sh
+# @brief A library for parametrizing tests.
+# @description
+#   This library provides a function to parametrize tests, allowing to run the same test with different inputs.
 
 # stdlib testing parametrize library
 
@@ -12,17 +16,14 @@ _PARAMETRIZE_SHOW_ORIGINAL_TEST_NAMES=""
 _PARAMETRIZE_VARIANT_TAG="@vary"
 _PARAMETRIZE_GENERATED_FUNCTIONS=()
 
+# @description Parametrizes a test function.
+# It generates a new test function for each scenario provided.
+# @arg $1 string The name of the test function to parametrize.
+# @arg $@ A list of fixtures, variable names, and scenarios.
+#   - Fixtures start with `@fixture`.
+#   - The first argument that is not a fixture is the list of variable names, comma-separated.
+#   - The rest of the arguments are the scenarios, each being a comma-separated list of a scenario name and values.
 @parametrize() {
-  # $1: (required) the name of the test function to parametrize
-  # $@: (optional) test fixtures (or setup commands to execute) before test execution begins.
-  #     These commands can have access to the variables that have been parametrized for
-  #     more complex scenario generation.
-  #     i.e. "@fixture function_name" or "@fixture echo hello"
-  # $X: (required) a comma separate list of variable names
-  #     i.e. VAR1,VAR2,VAR3
-  # $@: (required) a comma separated list of a scenario name, and values comprising a test scenario
-  #     i.e. SCENARIO_NAME,VALUE1,VALUE2,VALUE3
-
   local _P_CONFIGURATION_LINE=""
   local _P_CONFIGURATION_LINES=()
   local _P_INDEX=0

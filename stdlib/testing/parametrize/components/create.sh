@@ -1,12 +1,18 @@
 #!/bin/bash
+# @file create.sh
+# @brief A component for creating parts of parametrized tests.
+# @description
+#   This script is a component of the parametrization framework. It is not meant to be sourced directly.
+#   It provides functions to create variant tags and padded test function names.
 
 # stdlib testing parametrize create component
 
 set -eo pipefail
 
+# @description Creates an array of function variant tags from an array of function names.
+# This is an internal function.
+# @arg $@ An array of function names to convert to variant tags.
 @parametrize._components.create.array.fn_variant_tags() {
-  # $@: an array of function names to convert to variant tags
-
   local __INDEX=""
   local __FUNCTION=""
   local __VARIANT=""
@@ -21,11 +27,13 @@ set -eo pipefail
   done
 }
 
+# @description Creates a padded test function variant name.
+# This is an internal function.
+# @arg $1 string The function name to parametrize.
+# @arg $2 string The function variant's description.
+# @arg $3 integer The length of the longest variant description for padding.
+# @stdout The padded test function variant name.
 @parametrize._components.create.string.padded_test_fn_variant_name() {
-  # $1: the function name to parametrize
-  # $2: the function variant's description
-  # $3: the length of the longest variant description for padding
-
   local PADDED_VARIANT_NAME
 
   PADDED_VARIANT_NAME="${2// /_}"

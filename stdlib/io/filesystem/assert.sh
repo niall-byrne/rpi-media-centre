@@ -1,12 +1,22 @@
 #!/bin/bash
+# @file assert.sh
+# @brief A library for making assertions about the filesystem.
+# @description
+#   This library provides functions to make assertions about the filesystem,
+#   such as checking if a path exists, if it's a file or a folder.
 
 # stdlib io filesystem assert library
 
 set -eo pipefail
 
+# @description Asserts that a path exists on the filesystem.
+# @arg $1 string The path to check.
+# @exitcode 0 If the path exists.
+# @exitcode 1 If the path does not exist.
+# @exitcode 126 If the argument is an empty string.
+# @exitcode 127 If an incorrect number of arguments have been passed.
+# @stderr Logs an error message if the path does not exist or if the arguments are invalid.
 stdlib.io.filesystem.assert.exists() {
-  # $1: the path to check
-
   local return_code=0
 
   stdlib.io.filesystem.query.exists "${@}" || return_code="$?"
@@ -27,9 +37,14 @@ stdlib.io.filesystem.assert.exists() {
   return "${return_code}"
 }
 
+# @description Asserts that a path is a file.
+# @arg $1 string The path to check.
+# @exitcode 0 If the path is a file.
+# @exitcode 1 If the path is not a file.
+# @exitcode 126 If the argument is an empty string.
+# @exitcode 127 If an incorrect number of arguments have been passed.
+# @stderr Logs an error message if the path is not a file or if the arguments are invalid.
 stdlib.io.filesystem.assert.is_file() {
-  # $1: the folder to check
-
   local return_code=0
 
   stdlib.io.filesystem.query.is_file "${@}" || return_code="$?"
@@ -50,9 +65,14 @@ stdlib.io.filesystem.assert.is_file() {
   return "${return_code}"
 }
 
+# @description Asserts that a path is a folder.
+# @arg $1 string The path to check.
+# @exitcode 0 If the path is a folder.
+# @exitcode 1 If the path is not a folder.
+# @exitcode 126 If the argument is an empty string.
+# @exitcode 127 If an incorrect number of arguments have been passed.
+# @stderr Logs an error message if the path is not a folder or if the arguments are invalid.
 stdlib.io.filesystem.assert.is_folder() {
-  # $1: the folder to check
-
   local return_code=0
 
   stdlib.io.filesystem.query.is_folder "${@}" || return_code="$?"
@@ -73,9 +93,14 @@ stdlib.io.filesystem.assert.is_folder() {
   return "${return_code}"
 }
 
+# @description Asserts that a path does not exist on the filesystem.
+# @arg $1 string The path to check.
+# @exitcode 0 If the path does not exist.
+# @exitcode 1 If the path exists.
+# @exitcode 126 If the argument is an empty string.
+# @exitcode 127 If an incorrect number of arguments have been passed.
+# @stderr Logs an error message if the path exists or if the arguments are invalid.
 stdlib.io.filesystem.assert.not_exists() {
-  # $1: the path to check
-
   local return_code=0
 
   stdlib.io.filesystem.query.exists "${@}" || return_code="$?"

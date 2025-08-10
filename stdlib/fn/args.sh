@@ -1,4 +1,8 @@
 #!/bin/bash
+# @file args.sh
+# @brief A library for argument validation.
+# @description
+#   This library provides a function to require a certain number of arguments for a function.
 
 # stdlib fn args library
 
@@ -9,12 +13,17 @@ SAFETY_LOADED="${SAFETY_LOADED:-1}"
 _ARGS_ALLOW_NULL_BOOLEAN=0
 _SAFE_FUNCTION_REGISTRY=()
 
+# @description Checks if a function received the expected number of arguments.
+# It can also check if the arguments are null or empty.
+# This function is meant to be called from within another function.
+# @env _ARGS_ALLOW_NULL_BOOLEAN If set to 1, empty arguments are allowed. Defaults to 0.
+# @arg $1 integer The number of required arguments.
+# @arg $2 integer The number of optional arguments.
+# @arg $@ The arguments to check. These should be the arguments of the calling function.
+# @exitcode 126 If the provided counts are not digits, or if an argument is null when not allowed.
+# @exitcode 127 If an incorrect number of arguments have been passed.
+# @stderr Logs an error message if the validation fails.
 stdlib.fn.args.require() {
-  # $1 the number of arguments expected to be received
-  # $@ the list of argument values to check
-  #
-  # _ARGS_ALLOW_NULL_BOOLEAN: accept empty args, and just check arg counts
-
   local args_allow_null_boolean="${_ARGS_ALLOW_NULL_BOOLEAN:-0}"
 
   local args_required_count="${1}"

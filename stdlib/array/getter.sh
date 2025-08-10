@@ -1,4 +1,10 @@
 #!/bin/bash
+# @file getter.sh
+# @brief A library for getting information about arrays.
+# @description
+#   This library provides functions to get information about arrays,
+#   such as the last element, the length, the longest element, and the shortest element.
+#   The results are stored in the global variable `ARRAY_BUFFER` and also printed to stdout.
 
 # stdlib array getter library
 
@@ -6,9 +12,13 @@ set -eo pipefail
 
 ARRAY_BUFFER=""
 
+# @description Gets the last element of an array.
+# @arg $1 string The name of the array.
+# @set ARRAY_BUFFER string The last element of the array.
+# @stdout The last element of the array.
+# @exitcode 126 If the argument is null, not an array, or the array is empty.
+# @exitcode 127 If an incorrect number of arguments have been passed.
 stdlib.array.get.last() {
-  # $1: the array name
-
   local indirect_reference
   local indirect_array=()
   local indirect_array_last_element_index
@@ -24,9 +34,13 @@ stdlib.array.get.last() {
   echo "${ARRAY_BUFFER}"
 }
 
+# @description Gets the length of an array.
+# @arg $1 string The name of the array.
+# @set ARRAY_BUFFER integer The length of the array.
+# @stdout The length of the array.
+# @exitcode 126 If the argument is null or not an array.
+# @exitcode 127 If an incorrect number of arguments have been passed.
 stdlib.array.get.length() {
-  # $1: the array name
-
   local indirect_reference
   local indirect_array=()
   local indirect_array_last_element_index
@@ -41,9 +55,13 @@ stdlib.array.get.length() {
   echo "${ARRAY_BUFFER}"
 }
 
+# @description Gets the length of the longest element in an array.
+# @arg $1 string The name of the array.
+# @set ARRAY_BUFFER integer The length of the longest element.
+# @stdout The length of the longest element.
+# @exitcode 126 If the argument is null, not an array, or the array is empty.
+# @exitcode 127 If an incorrect number of arguments have been passed.
 stdlib.array.get.longest() {
-  # $1: the array name
-
   local indirect_reference
   local indirect_array=()
   local indirect_array_last_element_index
@@ -66,9 +84,13 @@ stdlib.array.get.longest() {
   echo "${ARRAY_BUFFER}"
 }
 
+# @description Gets the length of the shortest element in an array.
+# @arg $1 string The name of the array.
+# @set ARRAY_BUFFER integer The length of the shortest element.
+# @stdout The length of the shortest element.
+# @exitcode 126 If the argument is null, not an array, or the array is empty.
+# @exitcode 127 If an incorrect number of arguments have been passed.
 stdlib.array.get.shortest() {
-  # $1: the array name
-
   local indirect_reference
   local indirect_array=()
   local indirect_array_last_element_index

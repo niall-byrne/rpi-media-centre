@@ -1,15 +1,20 @@
 #!/bin/bash
+# @file map.sh
+# @brief A library for applying functions or formats to lines in a string.
+# @description
+#   This library provides functions to map over the lines in a string and apply a format string or a function to each line.
 
 # stdlib string map library
 
 set -eo pipefail
 
+# @description Applies a printf format string to each line of a string.
+# @arg $1 string A valid printf format string.
+# @arg $2 string The input string to process.
+# @env _DELIMITER The delimiter to split the string by. Defaults to newline.
+# @exitcode ? Propagated from stdlib.fn.args.require.
+# @stdout The formatted lines.
 stdlib.string.map.format() {
-  # $1: a valid print format string to apply to each line
-  # $2: the input string to process
-  #
-  # _DELIMITER:  a char sequence to split the string with for processing
-
   local delimiter="${_DELIMITER:-$'\n'}"
   local line=""
   local output=""
@@ -31,12 +36,14 @@ stdlib.string.map.format() {
   echo -e "${output%?}"
 }
 
+# @description Applies a function to each line of a string.
+# @arg $1 string The name of the function to apply.
+# @arg $2 string The input string to process.
+# @env _DELIMITER The delimiter to split the string by. Defaults to newline.
+# @exitcode 126 If the first argument is not a function.
+# @exitcode ? Propagated from stdlib.fn.args.require.
+# @stdout The output of the function for each line.
 stdlib.string.map.fn() {
-  # $1: a valid function apply to each line
-  # $2: the input string to process
-  #
-  # _DELIMITER:  a char sequence to split the string with for processing
-
   local delimiter="${_DELIMITER:-$'\n'}"
   local line=""
   local output=""

@@ -1,13 +1,19 @@
 #!/bin/bash
+# @file apply.sh
+# @brief A library for applying parametrizations to test functions.
+# @description
+#   This library provides a function to apply a series of parametrizations to a test function.
 
 # stdlib testing parametrize apply library
 
 set -eo pipefail
 
+# @description Applies a series of parametrizations to a test function.
+# For each parametrization function, it creates a new version of the test function,
+# applies the parametrization, and then unsets the original test function.
+# @arg $1 string The name of the test function to parametrize.
+# @arg $@ A series of parametrize functions to apply to this function.
 @parametrize.apply() {
-  # $1: the name of the test function to parametrize
-  # $@: a series of parametrize functions to apply to this function
-
   local _PM_COUNTER=0
   local _PM_CURRENT_FUNCTION
   local _PM_STACK_FUNCTIONS=()

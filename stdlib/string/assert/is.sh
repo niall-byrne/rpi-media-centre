@@ -1,12 +1,21 @@
 #!/bin/bash
+# @file is.sh
+# @brief A library for making assertions about strings.
+# @description
+#   This library provides functions to make assertions about strings,
+#   such as checking if a string is alpha, alpha-numeric, a boolean, etc.
 
 # stdlib string assert is library
 
 set -eo pipefail
 
+# @description Asserts that a string contains only alphabetic characters.
+# @arg $1 string The string to check.
+# @exitcode 0 If the string is alphabetic.
+# @exitcode 1 If the string is not alphabetic.
+# @exitcode 127 If an incorrect number of arguments have been passed.
+# @stderr Logs an error message if the assertion fails.
 stdlib.string.assert.is_alpha() {
-  # $1: the string name
-
   local return_code=0
 
   stdlib.string.query.is_alpha "${@}" || return_code="$?"
@@ -27,9 +36,13 @@ stdlib.string.assert.is_alpha() {
   return "${return_code}"
 }
 
+# @description Asserts that a string contains only alpha-numeric characters.
+# @arg $1 string The string to check.
+# @exitcode 0 If the string is alpha-numeric.
+# @exitcode 1 If the string is not alpha-numeric.
+# @exitcode 127 If an incorrect number of arguments have been passed.
+# @stderr Logs an error message if the assertion fails.
 stdlib.string.assert.is_alpha_numeric() {
-  # $1: the string name
-
   local return_code=0
 
   stdlib.string.query.is_alpha_numeric "${@}" || return_code="$?"
@@ -50,9 +63,13 @@ stdlib.string.assert.is_alpha_numeric() {
   return "${return_code}"
 }
 
+# @description Asserts that a string is a boolean (0 or 1).
+# @arg $1 string The string to check.
+# @exitcode 0 If the string is a boolean.
+# @exitcode 1 If the string is not a boolean.
+# @exitcode 127 If an incorrect number of arguments have been passed.
+# @stderr Logs an error message if the assertion fails.
 stdlib.string.assert.is_boolean() {
-  # $1: the string name
-
   local return_code=0
 
   stdlib.string.query.is_boolean "${@}" || return_code="$?"
@@ -73,9 +90,13 @@ stdlib.string.assert.is_boolean() {
   return "${return_code}"
 }
 
+# @description Asserts that a string contains a single character.
+# @arg $1 string The string to check.
+# @exitcode 0 If the string is a single character.
+# @exitcode 1 If the string is not a single character.
+# @exitcode 127 If an incorrect number of arguments have been passed.
+# @stderr Logs an error message if the assertion fails.
 stdlib.string.assert.is_char() {
-  # $1: the string name
-
   local return_code=0
 
   stdlib.string.query.is_char "${@}" || return_code="$?"
@@ -96,9 +117,13 @@ stdlib.string.assert.is_char() {
   return "${return_code}"
 }
 
+# @description Asserts that a string contains only digits.
+# @arg $1 string The string to check.
+# @exitcode 0 If the string contains only digits.
+# @exitcode 1 If the string does not contain only digits.
+# @exitcode 127 If an incorrect number of arguments have been passed.
+# @stderr Logs an error message if the assertion fails.
 stdlib.string.assert.is_digit() {
-  # $1: the string name
-
   local return_code=0
 
   stdlib.string.query.is_digit "${@}" || return_code="$?"
@@ -119,10 +144,14 @@ stdlib.string.assert.is_digit() {
   return "${return_code}"
 }
 
+# @description Asserts that a string matches a regex.
+# @arg $1 string The regex to match.
+# @arg $2 string The string to check.
+# @exitcode 0 If the string matches the regex.
+# @exitcode 1 If the string does not match the regex.
+# @exitcode 127 If an incorrect number of arguments have been passed.
+# @stderr Logs an error message if the assertion fails.
 stdlib.string.assert.is_regex_match() {
-  # $1: the regex to match
-  # $2: the string name
-
   local return_code=0
 
   stdlib.string.query.is_regex_match "${@}" || return_code="$?"
@@ -143,9 +172,13 @@ stdlib.string.assert.is_regex_match() {
   return "${return_code}"
 }
 
+# @description Asserts that a value is a non-empty string.
+# @arg $1 string The value to check.
+# @exitcode 0 If the value is a non-empty string.
+# @exitcode 1 If the value is an empty string.
+# @exitcode 127 If an incorrect number of arguments have been passed.
+# @stderr Logs an error message if the assertion fails.
 stdlib.string.assert.is_string() {
-  # $1: the string name
-
   local return_code=0
 
   stdlib.string.query.is_string "${@}" || return_code="$?"

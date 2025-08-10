@@ -1,4 +1,9 @@
 #!/bin/bash
+# @file pipeable.sh
+# @brief A library for creating pipeable functions.
+# @description
+#   This library provides a function to create a pipeable version of an existing function.
+#   The new function will have a `_pipe` suffix added to its name.
 
 # stdlib fn derive pipeable library
 
@@ -6,12 +11,15 @@ set -eo pipefail
 
 STDIN_SOURCE_SPECIFIER="${STDIN_SOURCE_SPECIFIER:-""}"
 
+# @description Creates a new, pipeable version of a function.
+# The new function is named by appending '_pipe' to the original function's name.
+# The pipeable function can accept input from stdin and use it as one of its arguments.
+# @arg $1 string The name of the function to make pipeable.
+# @arg $2 integer The number of arguments the original function requires.
+# @env STDIN_SOURCE_SPECIFIER The character used to specify stdin as an argument. Defaults to "-".
+# @exitcode 126 If wrong or invalid arguments have been passed.
+# @exitcode 127 If an incorrect number of arguments have been passed.
 stdlib.fn.derive.pipeable() {
-  # $1: the function name
-  # $2: the number of arguments required
-  #
-  # _STDIN_SOURCE_SPECIFIER:  a reserved argument used to specify a stdin source
-
   local derive_target_fn_name
   local stdin_source_specifier="${STDIN_SOURCE_SPECIFIER:-"-"}"
 

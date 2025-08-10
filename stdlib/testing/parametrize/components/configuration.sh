@@ -1,19 +1,26 @@
 #!/bin/bash
+# @file configuration.sh
+# @brief A component for parsing parametrization configurations.
+# @description
+#   This script is a component of the parametrization framework. It is not meant to be sourced directly.
+#   It provides functions to parse the configuration for a parametrized test.
 
 # stdlib testing parametrize configuration component
 
 set -eo pipefail
 
+# @description Parses the parametrization configuration.
+# This is an internal function.
+# @arg $@ The arguments passed to parametrize.
 @parametrize._components.configuration.parse() {
-  # $@: the arguments passed to parametrize
-
   @parametrize._components.configuration.parse_header "${@}"
   @parametrize._components.configuration.parse_scenarios "${_P_CONFIGURATION_LINES[@]}"
 }
 
+# @description Parses the header of the parametrization configuration.
+# This is an internal function.
+# @arg $@ The arguments passed to parametrize.
 @parametrize._components.configuration.parse_header() {
-  # $@: the arguments passed to parametrize
-
   local _P_CONFIGURATION_INDEX=-1
 
   while [[ -n "${1}" ]]; do
@@ -31,9 +38,10 @@ set -eo pipefail
   _P_CONFIGURATION_LINES=("${@}")
 }
 
+# @description Parses the scenarios of the parametrization configuration.
+# This is an internal function.
+# @arg $@ The arguments passed to parametrize.
 @parametrize._components.configuration.parse_scenarios() {
-  # $@: the arguments passed to parametrize
-
   local _P_INDEX=0
   local _P_CONFIGURATION_LINES=("${@}")
 

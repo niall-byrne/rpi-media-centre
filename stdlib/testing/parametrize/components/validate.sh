@@ -1,26 +1,35 @@
 #!/bin/bash
+# @file validate.sh
+# @brief A component for validating parts of parametrized tests.
+# @description
+#   This script is a component of the parametrization framework. It is not meant to be sourced directly.
+#   It provides functions to validate function names and scenarios.
 
 # stdlib testing parametrize validate component
 
 set -eo pipefail
 
+# @description Validates the name of a parametrizer function.
+# This is an internal function.
+# @arg $1 string The parametrizer function name to validate.
 @parametrize._components.validate.fn_name.parametrizer() {
-  # $1: the parametrizer function name to validate
-
   if ! stdlib.string.query.starts_with "${_PARAMETRIZE_MULTIPLE_PREFIX}" "${1}"; then
     _testing.error "The function '${1}' cannot be used in a parametrize series!  It's name must be prefixed with '${_PARAMETRIZE_MULTIPLE_PREFIX}' !"
   fi
 }
 
+# @description Validates the name of a test function.
+# This is an internal function.
+# @arg $1 string The test function name to validate.
 @parametrize._components.validate.fn_name.test() {
-  # $1: the test function name to validate
-
   if ! stdlib.string.query.has_substring "${_PARAMETRIZE_VARIANT_TAG}" "${1}" ||
     ! stdlib.string.query.starts_with "test" "${1}"; then
     _testing.error "The function '${1}' cannot be parametrized.  It's name must start with 'test' and contain a '${_PARAMETRIZE_VARIANT_TAG}' tag, please rename this function!"
   fi
 }
 
+# @description Validates a scenario configuration.
+# This is an internal function.
 @parametrize._components.validate.scenario() {
   local VALIDATION_INDEX
 

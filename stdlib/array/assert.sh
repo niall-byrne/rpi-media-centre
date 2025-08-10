@@ -1,13 +1,25 @@
 #!/bin/bash
+# @file assert.sh
+# @brief A library for assertions on arrays.
+# @description
+#   This library provides functions to make assertions on arrays,
+#   such as checking for equality, if a variable is an array, or if an array is not empty.
+#   These functions are useful for testing and validation.
 
 # stdlib array assert library
 
 set -eo pipefail
 
+# @description Asserts that two arrays are equal.
+# It checks if both arrays have the same length and the same elements in the same order.
+# @arg $1 string The name of the first array to compare.
+# @arg $2 string The name of the second array to compare.
+# @exitcode 0 If the arrays are equal.
+# @exitcode 1 If the arrays are not equal.
+# @exitcode 126 If one of the arguments is not an array.
+# @exitcode 127 If the number of arguments is not 2.
+# @stderr Logs an error message if the arrays are not equal or if the arguments are invalid.
 stdlib.array.assert.equals() {
-  # $1: the name of the first array to compare
-  # $2: the name of the second array to compare
-
   local indirect_reference_1
   local indirect_array_1=()
   local indirect_reference_2
@@ -45,9 +57,13 @@ stdlib.array.assert.equals() {
   return 0
 }
 
+# @description Asserts that a variable is an array.
+# @arg $1 string The name of the variable to check.
+# @exitcode 0 If the variable is an array.
+# @exitcode 1 If the variable is not an array.
+# @exitcode 127 If an incorrect number of arguments have been passed.
+# @stderr Logs an error message if the variable is not an array or if the arguments are invalid.
 stdlib.array.assert.is_array() {
-  # $1: the array name
-
   local return_code=0
 
   stdlib.array.query.is_array "${@}" || return_code="$?"
@@ -68,9 +84,14 @@ stdlib.array.assert.is_array() {
   return "${return_code}"
 }
 
+# @description Asserts that an array is not empty.
+# @arg $1 string The name of the array to check.
+# @exitcode 0 If the array is not empty.
+# @exitcode 1 If the array is empty.
+# @exitcode 126 If the provided argument is not an array.
+# @exitcode 127 If an incorrect number of arguments have been passed.
+# @stderr Logs an error message if the array is empty, if the variable is not an array, or if the arguments are invalid.
 stdlib.array.assert.is_not_empty() {
-  # $1: the array name
-
   local return_code=0
 
   stdlib.array.query.is_empty "${@}" || return_code="$?"
