@@ -66,6 +66,13 @@ repos:
         stages: [manual]
         pass_filenames: false
         require_serial: true
+      - id: bash-unit-tests
+        name: bash-unit-tests
+        entry: bash -c 'TEST_CONTAINER_CI=1 ./testing/container.sh t'
+        language: system
+        stages: [manual]
+        pass_filenames: false
+        require_serial: true
       - id: headers-source-file-library-root
         name: headers-source-file-library-root
         entry: "\\A(?!#!/bin/bash\n(# shellcheck disable=.+\n){0,1}\nset -Eeo pipefail\n).+\\Z"
@@ -99,6 +106,12 @@ repos:
         language: pygrep
         files: "^stdlib/.+\\.sh$"
         exclude: "^(.+tests/.+\\.sh|stdlib/trap/trap.sh)$"
+      - id: headers-test-files
+        name: headers-test-files
+        entry: "\\A(?!#!/bin/bash\n).+\\Z"
+        args: [--multiline]
+        language: pygrep
+        files: "^(.+tests/test_.+\\.sh)$"
       - id: source-test-files
         name: source-test-files
         entry: "\\A#!/bin/bash\n.+(source \".+\"|\\. \".+\")+.+\\Z"

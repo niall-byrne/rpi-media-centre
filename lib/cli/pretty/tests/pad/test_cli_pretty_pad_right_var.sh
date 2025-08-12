@@ -1,0 +1,10 @@
+#!/bin/bash
+
+test_cli_pretty_pad_right_var__arg__width_10__sets_var() {
+  TEST_EXPECTED="string          "
+  TEST_INPUT="string"
+
+  _cli_pretty_pad_right_var "10" TEST_INPUT
+
+  assert_equals "${TEST_EXPECTED}" "${TEST_INPUT}"
+}
