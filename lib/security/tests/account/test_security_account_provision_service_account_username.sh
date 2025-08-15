@@ -16,9 +16,9 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "RPI_SVC_UID,TEST_USERADD_ARGS" \
-    "uid_not_set,,-g ${RPI_SVC_GID} -r -s /usr/sbin/nologin ${TEST_USERNAME}," \
-    "uid_set____,1001,-u 1001 -g ${RPI_SVC_GID} -r -s /usr/sbin/nologin -o ${TEST_USERNAME},"
+    "RPI_SVC_UID;TEST_USERADD_ARGS" \
+    "uid_not_set;;-g ${RPI_SVC_GID} -r -s /usr/sbin/nologin ${TEST_USERNAME};" \
+    "uid_set____;1001;-u 1001 -g ${RPI_SVC_GID} -r -s /usr/sbin/nologin -o ${TEST_USERNAME};"
 }
 
 test_security_account_provision_service_account_username__calls_getent() {

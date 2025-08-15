@@ -53,8 +53,8 @@ test_disk_manifest_all_command______encrypted__@vary__return_code_0() {
 @parametrize \
   test_disk_manifest_all_command______encrypted__@vary__return_code_0 \
   "MANIFEST_ENTRIES" \
-  "2_manifest_entries,2" \
-  "3_manifest_entries,3"
+  "2_manifest_entries;2" \
+  "3_manifest_entries;3"
 
 test_disk_manifest_all_command______encrypted__2_manifest_entries__calls_command_2_times() {
   _is_disk_encrypted.mock.set.rc "0"

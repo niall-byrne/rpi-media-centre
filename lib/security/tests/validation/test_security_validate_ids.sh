@@ -11,10 +11,10 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "RPI_SVC_GID,RPI_SVC_UID" \
-    "invalid_gid__valid_uid__,0,1000" \
-    "valid_gid____invalid_uid,1000,0" \
-    "invalid_gid__invalid_uid,0,0"
+    "RPI_SVC_GID;RPI_SVC_UID" \
+    "invalid_gid__valid_uid__;0;1000" \
+    "valid_gid____invalid_uid;1000;0" \
+    "invalid_gid__invalid_uid;0;0"
 }
 
 test_security_validate_ids__@vary__logs_error_messages() {

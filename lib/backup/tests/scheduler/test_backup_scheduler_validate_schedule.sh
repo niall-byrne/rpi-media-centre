@@ -21,9 +21,9 @@ _fixture_setup_date() {
   @parametrize \
     "${1}" \
     "@fixture _fixture_setup_date" \
-    "START_EPOCH,END_EPOCH,EXPECTED_RC" \
-    "end_before_start,1753025000,1753025000,127" \
-    "end_equals_start,1753025000,1753025000,127"
+    "START_EPOCH;END_EPOCH;EXPECTED_RC" \
+    "end_before_start;1753025000;1753025000;127" \
+    "end_equals_start;1753025000;1753025000;127"
 }
 
 @parametrize_with_valid___epoch_combos() {
@@ -32,8 +32,8 @@ _fixture_setup_date() {
   @parametrize \
     "${1}" \
     "@fixture _fixture_setup_date" \
-    "START_EPOCH,END_EPOCH,EXPECTED_RC" \
-    "start_before_end,1753005000,1753025000,0"
+    "START_EPOCH;END_EPOCH;EXPECTED_RC" \
+    "start_before_end;1753005000;1753025000;0"
 }
 
 test_backup_scheduler_validate_schedule__@vary__@vary__calls_date_correctly() {

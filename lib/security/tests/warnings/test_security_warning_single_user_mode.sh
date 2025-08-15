@@ -10,8 +10,8 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "RPI_SVC_USERNAME,SUDO_USER,RPI_DISABLE_SINGLE_USER_MODE_WARNING_BOOLEAN" \
-    "single_user_mode___warning_enabled_,admin_user,admin_user,,"
+    "RPI_SVC_USERNAME;SUDO_USER;RPI_DISABLE_SINGLE_USER_MODE_WARNING_BOOLEAN" \
+    "single_user_mode___warning_enabled_;admin_user;admin_user;;"
 }
 
 @parametrize_with_sum_warning_bypass() {
@@ -19,10 +19,10 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "RPI_SVC_USERNAME,SUDO_USER,RPI_DISABLE_SINGLE_USER_MODE_WARNING_BOOLEAN" \
-    "single_user_mode___warning_disabled,admin_user,admin_user,1," \
-    "service_user_mode__warning_disabled,user,admin_user,," \
-    "service_user_mode__warning_enable__,user,admin_user,1,"
+    "RPI_SVC_USERNAME;SUDO_USER;RPI_DISABLE_SINGLE_USER_MODE_WARNING_BOOLEAN" \
+    "single_user_mode___warning_disabled;admin_user;admin_user;1;" \
+    "service_user_mode__warning_disabled;user;admin_user;;" \
+    "service_user_mode__warning_enable__;user;admin_user;1;"
 }
 
 test_security_warning_single_user_mode__@vary__@vary__calls_security_defaults_set() {

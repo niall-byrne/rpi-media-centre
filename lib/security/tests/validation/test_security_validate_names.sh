@@ -9,10 +9,10 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "RPI_SVC_USERNAME,RPI_SVC_GROUPNAME" \
-    "invalid_username__invalid_group,root,root" \
-    "valid_username____invalid_group,user,root" \
-    "invalid_username__valid_group__,root,group"
+    "RPI_SVC_USERNAME;RPI_SVC_GROUPNAME" \
+    "invalid_username__invalid_group;root;root" \
+    "valid_username____invalid_group;user;root" \
+    "invalid_username__valid_group__;root;group"
 }
 
 test_security_validate_names__@vary__logs_error_messages() {

@@ -21,9 +21,9 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "RPI_DISK_CRYPT_GROUP", \
-    "___with_crypt_group,mocked_crypt_group," \
-    "without_crypt_group,,"
+    "RPI_DISK_CRYPT_GROUP" \
+    "___with_crypt_group;mocked_crypt_group;" \
+    "without_crypt_group;;"
 }
 
 test_disk_lock__already_mounted__does_not_mount() {

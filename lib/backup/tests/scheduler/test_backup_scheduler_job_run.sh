@@ -22,8 +22,8 @@ _fixture_setup_mocks() {
   @parametrize \
     "${1}" \
     "@fixture _fixture_setup_mocks" \
-    "TEST_JOB_RC,TEST_JOB_NAME" \
-    "job_succeeds,0,mocked_successful_job"
+    "TEST_JOB_RC;TEST_JOB_NAME" \
+    "job_succeeds;0;mocked_successful_job"
 }
 
 @parametrize_with_unsuccessful_job() {
@@ -32,8 +32,8 @@ _fixture_setup_mocks() {
   @parametrize \
     "${1}" \
     "@fixture _fixture_setup_mocks" \
-    "TEST_JOB_RC,TEST_JOB_NAME" \
-    "job_fails,1,mocked_failed_job"
+    "TEST_JOB_RC;TEST_JOB_NAME" \
+    "job_fails;1;mocked_failed_job"
 }
 
 test_backup_scheduler_job_run__@vary__@vary__calls_basename_to_identify_job() {

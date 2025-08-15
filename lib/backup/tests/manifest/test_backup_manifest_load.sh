@@ -30,8 +30,8 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "RPI_MANIFEST_BACKUP," \
-    "non-existent,${RPI_WORKING_DIRECTORY}/lib/backup/tests/manifest/__fixtures__/non-existent"
+    "RPI_MANIFEST_BACKUP;" \
+    "non-existent;${RPI_WORKING_DIRECTORY}/lib/backup/tests/manifest/__fixtures__/non-existent"
 }
 
 @parametrize_with_mock_manifests() {
@@ -39,10 +39,10 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "RPI_MANIFEST_BACKUP,TEST_MANIFEST_LENGTH,EXPECTED_NAME_SET,EXPECTED_GROUP_SET,EXPECTED_SOURCE_GROUP_SET,EXPECTED_RSYNC_SET,EXPECTED_TARBALL_SET,EXPECTED_TARBELL_VERSION_SET,EXPECTED_KEY_SET,EXPECTED_REMOTE_SET,EXPECTED_REMOTE_PARAMETER_SET" \
-    "simple_manifest,${RPI_WORKING_DIRECTORY}/lib/backup/tests/manifest/__fixtures__/manifest1,2,test1|test2,yearly|daily,/path/folder1|/path/folder2,/path/rsync1||,|/path/tarball1,|4,/path/key1||,s3://bucket/path1|s3://bucket/path1/path2,||" \
-    "blank_line_manifest,${RPI_WORKING_DIRECTORY}/lib/backup/tests/manifest/__fixtures__/manifest2,2,test1|test2,yearly|daily,/path/folder1|/path/folder2,|/path/rsync2|,|/path/tarball1,|4,/path/key1|/path/key2,s3://bucket/path1|s3://bucket/path1/path2,GLACIER||" \
-    "commented_line_manifest,${RPI_WORKING_DIRECTORY}/lib/backup/tests/manifest/__fixtures__/manifest3,2,test1|test2,yearly|daily,/path/folder1|/path/folder2,|/path/rsync2|,|/path/tarball1,|4,/path/key1|/path/key2,s3://bucket/path1|s3://bucket/path1/path2,GLACIER||"
+    "RPI_MANIFEST_BACKUP;TEST_MANIFEST_LENGTH;EXPECTED_NAME_SET;EXPECTED_GROUP_SET;EXPECTED_SOURCE_GROUP_SET;EXPECTED_RSYNC_SET;EXPECTED_TARBALL_SET;EXPECTED_TARBELL_VERSION_SET;EXPECTED_KEY_SET;EXPECTED_REMOTE_SET;EXPECTED_REMOTE_PARAMETER_SET" \
+    "simple_manifest;${RPI_WORKING_DIRECTORY}/lib/backup/tests/manifest/__fixtures__/manifest1;2;test1|test2;yearly|daily;/path/folder1|/path/folder2;/path/rsync1||;|/path/tarball1;|4;/path/key1||;s3://bucket/path1|s3://bucket/path1/path2;||" \
+    "blank_line_manifest;${RPI_WORKING_DIRECTORY}/lib/backup/tests/manifest/__fixtures__/manifest2;2;test1|test2;yearly|daily;/path/folder1|/path/folder2;|/path/rsync2|;|/path/tarball1;|4;/path/key1|/path/key2;s3://bucket/path1|s3://bucket/path1/path2;GLACIER||" \
+    "commented_line_manifest;${RPI_WORKING_DIRECTORY}/lib/backup/tests/manifest/__fixtures__/manifest3;2;test1|test2;yearly|daily;/path/folder1|/path/folder2;|/path/rsync2|;|/path/tarball1;|4;/path/key1|/path/key2;s3://bucket/path1|s3://bucket/path1/path2;GLACIER||"
 }
 
 @parametrize_with_each_env_var() {
@@ -50,16 +50,16 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "ENV_VAR_NAME,EXPECTED_VALUE_ENV_VAR_NAME" \
-    "RPI_BACKUP_JOBS_NAMES,RPI_BACKUP_JOBS_NAMES,EXPECTED_NAME_SET" \
-    "RPI_BACKUP_JOBS_GROUPS,RPI_BACKUP_JOBS_GROUPS,EXPECTED_GROUP_SET" \
-    "RPI_BACKUP_JOBS_LOCAL_SOURCES,RPI_BACKUP_JOBS_LOCAL_SOURCES,EXPECTED_SOURCE_GROUP_SET" \
-    "RPI_BACKUP_JOBS_LOCAL_RSYNC_FOLDERS,RPI_BACKUP_JOBS_LOCAL_RSYNC_FOLDERS,EXPECTED_RSYNC_SET" \
-    "RPI_BACKUP_JOBS_LOCAL_TARBALL_FOLDERS,RPI_BACKUP_JOBS_LOCAL_TARBALL_FOLDERS,EXPECTED_TARBALL_SET" \
-    "RPI_BACKUP_JOBS_LOCAL_TARBALL_VERSIONS,RPI_BACKUP_JOBS_LOCAL_TARBALL_VERSIONS,EXPECTED_TARBELL_VERSION_SET" \
-    "RPI_BACKUP_JOBS_REMOTE_ENCRYPTION_KEY_PATHS,RPI_BACKUP_JOBS_REMOTE_ENCRYPTION_KEY_PATHS,EXPECTED_KEY_SET" \
-    "RPI_BACKUP_JOBS_REMOTE_TARGETS,RPI_BACKUP_JOBS_REMOTE_TARGETS,EXPECTED_REMOTE_SET" \
-    "RPI_BACKUP_JOBS_REMOTE_PARAMETERS,RPI_BACKUP_JOBS_REMOTE_PARAMETERS,EXPECTED_REMOTE_PARAMETER_SET"
+    "ENV_VAR_NAME;EXPECTED_VALUE_ENV_VAR_NAME" \
+    "RPI_BACKUP_JOBS_NAMES;RPI_BACKUP_JOBS_NAMES;EXPECTED_NAME_SET" \
+    "RPI_BACKUP_JOBS_GROUPS;RPI_BACKUP_JOBS_GROUPS;EXPECTED_GROUP_SET" \
+    "RPI_BACKUP_JOBS_LOCAL_SOURCES;RPI_BACKUP_JOBS_LOCAL_SOURCES;EXPECTED_SOURCE_GROUP_SET" \
+    "RPI_BACKUP_JOBS_LOCAL_RSYNC_FOLDERS;RPI_BACKUP_JOBS_LOCAL_RSYNC_FOLDERS;EXPECTED_RSYNC_SET" \
+    "RPI_BACKUP_JOBS_LOCAL_TARBALL_FOLDERS;RPI_BACKUP_JOBS_LOCAL_TARBALL_FOLDERS;EXPECTED_TARBALL_SET" \
+    "RPI_BACKUP_JOBS_LOCAL_TARBALL_VERSIONS;RPI_BACKUP_JOBS_LOCAL_TARBALL_VERSIONS;EXPECTED_TARBELL_VERSION_SET" \
+    "RPI_BACKUP_JOBS_REMOTE_ENCRYPTION_KEY_PATHS;RPI_BACKUP_JOBS_REMOTE_ENCRYPTION_KEY_PATHS;EXPECTED_KEY_SET" \
+    "RPI_BACKUP_JOBS_REMOTE_TARGETS;RPI_BACKUP_JOBS_REMOTE_TARGETS;EXPECTED_REMOTE_SET" \
+    "RPI_BACKUP_JOBS_REMOTE_PARAMETERS;RPI_BACKUP_JOBS_REMOTE_PARAMETERS;EXPECTED_REMOTE_PARAMETER_SET"
 }
 
 test_backup_manifest_load__@vary__logs_info_message() {

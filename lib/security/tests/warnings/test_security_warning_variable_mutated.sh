@@ -9,8 +9,8 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "NEW_VALUE,ORIGINAL_VALUE,RESPONSIBLE_ENTITY" \
-    "mutated_variable,new_value,original_value,responsible_entity"
+    "NEW_VALUE;ORIGINAL_VALUE;RESPONSIBLE_ENTITY" \
+    "mutated_variable;new_value;original_value;responsible_entity"
 }
 
 @parametrize_warning_bypass_combos() {
@@ -18,8 +18,8 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "NEW_VALUE,ORIGINAL_VALUE,RESPONSIBLE_ENTITY" \
-    "stable_variable_,original_value,original_value,responsible_entity"
+    "NEW_VALUE;ORIGINAL_VALUE;RESPONSIBLE_ENTITY" \
+    "stable_variable_;original_value;original_value;responsible_entity"
 }
 
 test_security_warning_variable_mutated__@vary__logs_warning_messages() {

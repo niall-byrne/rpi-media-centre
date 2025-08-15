@@ -17,9 +17,9 @@ _fixture_disk_manifest_uuid_conditions_valid() {
 
   @parametrize \
     "${1}" \
-    "RPI_DISK_UUID,RPI_DISK_NAME,RPI_DISK_MOUNT_POINT" \
-    "no_uuid___,,MOCK_DISK_NAME,MOCK_DISK_MOUNT_POINT" \
-    "no_name___,MOCK_DISK_UUID,,MOCK_DISK_MOUNT_POINT" \
-    "no_mp_____,MOCK_DISK_UUID,MOCK_DISK_NAME,," \
-    "no_all____,,,,"
+    "RPI_DISK_UUID;RPI_DISK_NAME;RPI_DISK_MOUNT_POINT" \
+    "no_uuid___;;MOCK_DISK_NAME;MOCK_DISK_MOUNT_POINT" \
+    "no_name___;MOCK_DISK_UUID;;MOCK_DISK_MOUNT_POINT" \
+    "no_mp_____;MOCK_DISK_UUID;MOCK_DISK_NAME;;" \
+    "no_all____;;;;"
 }

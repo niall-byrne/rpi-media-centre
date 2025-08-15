@@ -10,10 +10,10 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_OPTIONAL,TEST_REQUIRED" \
-    "optional_unset__required_unset,,," \
-    "optional_unset__required_set__,,required_varname" \
-    "optional_set____required_set__,optional_varname,required_varname,"
+    "TEST_OPTIONAL;TEST_REQUIRED" \
+    "optional_unset__required_unset;;;" \
+    "optional_unset__required_set__;;required_varname" \
+    "optional_set____required_set__;optional_varname;required_varname;"
 
 }
 
@@ -28,10 +28,10 @@ test_security_validate_ids_relationship__@vary__calls_stdlib_fn_args_require() {
 
 @parametrize \
   test_security_validate_ids_relationship__@vary__calls_stdlib_fn_args_require \
-  "TEST_ARGUMENT_DEFINITION,EXPECTED_ARGS" \
-  "valid_arguments_,optional_varname|required_varname|entity_name,optional_varname required_varname entity_name" \
-  "omitted_required,optional_varname||entity_name,optional_varname  entity_name" \
-  "omitted_entity__,optional_varname|required_varname||,optional_varname required_varname "
+  "TEST_ARGUMENT_DEFINITION;EXPECTED_ARGS" \
+  "valid_arguments_;optional_varname|required_varname|entity_name;optional_varname required_varname entity_name" \
+  "omitted_required;optional_varname||entity_name;optional_varname  entity_name" \
+  "omitted_entity__;optional_varname|required_varname||;optional_varname required_varname "
 
 # shellcheck disable=SC2034
 test_security_validate_ids_relationship__valid_arguments___optional_set____required_unset__logs_error_message() {

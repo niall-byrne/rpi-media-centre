@@ -17,9 +17,9 @@ test_security_defaults_set__@vary_setter_once_without_args() {
 
 @parametrize \
   "test_security_defaults_set__@vary_setter_once_without_args" \
-  "SECURITY_SETTER," \
-  "_security_defaults_set_username_,_security_defaults_set_username" \
-  "_security_defaults_set_uid______,_security_defaults_set_uid" \
-  "_security_defaults_set_groupname,_security_defaults_set_groupname" \
-  "_security_defaults_set_gid______,_security_defaults_set_gid" \
-  "_security_defaults_set_uid_ro___,_security_defaults_set_uid_ro"
+  "SECURITY_SETTER;" \
+  "_security_defaults_set_username_;_security_defaults_set_username" \
+  "_security_defaults_set_uid______;_security_defaults_set_uid" \
+  "_security_defaults_set_groupname;_security_defaults_set_groupname" \
+  "_security_defaults_set_gid______;_security_defaults_set_gid" \
+  "_security_defaults_set_uid_ro___;_security_defaults_set_uid_ro"

@@ -10,9 +10,9 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "EXISTING_GID,EXISTING_GROUPNAME,EXPECTED_GID" \
-    "existing_gid_matches_new_gid___,1001,new_group,1001" \
-    "existing_gid_does_not_match_gid,1001,new_group,1002"
+    "EXISTING_GID;EXISTING_GROUPNAME;EXPECTED_GID" \
+    "existing_gid_matches_new_gid___;1001;new_group;1001" \
+    "existing_gid_does_not_match_gid;1001;new_group;1002"
 }
 
 test_security_defaults_set_gid__@vary__calls_stdlib_security_get_gid() {

@@ -30,10 +30,10 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "RPI_MANIFEST_CRYPT,TEST_MANIFEST_LENGTH,EXPECTED_UUID_SET,EXPECTED_NAME_SET,EXPECTED_CRYPT_GROUP_SET,EXPECTED_MOUNT_POINT_SET" \
-    "simple________manifest,${RPI_WORKING_DIRECTORY}/lib/disk/tests/manifest/__fixtures__/manifest1,1,UUID0,mocked_disk0,crypt_group0,/mnt/mocked/path0" \
-    "comment_in____manifest,${RPI_WORKING_DIRECTORY}/lib/disk/tests/manifest/__fixtures__/manifest2,2,UUID0|UUID1,mocked_disk0|mocked_disk1,crypt_group0|crypt_group1,/mnt/mocked/path0|/mnt/mocked/path1" \
-    "blank_line_in_manifest,${RPI_WORKING_DIRECTORY}/lib/disk/tests/manifest/__fixtures__/manifest3,3,UUID0|UUID1|UUID2,mocked_disk0|mocked_disk1|mocked_disk2,crypt_group0|crypt_group1|crypt_group2,/mnt/mocked/path0|/mnt/mocked/path1|/mnt/mocked/path2"
+    "RPI_MANIFEST_CRYPT;TEST_MANIFEST_LENGTH;EXPECTED_UUID_SET;EXPECTED_NAME_SET;EXPECTED_CRYPT_GROUP_SET;EXPECTED_MOUNT_POINT_SET" \
+    "simple________manifest;${RPI_WORKING_DIRECTORY}/lib/disk/tests/manifest/__fixtures__/manifest1;1;UUID0;mocked_disk0;crypt_group0;/mnt/mocked/path0" \
+    "comment_in____manifest;${RPI_WORKING_DIRECTORY}/lib/disk/tests/manifest/__fixtures__/manifest2;2;UUID0|UUID1;mocked_disk0|mocked_disk1;crypt_group0|crypt_group1;/mnt/mocked/path0|/mnt/mocked/path1" \
+    "blank_line_in_manifest;${RPI_WORKING_DIRECTORY}/lib/disk/tests/manifest/__fixtures__/manifest3;3;UUID0|UUID1|UUID2;mocked_disk0|mocked_disk1|mocked_disk2;crypt_group0|crypt_group1|crypt_group2;/mnt/mocked/path0|/mnt/mocked/path1|/mnt/mocked/path2"
 }
 
 @parametrize_with_each_env_var() {
@@ -41,11 +41,11 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "ENV_VAR_NAME,EXPECTED_VALUE_ENV_VAR_NAME" \
-    "RPI_DISK_UUID_SET,RPI_DISK_UUID_SET,EXPECTED_UUID_SET" \
-    "RPI_DISK_NAME_SET,RPI_DISK_NAME_SET,EXPECTED_NAME_SET" \
-    "RPI_DISK_CRYPT_GROUP_SET,RPI_DISK_CRYPT_GROUP_SET,EXPECTED_CRYPT_GROUP_SET" \
-    "RPI_DISK_MOUNT_POINT_SET,RPI_DISK_MOUNT_POINT_SET,EXPECTED_MOUNT_POINT_SET"
+    "ENV_VAR_NAME;EXPECTED_VALUE_ENV_VAR_NAME" \
+    "RPI_DISK_UUID_SET;RPI_DISK_UUID_SET;EXPECTED_UUID_SET" \
+    "RPI_DISK_NAME_SET;RPI_DISK_NAME_SET;EXPECTED_NAME_SET" \
+    "RPI_DISK_CRYPT_GROUP_SET;RPI_DISK_CRYPT_GROUP_SET;EXPECTED_CRYPT_GROUP_SET" \
+    "RPI_DISK_MOUNT_POINT_SET;RPI_DISK_MOUNT_POINT_SET;EXPECTED_MOUNT_POINT_SET"
 }
 
 test_disk_manifest_load__@vary__logs_info_message() {

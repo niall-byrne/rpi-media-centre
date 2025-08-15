@@ -5,9 +5,9 @@
 
   @parametrize \
     "${1}" \
-    "TEST_INDENT_SIZE,EXPECTED_INDENT" \
-    "indent_size_5,5,     " \
-    "indent_size_3,3,   "
+    "TEST_INDENT_SIZE;EXPECTED_INDENT" \
+    "indent_size_5;5;     " \
+    "indent_size_3;3;   "
 }
 
 test_cli_pretty_bullet_point__arg____default_indent__correct_output() {

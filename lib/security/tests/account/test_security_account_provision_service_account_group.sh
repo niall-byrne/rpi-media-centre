@@ -15,9 +15,9 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "RPI_SVC_GID,TEST_GROUPNAME_ADD_ARGS" \
-    "gid_not_set,,-r ${TEST_GROUPNAME}," \
-    "gid_set____,1001,-g 1001 -r ${TEST_GROUPNAME},"
+    "RPI_SVC_GID;TEST_GROUPNAME_ADD_ARGS" \
+    "gid_not_set;;-r ${TEST_GROUPNAME};" \
+    "gid_set____;1001;-g 1001 -r ${TEST_GROUPNAME};"
 }
 
 test_security_account_provision_service_account_group__calls_getent() {

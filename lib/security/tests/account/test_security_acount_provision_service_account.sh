@@ -17,8 +17,8 @@ setup() {
   @parametrize \
     "${1}" \
     "RPI_SVC_USERNAME" \
-    "not_set__,," \
-    "sudo_user,admin,"
+    "not_set__;;" \
+    "sudo_user;admin;"
 }
 
 @parametrize_username_group_combos() {
@@ -26,10 +26,10 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "RPI_SVC_USERNAME,RPI_SVC_GROUPNAME,TEST_GETENT_RC,TEST_EXPECTED_SVC_USERNAME,TEST_EXPECTED_SVC_GROUPNAME" \
-    "username_not_found___group_not_set,new_user,,1,new_user,new_user" \
-    "username_found_______group_not_set,new_user,,0,new_user,new_user_primary_group" \
-    "username_found_______group_set____,new_user,new_group,0,new_user,new_group"
+    "RPI_SVC_USERNAME;RPI_SVC_GROUPNAME;TEST_GETENT_RC;TEST_EXPECTED_SVC_USERNAME;TEST_EXPECTED_SVC_GROUPNAME" \
+    "username_not_found___group_not_set;new_user;;1;new_user;new_user" \
+    "username_found_______group_not_set;new_user;;0;new_user;new_user_primary_group" \
+    "username_found_______group_set____;new_user;new_group;0;new_user;new_group"
 }
 
 test_security_account_provision_service_account__username_@vary___return_code_127() {

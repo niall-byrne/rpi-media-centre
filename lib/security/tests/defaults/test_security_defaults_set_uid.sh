@@ -10,9 +10,9 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "EXISTING_UID,EXISTING_USERNAME,EXPECTED_UID" \
-    "existing_uid_matches_new_uid___,1001,new_user,1001" \
-    "existing_uid_does_not_match_uid,1001,new_user,1002"
+    "EXISTING_UID;EXISTING_USERNAME;EXPECTED_UID" \
+    "existing_uid_matches_new_uid___;1001;new_user;1001" \
+    "existing_uid_does_not_match_uid;1001;new_user;1002"
 }
 
 test_security_defaults_set_uid__@vary__calls_stdlib_security_get_uid() {

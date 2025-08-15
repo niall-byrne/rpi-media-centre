@@ -22,8 +22,8 @@ _fixture_setup_backup_job_get_next_queue() {
   @parametrize \
     "${1}" \
     "@fixture _fixture_setup_backup_job_get_next_queue" \
-    "TEST_NEXT_QUEUE_NAME," \
-    "job_is_finished__,,"
+    "TEST_NEXT_QUEUE_NAME;" \
+    "job_is_finished__;;"
 }
 
 @parametrize_with_unfinished_job() {
@@ -32,8 +32,8 @@ _fixture_setup_backup_job_get_next_queue() {
   @parametrize \
     "${1}" \
     "@fixture _fixture_setup_backup_job_get_next_queue" \
-    "TEST_NEXT_QUEUE_NAME," \
-    "job_is_unfinished,QUEUE2"
+    "TEST_NEXT_QUEUE_NAME;" \
+    "job_is_unfinished;QUEUE2"
 }
 
 test_backup_scheduler_job_promote__@vary__@vary__calls_backup_job_get_next_queue() {

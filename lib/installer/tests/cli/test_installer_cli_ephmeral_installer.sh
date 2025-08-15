@@ -18,8 +18,8 @@ _parameterize_with_branches() {
   @parametrize \
     "${1}" \
     "TARGET_BRANCH" \
-    "origin/dev_,origin/dev" \
-    "origin/main,origin/main"
+    "origin/dev_;origin/dev" \
+    "origin/main;origin/main"
 }
 
 test_installer_cli_ephemeral_installer__@vary__calls_mktemp() {

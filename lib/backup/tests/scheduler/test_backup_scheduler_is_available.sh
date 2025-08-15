@@ -9,10 +9,10 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_CURRENT_EPOCH,EXPECTED_RC" \
-    "too_early___,1753005000,1" \
-    "too_late____,1753025000,1" \
-    "in_between__,1753015000,0"
+    "TEST_CURRENT_EPOCH;EXPECTED_RC" \
+    "too_early___;1753005000;1" \
+    "too_late____;1753025000;1" \
+    "in_between__;1753015000;0"
 }
 
 test_backup_scheduler_is_available__@vary__returns_correct_status_code() {

@@ -13,11 +13,11 @@ setup() {
   @parametrize \
     "${1}" \
     "@fixture _backup_manifest_load.mock.set.subcommand 'fake_manifest_n_entries \${MANIFEST_ENTRIES} \${FAKE_MANIFEST_GROUP_START_INDEX} \${FAKE_MANIFEST_GROUP_LIMIT}' " \
-    "MANIFEST_ENTRIES,MANIFEST_COMMAND_CALL_COUNT,FAKE_MANIFEST_START_INDEX,FAKE_MANIFEST_GROUP_START_INDEX,FAKE_MANIFEST_GROUP_LIMIT,MANIFEST_GROUP_FILTER,MANIFEST_JOB_FILTER" \
-    "2_manifest_entries,2,2,0,0,0,,," \
-    "3_manifest_entries,3,3,0,0,0,,," \
-    "3_manifest_entries__filtered_by_group,3,1,2,2,2,job_group2,," \
-    "3_manifest_entries__filtered_by_job,3,1,2,2,2,,job_name2"
+    "MANIFEST_ENTRIES;MANIFEST_COMMAND_CALL_COUNT;FAKE_MANIFEST_START_INDEX;FAKE_MANIFEST_GROUP_START_INDEX;FAKE_MANIFEST_GROUP_LIMIT;MANIFEST_GROUP_FILTER;MANIFEST_JOB_FILTER" \
+    "2_manifest_entries;2;2;0;0;0;;;" \
+    "3_manifest_entries;3;3;0;0;0;;;" \
+    "3_manifest_entries__filtered_by_group;3;1;2;2;2;job_group2;;" \
+    "3_manifest_entries__filtered_by_job;3;1;2;2;2;;job_name2"
 }
 
 test_backup_manifest_all_command__loads_manifest() {
