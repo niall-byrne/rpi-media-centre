@@ -3,7 +3,7 @@
 set -eo pipefail
 
 export RPI_WORKING_DIRECTORY="/rpi-media-centre"
-export TEST_FORMAT="${TEST_FORMAT:-"%s"}"
+export STDLIB_TRACEBACK_DISABLE_BOOLEAN=1
 
 # $1: a filter to match tests by
 
@@ -17,7 +17,7 @@ _test_runner_discover() {
       continue
     fi
     __RPI_TEST_RUNNER_DISCOVERED_TEST_MODULES+=("${__RPI_TEST_RUNNER_DISCOVERED_TEST_FILE}")
-  done < <(find "${RPI_WORKING_DIRECTORY}"/lib -name "test_*" -type f -print0)
+  done < <(find "${RPI_WORKING_DIRECTORY}"/{lib,stdlib} -name "test_*" -type f -print0)
 }
 
 _test_runner_execute() {
@@ -37,34 +37,26 @@ _test_runner_execute() {
   set -e
 }
 
-_test_runner_load_framework_support() {
-  # shellcheck source=lib/io.sh
-  source "${RPI_WORKING_DIRECTORY}/lib/io.sh"
-  # shellcheck source=lib/cli/pretty/__all__.sh
-  source "${RPI_WORKING_DIRECTORY}/lib/cli/pretty/__all__.sh"
+_test_runner_load_testing_framework() {
   # shellcheck source=lib/testing/__all__.sh
-  source "${RPI_WORKING_DIRECTORY}/lib/testing/__all__.sh"
-  _mock.compile
+  source "${RPI_WORKING_DIRECTORY}/stdlib/testing/__lib__.sh"
 }
 
-_test_runner_load_project() {
+_test_runner_load_stdlib() {
   # shellcheck source=lib/__all__.sh
-  source "${RPI_WORKING_DIRECTORY}/lib/__all__.sh"
-  # shellcheck source=lib/__fixtures__/__all__.sh
-  source "${RPI_WORKING_DIRECTORY}/lib/__fixtures__/__all__.sh"
+  source "${RPI_WORKING_DIRECTORY}/stdlib/__lib__.sh"
 }
 
 _test_runner_main() {
   local __RPI_TEST_RUNNER_DISCOVERED_TEST_MODULES=()
   local __RPI_TEST_RUNNER_EXIT_CODE
 
-  _test_runner_load_framework_support
-  _test_runner_load_project
-
-  _io_colours_escape
+  _test_runner_load_stdlib
+  _test_runner_load_testing_framework
 
   __mock.persistence.registry.create
-  trap __mock.persistence.registry.cleanup SIGINT
+
+  stdlib.trap.handler.exit.fn.register __mock.persistence.registry.cleanup
 
   # Allow specifying a file as the first argument
   _test_runner_discover "$1"
@@ -72,8 +64,6 @@ _test_runner_main() {
   shift || true
 
   _test_runner_execute "$@"
-
-  __mock.persistence.registry.cleanup
 
   exit "${__RPI_TEST_RUNNER_EXIT_CODE}"
 }

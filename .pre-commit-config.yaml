@@ -59,6 +59,13 @@ repos:
         stages: [pre-commit]
   - repo: local
     hooks:
+      - id: bash-coverage-stdlib
+        name: bash-unit-tests
+        entry: bash -c 'TEST_CONTAINER_CI=1 ./testing/container.sh bashcov --root stdlib t stdlib'
+        language: system
+        stages: [manual]
+        pass_filenames: false
+        require_serial: true
       - id: headers-source-file-library-root
         name: headers-source-file-library-root
         entry: "\\A(?!#!/bin/bash\n(# shellcheck disable=.+\n){0,1}\nset -Eeo pipefail\n).+\\Z"

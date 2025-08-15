@@ -34,7 +34,7 @@ main() {
     -v "${HOME}"/.gitignore_global:/home/pi1/.gitignore_global \
     --tmpfs /tmp \
     rpi-media-centre:test \
-    "${TEST_CONTAINER_COMMAND}"
+    "${TEST_CONTAINER_COMMAND}" "${@:2}"
 
   popd > /dev/null
 }

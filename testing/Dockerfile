@@ -8,12 +8,11 @@ ARG UNAME2=pi2
 ARG UID2=2001
 ARG GID2=2001
 
-
 ENV PATH="${PATH}:/rpi-media-centre/testing"
 
 RUN \
   apt-get update \
-  && apt-get install -y bash-completion ca-certificates curl gettext git mandoc rsync sudo unzip uuid-runtime vim \
+  && apt-get install -y bash-completion ca-certificates curl gettext git mandoc ruby rsync sudo unzip uuid-runtime vim \
   && install -m 0755 -d /etc/apt/keyrings \
   && curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc \
   && chmod a+r /etc/apt/keyrings/docker.asc \
@@ -45,6 +44,13 @@ RUN \
 RUN \
   curl -s https://raw.githubusercontent.com/bash-unit/bash_unit/master/install.sh | bash \
   && mv bash_unit /usr/local/bin
+
+COPY /testing/bashcov.patch /root/bashcov.patch
+
+RUN \
+  gem install specific_install && \
+  gem specific_install -l https://github.com/niall-byrne/bashcov.git && \
+  patch /var/lib/gems/3.2.0/gems/bashcov-3.2.0/bin/bashcov /root/bashcov.patch
 
 WORKDIR /rpi-media-centre
 
