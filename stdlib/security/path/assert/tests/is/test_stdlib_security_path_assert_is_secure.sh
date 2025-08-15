@@ -12,9 +12,9 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args_______________returns_status_code_127,,127" \
-    "extra_args____________returns_status_code_127,/etc|user1|group1|644|extra_arg,127"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args_______________returns_status_code_127;;127" \
+    "extra_args____________returns_status_code_127;/etc|user1|group1|644|extra_arg;127"
 }
 
 @parametrize_with_required_valid_arg_combos() {
@@ -22,11 +22,11 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_HAS_OWNER_RC,TEST_HAS_GROUP_RC,TEST_HAS_PERMS_RC,TEST_EXPECTED_RC" \
-    "test_ownership_fails__returns_status_code_1,1,0,0,1" \
-    "test_group_fails______returns_status_code_1,0,1,0,1" \
-    "test_perms_fails______returns_status_code_1,0,0,1,1" \
-    "test_all_pass_________returns_status_code_0,0,0,0,0"
+    "TEST_HAS_OWNER_RC;TEST_HAS_GROUP_RC;TEST_HAS_PERMS_RC;TEST_EXPECTED_RC" \
+    "test_ownership_fails__returns_status_code_1;1;0;0;1" \
+    "test_group_fails______returns_status_code_1;0;1;0;1" \
+    "test_perms_fails______returns_status_code_1;0;0;1;1" \
+    "test_all_pass_________returns_status_code_0;0;0;0;0"
 }
 
 test_stdlib_security_path_assert_is_secure__invalid_args__@vary() {

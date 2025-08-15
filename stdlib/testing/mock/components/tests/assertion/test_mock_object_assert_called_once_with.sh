@@ -9,7 +9,7 @@ test_mock_object__assert_called_once_with__called_1_time__@vary__succeeds() {
   test_mock.mock.assert_called_once_with "${TEST_VALUE}"
 }
 
-@parametrize \
+_PARAMETRIZE_FIELD_SEPERATOR="," @parametrize \
   test_mock_object__assert_called_once_with__called_1_time__@vary__succeeds \
   "TEST_VALUE" \
   "simple__digit__,1" \
@@ -31,7 +31,7 @@ test_mock_object__assert_called_once_with__called_1_time__@vary__fails() {
     "${TEST_OUTPUT}"
 }
 
-@parametrize \
+_PARAMETRIZE_FIELD_SEPERATOR="," @parametrize \
   test_mock_object__assert_called_once_with__called_1_time__@vary__fails \
   "TEST_VALUE" \
   "simple__digit__,1" \
@@ -56,7 +56,7 @@ test_mock_object__assert_called_once_with__multple_calls__@vary__fails() {
     "${TEST_OUTPUT}"
 }
 
-@parametrize \
+_PARAMETRIZE_FIELD_SEPERATOR="," @parametrize \
   test_mock_object__assert_called_once_with__multple_calls__@vary__fails \
   "TEST_VALUE,EXPECTED_COUNT" \
   "not_called_______empty_string,"",0" \

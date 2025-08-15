@@ -11,12 +11,12 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args____________returns_status_code_127,,127" \
-    "extra_arg__________returns_status_code_127,/etc|user1|extra_arg,127" \
-    "null_path__________returns_status_code_126,|user1,126" \
-    "null_user__________returns_status_code_126,/etc||,126" \
-    "non_existent_path__returns_status_code_126,non-existent|user1,126"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args____________returns_status_code_127;;127" \
+    "extra_arg__________returns_status_code_127;/etc|user1|extra_arg;127" \
+    "null_path__________returns_status_code_126;|user1;126" \
+    "null_user__________returns_status_code_126;/etc||;126" \
+    "non_existent_path__returns_status_code_126;non-existent|user1;126"
 }
 
 test_stdlib_security_path_query_has_owner__invalid_args__@vary() {

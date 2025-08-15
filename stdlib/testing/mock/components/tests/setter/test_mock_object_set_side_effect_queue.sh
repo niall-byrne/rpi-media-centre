@@ -20,8 +20,8 @@ test_mock_object__set.side_effects__@vary__calls_side_effect_as_expected() {
 
 @parametrize \
   "test_mock_object__set.side_effects__@vary__calls_side_effect_as_expected" \
-  "SIDE_EFFECTS_DEFINITION,TEST_EXPECTED_OUTPUT_1,TEST_EXPECTED_OUTPUT_2,TEST_EXPECTED_OUTPUT_3" \
-  "three_side_effects,echo sandwich|echo pizza|echo wrap,sandwich,pizza,wrap" \
-  "two___side_effects,echo biking|echo running,biking,running,," \
-  "one___side_effects,echo workout,workout,,," \
-  "no_elements_______,,,,,"
+  "SIDE_EFFECTS_DEFINITION;TEST_EXPECTED_OUTPUT_1;TEST_EXPECTED_OUTPUT_2;TEST_EXPECTED_OUTPUT_3" \
+  "three_side_effects;echo sandwich|echo pizza|echo wrap;sandwich;pizza;wrap" \
+  "two___side_effects;echo biking|echo running;biking;running;;" \
+  "one___side_effects;echo workout;workout;;;" \
+  "no_elements_______;;;;;"

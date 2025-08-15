@@ -9,12 +9,12 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args__________returns_status_code_127,,127" \
-    "extra_arg________returns_status_code_127,ARRAY1|#|not_a_real_file.txt|extra_arg,127" \
-    "null_array_name__returns_status_code_126,|#|not_a_real_file.txt,126" \
-    "null_seperator___returns_status_code_126,test||not_a_real_file.txt,126" \
-    "null_file_name___returns_status_code_126,test|#||,126"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args__________returns_status_code_127;;127" \
+    "extra_arg________returns_status_code_127;ARRAY1|#|not_a_real_file.txt|extra_arg;127" \
+    "null_array_name__returns_status_code_126;|#|not_a_real_file.txt;126" \
+    "null_seperator___returns_status_code_126;test||not_a_real_file.txt;126" \
+    "null_file_name___returns_status_code_126;test|#||;126"
 }
 
 test_stdlib_array_make_from_file__@vary() {

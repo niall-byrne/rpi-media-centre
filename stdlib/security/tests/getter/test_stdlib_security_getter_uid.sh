@@ -9,10 +9,10 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args_____returns_status_code_127,,127" \
-    "null_user___returns_status_code_126,|,126" \
-    "extra_arg___returns_status_code_127,user1|extra_arg,127"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args_____returns_status_code_127;;127" \
+    "null_user___returns_status_code_126;|;126" \
+    "extra_arg___returns_status_code_127;user1|extra_arg;127"
 }
 
 @parametrize_with_id_output() {
@@ -21,8 +21,8 @@ setup() {
   @parametrize \
     "${1}" \
     "ID_STDOUT" \
-    "uid_501_,501" \
-    "uid_1001,1001"
+    "uid_501_;501" \
+    "uid_1001;1001"
 }
 
 test_security_get_uid__@vary() {

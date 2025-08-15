@@ -13,12 +13,12 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args__________returns_status_code_127,,127" \
-    "extra_arg________returns_status_code_127,ARRAY1|extra_arg,127" \
-    "arg_is_string____returns_status_code_126,NOT_ARRAY,126" \
-    "populated_array__returns_status_code___0,ARRAY1,1" \
-    "empty_array______returns_status_code___0,EMPTY_ARRAY,0"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args__________returns_status_code_127;;127" \
+    "extra_arg________returns_status_code_127;ARRAY1|extra_arg;127" \
+    "arg_is_string____returns_status_code_126;NOT_ARRAY;126" \
+    "populated_array__returns_status_code___0;ARRAY1;1" \
+    "empty_array______returns_status_code___0;EMPTY_ARRAY;0"
 }
 
 # shellcheck disable=SC2034

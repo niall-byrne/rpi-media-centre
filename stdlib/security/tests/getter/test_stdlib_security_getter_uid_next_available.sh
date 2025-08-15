@@ -16,8 +16,8 @@ pi2:x:2001:2001::/home/pi2:/bin/bash
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "extra_arg___returns_status_code_127,extra_arg,127"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "extra_arg___returns_status_code_127;extra_arg;127"
 }
 
 test_security_get_unused_uid__@vary() {

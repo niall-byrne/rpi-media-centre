@@ -5,9 +5,9 @@
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args________returns_status_code_127,,127" \
-    "extra_arg______returns_status_code_127,10|input_string|extra_arg,127"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args________returns_status_code_127;;127" \
+    "extra_arg______returns_status_code_127;10|input_string|extra_arg;127"
 }
 
 # shellcheck disable=SC2034

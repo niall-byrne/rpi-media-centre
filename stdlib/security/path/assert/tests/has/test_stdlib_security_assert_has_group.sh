@@ -10,12 +10,12 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args____________127,,127" \
-    "extra_arg__________127,/etc|group1|extra_arg,127" \
-    "null_path__________126,|group1,126" \
-    "null_group_________126,/etc||,126" \
-    "non_existent_path__126,non-existent|group1,126"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args____________127;;127" \
+    "extra_arg__________127;/etc|group1|extra_arg;127" \
+    "null_path__________126;|group1;126" \
+    "null_group_________126;/etc||;126" \
+    "non_existent_path__126;non-existent|group1;126"
 }
 
 # shellcheck disable=SC2034

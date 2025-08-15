@@ -10,9 +10,9 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC,TEST_EXPECTED_ERROR_MESSAGE" \
-    "no_args_______127,,127,_testing.load: Invalid arguments!" \
-    "extra_arg_____127,non-existent_target.sh|extra_arg,127,_testing.load: Invalid arguments!"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC;TEST_EXPECTED_ERROR_MESSAGE" \
+    "no_args_______127;;127;_testing.load: Invalid arguments!" \
+    "extra_arg_____127;non-existent_target.sh|extra_arg;127;_testing.load: Invalid arguments!"
 }
 
 test_stdlib_testing_load__@vary__returns_expected_status_code() {

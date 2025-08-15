@@ -9,14 +9,14 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args________________returns_status_code_127,,127" \
-    "extra_args_____________returns_status_code_127,%s|test_array|extra_arg,127" \
-    "null_array_____________returns_status_code_126,%s||,126" \
-    "null_format_string_____returns_status_code_126,|test_array,126" \
-    "invalid_array__________returns_status_code_126,%s|invalid_array,126" \
-    "invalid_format_string__returns_status_code_126,|test_array,126" \
-    "both_valid_____________returns_status_code___0,%s|test_array,0"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args________________returns_status_code_127;;127" \
+    "extra_args_____________returns_status_code_127;%s|test_array|extra_arg;127" \
+    "null_array_____________returns_status_code_126;%s||;126" \
+    "null_format_string_____returns_status_code_126;|test_array;126" \
+    "invalid_array__________returns_status_code_126;%s|invalid_array;126" \
+    "invalid_format_string__returns_status_code_126;|test_array;126" \
+    "both_valid_____________returns_status_code___0;%s|test_array;0"
 }
 
 # shellcheck disable=SC2034

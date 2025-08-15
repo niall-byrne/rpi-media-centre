@@ -12,13 +12,13 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args_______________returns_status_code_127,,127" \
-    "extra_arg_____________returns_status_code_127,ARRAY1|value|extra_arg,127" \
-    "array_arg_is_string___returns_status_code_126,NOT_ARRAY|value,126" \
-    "value_arg_is_null_____returns_status_code___1,ARRAY1||,1" \
-    "value_is_not_present__returns_status_code___1,ARRAY1|beef,1" \
-    "value_is_present______returns_status_code___0,ARRAY1|wraps,0"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args_______________returns_status_code_127;;127" \
+    "extra_arg_____________returns_status_code_127;ARRAY1|value|extra_arg;127" \
+    "array_arg_is_string___returns_status_code_126;NOT_ARRAY|value;126" \
+    "value_arg_is_null_____returns_status_code___1;ARRAY1||;1" \
+    "value_is_not_present__returns_status_code___1;ARRAY1|beef;1" \
+    "value_is_present______returns_status_code___0;ARRAY1|wraps;0"
 }
 
 @parametrize_with_error_messages() {
@@ -26,11 +26,11 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_LOG_MESSAGE" \
-    "extra_arg___________,ARRAY1|value|extra_arg,Invalid arguments provided!" \
-    "array_arg_is_string_,NOT_ARRAY|value,Invalid arguments provided!" \
-    "value_arg_is_null___,ARRAY1||,The value '' is not found in the 'ARRAY1' array!" \
-    "value_is_not_present,ARRAY1|beef,The value 'beef' is not found in the 'ARRAY1' array!"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_LOG_MESSAGE" \
+    "extra_arg___________;ARRAY1|value|extra_arg;Invalid arguments provided!" \
+    "array_arg_is_string_;NOT_ARRAY|value;Invalid arguments provided!" \
+    "value_arg_is_null___;ARRAY1||;The value '' is not found in the 'ARRAY1' array!" \
+    "value_is_not_present;ARRAY1|beef;The value 'beef' is not found in the 'ARRAY1' array!"
 }
 
 test_stdlib_array_assert_contains__@vary() {

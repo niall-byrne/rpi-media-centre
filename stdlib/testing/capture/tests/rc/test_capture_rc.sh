@@ -16,6 +16,6 @@ test_capture_rc__correct_rc____@vary__succeeds() {
 
 @parametrize \
   test_capture_rc__correct_rc____@vary__succeeds \
-  "TEST_FUNCTION,EXPECTED_RC" \
-  "return_code_0__,mock_function_rc_0,0" \
-  "return_code_127,mock_function_rc_127,127"
+  "TEST_FUNCTION;EXPECTED_RC" \
+  "return_code_0__;mock_function_rc_0;0" \
+  "return_code_127;mock_function_rc_127;127"

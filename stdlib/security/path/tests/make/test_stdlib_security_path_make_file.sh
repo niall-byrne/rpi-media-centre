@@ -11,13 +11,13 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args_____returns_status_code_127,,127" \
-    "extra_args__returns_status_code_127,/etc|user1|group1|644|extra_arg,127" \
-    "null_path___returns_status_code_126,|user1|group1|644,126" \
-    "null_owner__returns_status_code_126,/etc||group1|644,126" \
-    "null_group__returns_status_code_126,/etc|user1||644,126" \
-    "null_perms__returns_status_code_126,/etc|user1|group1||,126"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args_____returns_status_code_127;;127" \
+    "extra_args__returns_status_code_127;/etc|user1|group1|644|extra_arg;127" \
+    "null_path___returns_status_code_126;|user1|group1|644;126" \
+    "null_owner__returns_status_code_126;/etc||group1|644;126" \
+    "null_group__returns_status_code_126;/etc|user1||644;126" \
+    "null_perms__returns_status_code_126;/etc|user1|group1||;126"
 }
 
 test_stdlib_security_path_make_file__invalid_args__@vary() {

@@ -10,26 +10,26 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args____________returns_status_code_127,,127" \
-    "extra_arg__________returns_status_code_127,1|extra_arg,127" \
-    "empty_string_______returns_status_code_126,|,126" \
-    "alphanumeric_______returns_status_code___1,aa011,1" \
-    "non_boolean_digit__returns_status_code___1,3,1" \
-    "boolean_off________returns_status_code___0,0,0" \
-    "boolean_on_________returns_status_code___0,1,0"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args____________returns_status_code_127;;127" \
+    "extra_arg__________returns_status_code_127;1|extra_arg;127" \
+    "empty_string_______returns_status_code_126;|;126" \
+    "alphanumeric_______returns_status_code___1;aa011;1" \
+    "non_boolean_digit__returns_status_code___1;3;1" \
+    "boolean_off________returns_status_code___0;0;0" \
+    "boolean_on_________returns_status_code___0;1;0"
 }
 
 @parametrize_with_error_messages() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_LOG_MESSAGE" \
-    "no_args__________,,Invalid arguments provided!," \
-    "extra_arg________,1|extra_arg,Invalid arguments provided!," \
-    "empty_string_____,|,The value '' is not a set string containing a boolean (0 or 1)!" \
-    "alphanumeric_____,aa011,The value 'aa011' is not a set string containing a boolean (0 or 1)!" \
-    "non_boolean_digit,3,The value '3' is not a set string containing a boolean (0 or 1)!"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_LOG_MESSAGE" \
+    "no_args__________;;Invalid arguments provided!;" \
+    "extra_arg________;1|extra_arg;Invalid arguments provided!;" \
+    "empty_string_____;|;The value '' is not a set string containing a boolean (0 or 1)!" \
+    "alphanumeric_____;aa011;The value 'aa011' is not a set string containing a boolean (0 or 1)!" \
+    "non_boolean_digit;3;The value '3' is not a set string containing a boolean (0 or 1)!"
 }
 
 # shellcheck disable=SC2034

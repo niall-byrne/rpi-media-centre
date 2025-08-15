@@ -13,5 +13,5 @@ test_mock_object__set.stderr__@vary__generates_correct_output() {
 @parametrize \
   "test_mock_object__set.stderr__@vary__generates_correct_output" \
   "EXPECTED_STDERR" \
-  "string1,string1" \
-  "string2,string2"
+  "string1;string1" \
+  "string2;string2"

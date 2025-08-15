@@ -22,8 +22,8 @@ setup() {
   @parametrize \
     "${1}" \
     "SHOW_FN_NAME_VALUE" \
-    "show_fn_names_enabled,1" \
-    "show_fn_names_disabled,0"
+    "show_fn_names_enabled;1" \
+    "show_fn_names_disabled;0"
 }
 
 @parametrize_with_debug() {
@@ -32,8 +32,8 @@ setup() {
   @parametrize \
     "${1}" \
     "DEBUG_VALUE" \
-    "debug_enabled,1" \
-    "debug_disabled,0"
+    "debug_enabled;1" \
+    "debug_disabled;0"
 }
 
 test_parametrize_components_create_fn_test_variant__debug_disabled__does_not_call_debug() {

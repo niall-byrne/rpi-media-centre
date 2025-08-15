@@ -9,12 +9,12 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args_____________returns_status_code_127,,127" \
-    "extra_arg___________returns_status_code_127,ARRAY1|#|input_string|extra_arg,127" \
-    "null_array_name_____returns_status_code_126,|#|input string,126" \
-    "null_seperator______returns_status_code_126,test||input string,126" \
-    "null_source_string__returns_status_code_0,test|#||,0"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args_____________returns_status_code_127;;127" \
+    "extra_arg___________returns_status_code_127;ARRAY1|#|input_string|extra_arg;127" \
+    "null_array_name_____returns_status_code_126;|#|input string;126" \
+    "null_seperator______returns_status_code_126;test||input string;126" \
+    "null_source_string__returns_status_code_0;test|#||;0"
 }
 
 test_stdlib_array_make_from_string__@vary() {

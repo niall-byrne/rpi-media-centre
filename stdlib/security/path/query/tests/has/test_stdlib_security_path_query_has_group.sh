@@ -11,12 +11,12 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args______________returns_status_code_127,,127" \
-    "extra_arg____________returns_status_code_127,/etc|group1|extra_arg,127" \
-    "null_path____________returns_status_code_126,|group1,126" \
-    "null_group___________returns_status_code_126,/etc||,126" \
-    "non_existent_path____returns_status_code_126,non-existent|group1,126"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args______________returns_status_code_127;;127" \
+    "extra_arg____________returns_status_code_127;/etc|group1|extra_arg;127" \
+    "null_path____________returns_status_code_126;|group1;126" \
+    "null_group___________returns_status_code_126;/etc||;126" \
+    "non_existent_path____returns_status_code_126;non-existent|group1;126"
 }
 
 test_stdlib_security_path_query_has_group__invalid_args__@vary() {

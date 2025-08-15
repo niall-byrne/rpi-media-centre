@@ -12,5 +12,5 @@ test_mock_object__set.rc__@vary__returns_correct_value() {
 @parametrize \
   "test_mock_object__set.rc__@vary__returns_correct_value" \
   "EXPECTED_RC" \
-  "with_rc_9,9" \
-  "with_rc_0,0"
+  "with_rc_9;9" \
+  "with_rc_0;0"

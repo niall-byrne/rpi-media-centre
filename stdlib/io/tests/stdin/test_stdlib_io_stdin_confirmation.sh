@@ -13,11 +13,11 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_KEY_STROKES,TEST_EXPECTED_RC" \
-    "simple_Y__,Y,0" \
-    "simple_n__,n,1" \
-    "many_keystrokes_ending_in_n,abcdefghijklmnn,1" \
-    "many_keystrokes_ending_in_Y,ABCDEFGHIJKLMNOPQRSTUVWXY,0"
+    "TEST_KEY_STROKES;TEST_EXPECTED_RC" \
+    "simple_Y__;Y;0" \
+    "simple_n__;n;1" \
+    "many_keystrokes_ending_in_n;abcdefghijklmnn;1" \
+    "many_keystrokes_ending_in_Y;ABCDEFGHIJKLMNOPQRSTUVWXY;0"
 }
 
 test_stdlib_io_stdin_confirmation__null_prompt__________________returns_expected_status_code() {

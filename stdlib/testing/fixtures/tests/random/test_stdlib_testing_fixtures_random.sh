@@ -6,8 +6,8 @@
   @parametrize \
     "${1}" \
     "TEST_REQUIRED_LENGTH" \
-    "10,10" \
-    "20,20"
+    "10;10" \
+    "20;20"
 }
 
 test_stdlib_testing_fixtures_random__default__________________is_50_characters_long() {

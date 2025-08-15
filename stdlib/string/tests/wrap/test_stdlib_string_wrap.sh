@@ -5,14 +5,14 @@
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "null_padding_____returns_status_code_126,|80|input_string,126" \
-    "invalid_padding__returns_status_code_126,aa|80|input_string,126" \
-    "null_limit_______returns_status_code_126,20||input_string,126" \
-    "invalid_limit____returns_status_code_126,20|aa|input_string,126" \
-    "extra_arg________returns_status_code_127,20|80|input_string|extra_arg,127" \
-    "null_input_______returns_status_code___0,20|80||,0" \
-    "valid_args_______returns_status_code___0,20|80|input_string,0"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "null_padding_____returns_status_code_126;|80|input_string;126" \
+    "invalid_padding__returns_status_code_126;aa|80|input_string;126" \
+    "null_limit_______returns_status_code_126;20||input_string;126" \
+    "invalid_limit____returns_status_code_126;20|aa|input_string;126" \
+    "extra_arg________returns_status_code_127;20|80|input_string|extra_arg;127" \
+    "null_input_______returns_status_code___0;20|80||;0" \
+    "valid_args_______returns_status_code___0;20|80|input_string;0"
 }
 
 # shellcheck disable=SC2034

@@ -17,13 +17,13 @@ _test_fn() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args__________returns_status_code_127,,127" \
-    "arg_is_null______returns_status_code_126,|,126" \
-    "extra_arg________returns_status_code_127,_test_fn|extra_arg,127" \
-    "arg_is_string____returns_status_code___1,not_fn_string,1" \
-    "arg_is_array_____returns_status_code___1,not_fn_array,1" \
-    "arg_is_function__returns_status_code___0,_test_fn,0"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args__________returns_status_code_127;;127" \
+    "arg_is_null______returns_status_code_126;|;126" \
+    "extra_arg________returns_status_code_127;_test_fn|extra_arg;127" \
+    "arg_is_string____returns_status_code___1;not_fn_string;1" \
+    "arg_is_array_____returns_status_code___1;not_fn_array;1" \
+    "arg_is_function__returns_status_code___0;_test_fn;0"
 }
 
 @parametrize_with_error_messages() {
@@ -31,10 +31,10 @@ _test_fn() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_LOG_MESSAGE" \
-    "arg_is_null____,|,The function '' doesn't exist!" \
-    "arg_is_string__,not_fn_string,The function 'not_fn_string' doesn't exist!" \
-    "arg_is_array___,not_fn_array,The function 'not_fn_array' doesn't exist!"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_LOG_MESSAGE" \
+    "arg_is_null____;|;The function '' doesn't exist!" \
+    "arg_is_string__;not_fn_string;The function 'not_fn_string' doesn't exist!" \
+    "arg_is_array___;not_fn_array;The function 'not_fn_array' doesn't exist!"
 }
 
 test_stdlib_fn_assert_is_fn__@vary() {

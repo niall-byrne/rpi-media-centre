@@ -9,12 +9,12 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args__________________returns_status_code_127,,127" \
-    "extra_arg________________returns_status_code_127,%s|input _string|extra_arg,127" \
-    "null_format_string_______returns_status_code_126,|input string,126" \
-    "format_string_and_input__returns_status_code___0,%s|input string,0" \
-    "null_input_______________returns_status_code___0,%s||,0"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args__________________returns_status_code_127;;127" \
+    "extra_arg________________returns_status_code_127;%s|input _string|extra_arg;127" \
+    "null_format_string_______returns_status_code_126;|input string;126" \
+    "format_string_and_input__returns_status_code___0;%s|input string;0" \
+    "null_input_______________returns_status_code___0;%s||;0"
 }
 
 test_stdlib_string_map_format__@vary() {

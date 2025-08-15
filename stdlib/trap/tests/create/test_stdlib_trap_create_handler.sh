@@ -15,12 +15,12 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args__________returns_status_code_127,,127" \
-    "name_is_null_____returns_status_code_126,|TEST_ARRAY,126" \
-    "array_is_string__returns_status_code_126,handler_name|NOT_AN_ARRAY,126" \
-    "extra_arg________returns_status_code_127,handler_name|TEST_ARRAY|extra_arg,127" \
-    "valid_args_______returns_status_code___0,handler_name|TEST_ARRAY,0"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args__________returns_status_code_127;;127" \
+    "name_is_null_____returns_status_code_126;|TEST_ARRAY;126" \
+    "array_is_string__returns_status_code_126;handler_name|NOT_AN_ARRAY;126" \
+    "extra_arg________returns_status_code_127;handler_name|TEST_ARRAY|extra_arg;127" \
+    "valid_args_______returns_status_code___0;handler_name|TEST_ARRAY;0"
 }
 
 @parametrize_with_handler_arg_combos() {
@@ -28,9 +28,9 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "valid_args__returns_status_code___0,,0" \
-    "extra_arg___returns_status_code_127,extra_arg,127"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "valid_args__returns_status_code___0;;0" \
+    "extra_arg___returns_status_code_127;extra_arg;127"
 }
 
 @parametrize_with_register_arg_combos() {
@@ -38,11 +38,11 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args_____returns_status_code_127,,127" \
-    "not_a_fn____returns_status_code_126,not_a_fn,126" \
-    "extra_arg___returns_status_code_127,_fn1|extra_arg,127" \
-    "valid_args__returns_status_code___0,_fn1,0"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args_____returns_status_code_127;;127" \
+    "not_a_fn____returns_status_code_126;not_a_fn;126" \
+    "extra_arg___returns_status_code_127;_fn1|extra_arg;127" \
+    "valid_args__returns_status_code___0;_fn1;0"
 }
 
 test_stdlib_trap_create_handler__@vary() {

@@ -10,10 +10,10 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "too_many_args______127,arg1|arg2,127" \
-    "insufficient_args__127,,127", \
-    "empty_arg__________126,|,126",
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "too_many_args______127;arg1|arg2;127" \
+    "insufficient_args__127;;127" \
+    "empty_arg__________126;|;126"
 }
 
 test_stdlib_io_filesystem_query_exists__@vary__________return_expected_status_code() {

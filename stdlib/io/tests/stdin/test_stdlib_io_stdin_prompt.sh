@@ -11,13 +11,13 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args_______________________________returns_status_code_127,,127" \
-    "extra_arg_____________________________returns_status_code_127,input_var|Enter a value:|password|extra_arg,127" \
-    "null_variable_name____________________returns_status_code_126,|Enter a value:|,126" \
-    "null_prompt___________________________returns_status_code___0,input_var|,0" \
-    "prompt_and_variable_name______________returns_status_code___0,input_var|Enter a value:,0" \
-    "prompt_and_variable_name_as_password__returns_status_code___0,input_var|Enter a value:|password,0"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args_______________________________returns_status_code_127;;127" \
+    "extra_arg_____________________________returns_status_code_127;input_var|Enter a value:|password|extra_arg;127" \
+    "null_variable_name____________________returns_status_code_126;|Enter a value:|;126" \
+    "null_prompt___________________________returns_status_code___0;input_var|;0" \
+    "prompt_and_variable_name______________returns_status_code___0;input_var|Enter a value:;0" \
+    "prompt_and_variable_name_as_password__returns_status_code___0;input_var|Enter a value:|password;0"
 }
 
 @parametrize_with_args_and_read_flags() {
@@ -25,10 +25,10 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_READ_ARGS" \
-    "variable_name_______________________,input_var,-rp Enter a value:  input_var" \
-    "prompt_and_variable_name____________,input_var|Enter a custom value:,-rp Enter a custom value: input_var" \
-    "prompt_and_variable_name_as_password,input_var|Enter a custom value:|password,-rsp Enter a custom value: input_var"
+    "TEST_ARGS_DEFINITION;TEST_READ_ARGS" \
+    "variable_name_______________________;input_var;-rp Enter a value:  input_var" \
+    "prompt_and_variable_name____________;input_var|Enter a custom value:;-rp Enter a custom value: input_var" \
+    "prompt_and_variable_name_as_password;input_var|Enter a custom value:|password;-rsp Enter a custom value: input_var"
 }
 
 test_stdlib_io_stdin_prompt__@vary() {

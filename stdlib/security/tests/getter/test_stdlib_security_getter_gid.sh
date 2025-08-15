@@ -9,10 +9,10 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args_____returns_status_code_127,,127" \
-    "null_group__returns_status_code_126,|,126" \
-    "extra_arg___returns_status_code_127,group1|extra_arg,127"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args_____returns_status_code_127;;127" \
+    "null_group__returns_status_code_126;|;126" \
+    "extra_arg___returns_status_code_127;group1|extra_arg;127"
 }
 
 @parametrize_with_getent_output() {
@@ -20,9 +20,9 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "GETENT_STDOUT,EXPECTED_GID" \
-    "gid_501_,mock_groupname:x:501:,501" \
-    "gid_1001,mock_groupname:x:1001:,1001"
+    "GETENT_STDOUT;EXPECTED_GID" \
+    "gid_501_;mock_groupname:x:501:;501" \
+    "gid_1001;mock_groupname:x:1001:;1001"
 }
 
 test_security_get_gid__@vary() {

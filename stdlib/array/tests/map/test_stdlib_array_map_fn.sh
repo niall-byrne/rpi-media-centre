@@ -13,14 +13,14 @@ _uppercase() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args_____________returns_status_code_127,,127" \
-    "extra_args__________returns_status_code_127,_uppercase|test_array|extra_arg,127" \
-    "null_array__________returns_status_code_126,_uppercase||,126" \
-    "null_fn_____________returns_status_code_126,|test_array,126" \
-    "invalid_fn__________returns_status_code_126,_invalid_fn_name|test_array,126" \
-    "invalid_array_______returns_status_code_126,_invalid_fn_name|invalid_array,126" \
-    "valid_fn_and_array__returns_status_code___0,_uppercase|test_array,0"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args_____________returns_status_code_127;;127" \
+    "extra_args__________returns_status_code_127;_uppercase|test_array|extra_arg;127" \
+    "null_array__________returns_status_code_126;_uppercase||;126" \
+    "null_fn_____________returns_status_code_126;|test_array;126" \
+    "invalid_fn__________returns_status_code_126;_invalid_fn_name|test_array;126" \
+    "invalid_array_______returns_status_code_126;_invalid_fn_name|invalid_array;126" \
+    "valid_fn_and_array__returns_status_code___0;_uppercase|test_array;0"
 }
 
 # shellcheck disable=SC2034

@@ -22,14 +22,14 @@ _example_fn_with_no_args() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args_________________________127,,127" \
-    "extra_arg_______________________127,_example_subtract_fn|3|extra_arg,127" \
-    "null_fn_name____________________126,|3,126" \
-    "null_arg_count__________________126,_example_subtract_fn||,126" \
-    "fn_name_does_not_exist__________126,non_existent|1,126" \
-    "arg_count_is_not_digit__________126,_example_subtract_fn|aa,126" \
-    "valid_fn_name_and_arg_count_____0__,_example_subtract_fn|3,0"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args_________________________127;;127" \
+    "extra_arg_______________________127;_example_subtract_fn|3|extra_arg;127" \
+    "null_fn_name____________________126;|3;126" \
+    "null_arg_count__________________126;_example_subtract_fn||;126" \
+    "fn_name_does_not_exist__________126;non_existent|1;126" \
+    "arg_count_is_not_digit__________126;_example_subtract_fn|aa;126" \
+    "valid_fn_name_and_arg_count_____0__;_example_subtract_fn|3;0"
 }
 
 test_stdlib_fn_derive_pipeable__invalid_args__@vary__returns_expected_status_code() {

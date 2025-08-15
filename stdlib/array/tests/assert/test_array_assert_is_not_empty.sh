@@ -14,12 +14,12 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args__________returns_status_code_127,,127" \
-    "extra_arg________returns_status_code_127,ARRAY1|extra_arg,127" \
-    "arg_is_string____returns_status_code_126,NOT_ARRAY,126" \
-    "empty_array______returns_status_code___1,EMPTY_ARRAY,1" \
-    "populated_array__returns_status_code___0,ARRAY1,0"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args__________returns_status_code_127;;127" \
+    "extra_arg________returns_status_code_127;ARRAY1|extra_arg;127" \
+    "arg_is_string____returns_status_code_126;NOT_ARRAY;126" \
+    "empty_array______returns_status_code___1;EMPTY_ARRAY;1" \
+    "populated_array__returns_status_code___0;ARRAY1;0"
 }
 
 @parametrize_with_error_messages() {
@@ -27,9 +27,9 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_LOG_MESSAGE" \
-    "arg_is_string__,NOT_ARRAY,The value 'NOT_ARRAY' is not an array!" \
-    "empty_array____,EMPTY_ARRAY,The array 'EMPTY_ARRAY' is empty!"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_LOG_MESSAGE" \
+    "arg_is_string__;NOT_ARRAY;The value 'NOT_ARRAY' is not an array!" \
+    "empty_array____;EMPTY_ARRAY;The array 'EMPTY_ARRAY' is empty!"
 }
 
 test_stdlib_array_assert_is_not_empty__@vary() {

@@ -8,11 +8,11 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args_________returns_status_code_127,,127" \
-    "extra_arg_______returns_status_code_127,RED|substring|string to colourize|extra_arg,127" \
-    "missing_colour__returns_status_code_126,|substring|string to colourize,126" \
-    "empty_string____returns_status_code___0,RED|substring||,0",
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args_________returns_status_code_127;;127" \
+    "extra_arg_______returns_status_code_127;RED|substring|string to colourize|extra_arg;127" \
+    "missing_colour__returns_status_code_126;|substring|string to colourize;126" \
+    "empty_string____returns_status_code___0;RED|substring||;0"
 }
 
 # shellcheck disable=SC2034

@@ -14,13 +14,13 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args__________________returns_status_code_127,,127" \
-    "fn_name_is_null__________returns_status_code_126,|NOT_AN_ARRAY,126" \
-    "array_is_invalid_________returns_status_code_126,clean_up_fn|NOT_AN_ARRAY,126" \
-    "boolean_is_invalid_______returns_status_code_126,clean_up_fn|TEST_ARRAY|a,126" \
-    "valid_args_with_boolean__returns_status_code___0,clean_up_fn|TEST_ARRAY|1,0" \
-    "valid_args_not_boolean___returns_status_code___0,clean_up_fn|TEST_ARRAY,0"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args__________________returns_status_code_127;;127" \
+    "fn_name_is_null__________returns_status_code_126;|NOT_AN_ARRAY;126" \
+    "array_is_invalid_________returns_status_code_126;clean_up_fn|NOT_AN_ARRAY;126" \
+    "boolean_is_invalid_______returns_status_code_126;clean_up_fn|TEST_ARRAY|a;126" \
+    "valid_args_with_boolean__returns_status_code___0;clean_up_fn|TEST_ARRAY|1;0" \
+    "valid_args_not_boolean___returns_status_code___0;clean_up_fn|TEST_ARRAY;0"
 }
 
 @parametrize_with_clean_up_fn_arg_combos() {
@@ -28,9 +28,9 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "valid_args__returns_status_code___0,,0" \
-    "extra_arg___returns_status_code_127,extra_arg,127"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "valid_args__returns_status_code___0;;0" \
+    "extra_arg___returns_status_code_127;extra_arg;127"
 }
 
 test_stdlib_trap_create_clean_up_fn__@vary() {

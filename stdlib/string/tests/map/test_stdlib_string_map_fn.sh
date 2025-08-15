@@ -11,13 +11,13 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args_______________returns_status_code_127,,127" \
-    "extra_arg_____________returns_status_code_127,_uppercase|input _string|extra_arg,127" \
-    "null_fn_______________returns_status_code_126,|input string,126" \
-    "invalid_fn_and_input__returns_status_code_126,_invalid_fn_name|input string,126" \
-    "null_input____________returns_status_code___0,_uppercase||,0" \
-    "valid_fn_and_input____returns_status_code___0,_uppercase|input string,0"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args_______________returns_status_code_127;;127" \
+    "extra_arg_____________returns_status_code_127;_uppercase|input _string|extra_arg;127" \
+    "null_fn_______________returns_status_code_126;|input string;126" \
+    "invalid_fn_and_input__returns_status_code_126;_invalid_fn_name|input string;126" \
+    "null_input____________returns_status_code___0;_uppercase||;0" \
+    "valid_fn_and_input____returns_status_code___0;_uppercase|input string;0"
 }
 
 test_stdlib_string_map_fn__@vary() {

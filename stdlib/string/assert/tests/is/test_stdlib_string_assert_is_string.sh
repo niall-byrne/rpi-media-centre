@@ -10,22 +10,22 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args_____________returns_status_code_127,,127" \
-    "extra_arg___________returns_status_code_127,aa011|extra_arg,127" \
-    "empty_string________returns_status_code___1,|,1" \
-    "single_char_string__returns_status_code___0,a,0" \
-    "multi_char_string___returns_status_code___0,aa011,0"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args_____________returns_status_code_127;;127" \
+    "extra_arg___________returns_status_code_127;aa011|extra_arg;127" \
+    "empty_string________returns_status_code___1;|;1" \
+    "single_char_string__returns_status_code___0;a;0" \
+    "multi_char_string___returns_status_code___0;aa011;0"
 }
 
 @parametrize_with_error_messages() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_LOG_MESSAGE" \
-    "no_args___________,,Invalid arguments provided!," \
-    "extra_arg_________,aa011|extra_arg,Invalid arguments provided!" \
-    "empty_string______,|,The value '' is not a set string!"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_LOG_MESSAGE" \
+    "no_args___________;;Invalid arguments provided!;" \
+    "extra_arg_________;aa011|extra_arg;Invalid arguments provided!" \
+    "empty_string______;|;The value '' is not a set string!"
 }
 
 # shellcheck disable=SC2034

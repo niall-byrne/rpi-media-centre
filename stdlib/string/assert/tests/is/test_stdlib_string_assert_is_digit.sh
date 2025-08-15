@@ -10,25 +10,25 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args____________returns_status_code_127,,127" \
-    "extra_arg__________returns_status_code_127,1|extra_arg,127" \
-    "empty_string_______returns_status_code_126,|,126" \
-    "alpha______________returns_status_code___1,aa,1" \
-    "alphanumeric_______returns_status_code___1,aa011,1" \
-    "numeric____________returns_status_code___0,003,0"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args____________returns_status_code_127;;127" \
+    "extra_arg__________returns_status_code_127;1|extra_arg;127" \
+    "empty_string_______returns_status_code_126;|;126" \
+    "alpha______________returns_status_code___1;aa;1" \
+    "alphanumeric_______returns_status_code___1;aa011;1" \
+    "numeric____________returns_status_code___0;003;0"
 }
 
 @parametrize_with_error_messages() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_LOG_MESSAGE" \
-    "no_args__________,,Invalid arguments provided!," \
-    "extra_arg________,1|extra_arg,Invalid arguments provided!," \
-    "empty_string_____,|,The value '' is not a set string containing a digit!" \
-    "alpha____________,aa,The value 'aa' is not a set string containing a digit!" \
-    "alphanumeric_____,aa011,The value 'aa011' is not a set string containing a digit!"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_LOG_MESSAGE" \
+    "no_args__________;;Invalid arguments provided!;" \
+    "extra_arg________;1|extra_arg;Invalid arguments provided!;" \
+    "empty_string_____;|;The value '' is not a set string containing a digit!" \
+    "alpha____________;aa;The value 'aa' is not a set string containing a digit!" \
+    "alphanumeric_____;aa011;The value 'aa011' is not a set string containing a digit!"
 }
 
 # shellcheck disable=SC2034

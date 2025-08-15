@@ -10,24 +10,24 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "no_args____________returns_status_code_127,,127" \
-    "extra_arg__________returns_status_code_127,a|extra_arg,127" \
-    "empty_string_______returns_status_code_126,|,126" \
-    "multi_char_string__returns_status_code___1,aa,1" \
-    "alpha_char_________returns_status_code___0,a,0" \
-    "numeric_char_______returns_status_code___0,1,0"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "no_args____________returns_status_code_127;;127" \
+    "extra_arg__________returns_status_code_127;a|extra_arg;127" \
+    "empty_string_______returns_status_code_126;|;126" \
+    "multi_char_string__returns_status_code___1;aa;1" \
+    "alpha_char_________returns_status_code___0;a;0" \
+    "numeric_char_______returns_status_code___0;1;0"
 }
 
 @parametrize_with_error_messages() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_LOG_MESSAGE" \
-    "no_args__________,,Invalid arguments provided!," \
-    "extra_arg________,a|extra_arg,Invalid arguments provided!," \
-    "empty_string_____,|,The value '' is not a set string containing a single char!" \
-    "multi_char_string,aa,The value 'aa' is not a set string containing a single char!"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_LOG_MESSAGE" \
+    "no_args__________;;Invalid arguments provided!;" \
+    "extra_arg________;a|extra_arg;Invalid arguments provided!;" \
+    "empty_string_____;|;The value '' is not a set string containing a single char!" \
+    "multi_char_string;aa;The value 'aa' is not a set string containing a single char!"
 }
 
 # shellcheck disable=SC2034

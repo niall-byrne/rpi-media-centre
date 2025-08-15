@@ -9,9 +9,9 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_ARGS_DEFINITION,TEST_EXPECTED_RC" \
-    "extra_arg___returns_status_code_127,group1|extra_arg,127" \
-    "no_args_____returns_status_code___0,,0"
+    "TEST_ARGS_DEFINITION;TEST_EXPECTED_RC" \
+    "extra_arg___returns_status_code_127;group1|extra_arg;127" \
+    "no_args_____returns_status_code___0;;0"
 }
 
 test_security_get_euid__@vary() {
