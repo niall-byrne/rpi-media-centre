@@ -12,4 +12,4 @@ _security_sanitize() {
   echo "${_TESTING_SANITIZE_VALUE//[\[\]\(\)\*\\\/;\ ]/}"
 }
 
-_io_make_var_function "_security_sanitize"
+stdlib.fn.derive.var "_security_sanitize"

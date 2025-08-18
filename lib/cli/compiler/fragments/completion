@@ -1,12 +1,11 @@
-_rpi_bash_completion()
-{
+_rpi_bash_completion() {
   local RPI_COMPLETION_COMMAND=""
   local RPI_COMPLETION_COMMAND_LAST=""
   local RPI_COMPLETION_INDEX
 
   for ((RPI_COMPLETION_INDEX = 0; RPI_COMPLETION_INDEX < "${#COMP_WORDS[@]}"; RPI_COMPLETION_INDEX++)); do
     RPI_COMPLETION_COMMAND+="|${COMP_WORDS[RPI_COMPLETION_INDEX]}"
-    if (( RPI_COMPLETION_INDEX + 1 < "${#COMP_WORDS[@]}" )); then
+    if ((RPI_COMPLETION_INDEX + 1 < "${#COMP_WORDS[@]}")); then
       RPI_COMPLETION_COMMAND_LAST+="|${COMP_WORDS[RPI_COMPLETION_INDEX]}"
     fi
   done
@@ -18,5 +17,6 @@ _rpi_bash_completion()
       _rpi_bash_completion_lookup "${RPI_COMPLETION_COMMAND_LAST}"
   )"
 
-  COMPREPLY=( $(compgen -W "${RPI_AVAILABLE_COMMANDS}" -- "${COMP_WORDS[COMP_CWORD]}") )
+  # shellcheck disable=SC2207
+  COMPREPLY=($(compgen -W "${RPI_AVAILABLE_COMMANDS}" -- "${COMP_WORDS[COMP_CWORD]}"))
 }

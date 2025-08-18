@@ -34,8 +34,7 @@ _backup_manifest_all_command() {
       continue
     fi
 
-    __backup_manifest_all_command_wrapper \
-      "${1}" \
+    __backup_manifest_all_command_wrapper "${1}" \
       "${RPI_BACKUP_JOBS_NAMES[RPI_BACKUP_JOBS_INDEX]}" \
       "${RPI_BACKUP_JOBS_GROUPS[RPI_BACKUP_JOBS_INDEX]}" \
       "${RPI_BACKUP_JOBS_LOCAL_SOURCES[RPI_BACKUP_JOBS_INDEX]}" \
@@ -76,16 +75,16 @@ _backup_manifest_help() {
     echo " RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH |an optional local path to an encryption key file"
     echo " RPI_BACKUP_JOB_REMOTE_TARGET              |an optional remote target for archival *(required when \`RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER\` is blank and \`RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER\` is also blank)"
     echo " RPI_BACKUP_JOB_REMOTE_PARAMETER           |optional extra parameters for remote archival *(only permitted when \`RPI_BACKUP_JOB_REMOTE_TARGET\` is set)"
-  } | _cli_pretty_columns
+  } | _cli_pretty_columns_pipe
 }
 
 _backup_manifest_line_invalid() {
-  _cli_log_error "The ${RPI_MANIFEST_BACKUP} file is improperly formatted!"
   {
+    echo "The ${RPI_MANIFEST_BACKUP} file is improperly formatted!"
     echo "Input Line: ${FILE_LINE}"
     _backup_job_log
     _backup_manifest_help
-  } >&2
+  } >&2 # KCOV_EXCLUDE_LINE
   return 127
 }
 
@@ -110,15 +109,15 @@ _backup_manifest_load() {
 
   _cli_log_notice "-- loading ${RPI_MANIFEST_BACKUP} file ... --"
 
-  if [[ ! -e "${RPI_MANIFEST_BACKUP}" ]]; then
+  if ! stdlib.io.path.query.is_exists "${RPI_MANIFEST_BACKUP}"; then
     _cli_log_error "Please create the ${RPI_MANIFEST_BACKUP} file to use this feature."
     {
       _backup_manifest_help
-    } >&2
+    } >&2 # KCOV_EXCLUDE_LINE
     return 127
   fi
 
-  _security_path_check "${RPI_MANIFEST_BACKUP}" "root" "root" "600"
+  stdlib.security.path.query.is_secure "${RPI_MANIFEST_BACKUP}" "root" "root" "600"
 
   while IFS= read -r FILE_LINE; do
 
@@ -163,14 +162,13 @@ _backup_manifest_load() {
     RPI_BACKUP_JOBS_REMOTE_TARGETS+=("${RPI_BACKUP_JOB_REMOTE_TARGET}")
     RPI_BACKUP_JOBS_REMOTE_PARAMETERS+=("${RPI_BACKUP_JOB_REMOTE_PARAMETER}")
 
-  done < "${RPI_MANIFEST_BACKUP}"
+  done < "${RPI_MANIFEST_BACKUP}" # KCOV_EXCLUDE_LINE
 }
 
 _backup_manifest_write_jobs_all() {
   local RPI_BACKUP_INITIAL_QUEUE="${RPI_BACKUP_QUEUE_NAMES[0]}"
   local RPI_BACKUP_PATH_NEW_JOB="${RPI_BACKUP_PATH_QUEUE_ROOT}/${RPI_BACKUP_INITIAL_QUEUE}/${RPI_BACKUP_JOB_NAME}"
 
-  # shellcheck disable=SC2089
   local RPI_BACKUP_JOB_DATA="
     -n \"${RPI_BACKUP_JOB_NAME}\"
     -s \"${RPI_BACKUP_JOB_LOCAL_SOURCE}\"
@@ -190,7 +188,7 @@ _backup_manifest_write_jobs_all() {
   {
     echo "#!/bin/bash"
     echo "pictl backup service job ${RPI_BACKUP_JOB_DATA} -q \"\${1}\""
-  } > "${RPI_BACKUP_PATH_NEW_JOB}"
+  } > "${RPI_BACKUP_PATH_NEW_JOB}" # KCOV_EXCLUDE_LINE
 
-  _security_path_secure "${RPI_BACKUP_PATH_NEW_JOB}" "root" "root" "700"
+  stdlib.security.path.secure "${RPI_BACKUP_PATH_NEW_JOB}" "root" "root" "700"
 }

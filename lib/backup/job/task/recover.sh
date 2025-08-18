@@ -12,7 +12,7 @@ _backup_job_task_recover() {
     "s3://"*)
       _backup_job_task_wrapper "_backup_job_task_recover_s3"
       ;;
-    *) ;;
+    *) ;; # KCOV_EXCLUDE_LINE
   esac
 }
 
@@ -33,8 +33,7 @@ _backup_job_task_recover_s3() {
     "${RPI_BACKUP_JOB_RECOVERED_FILENAME}" \
     "${RPI_BACKUP_JOB_UPLOAD_OPTIONS[@]}"
 
-  _security_path_secure \
-    "${RPI_BACKUP_JOB_RECOVERED_FILENAME}" \
+  stdlib.security.path.secure "${RPI_BACKUP_JOB_RECOVERED_FILENAME}" \
     "${RPI_SVC_USERNAME}" \
     "${RPI_SVC_GROUPNAME}" \
     "600"

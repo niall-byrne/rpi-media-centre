@@ -15,22 +15,22 @@ _cli_pretty_colour_n() {
   echo -ne "${!RPI_CLI_PRETTY_THEME_COLOUR}${2}${THEME_NC}"
 }
 
-_io_make_pipeable "_cli_pretty_colour_n" "2"
+stdlib.fn.derive.pipeable "_cli_pretty_colour_n" "2"
 
-_io_make_var_function "_cli_pretty_colour_n" "_cli_pretty_colour_var"
+stdlib.fn.derive.var "_cli_pretty_colour_n" "_cli_pretty_colour_var"
 
 _cli_pretty_colour() {
   # $1: the theme colour
   # $2: the source string
 
-  local RPI_CLI_PRETTY_OUTPUT
+  local RPI_CLI_PRETTY_THEME_COLOUR
 
-  RPI_CLI_PRETTY_OUTPUT="$(_cli_pretty_colour_n "${1}" "${2}")"
+  RPI_CLI_PRETTY_THEME_COLOUR="THEME_${1}"
 
-  echo -e "${RPI_CLI_PRETTY_OUTPUT}"
+  echo -e "${!RPI_CLI_PRETTY_THEME_COLOUR}${2}${THEME_NC}"
 }
 
-_io_make_pipeable "_cli_pretty_colour" "2"
+stdlib.fn.derive.pipeable "_cli_pretty_colour" "2"
 
 _cli_pretty_colour_substring() {
   # $1: the theme colour
@@ -44,9 +44,9 @@ _cli_pretty_colour_substring() {
   echo -e "${3/${2}/${!RPI_CLI_PRETTY_THEME_COLOUR}${2}${THEME_NC}}"
 }
 
-_io_make_pipeable "_cli_pretty_colour_substring" "3"
+stdlib.fn.derive.pipeable "_cli_pretty_colour_substring" "3"
 
-_io_make_var_function "_cli_pretty_colour_substring"
+stdlib.fn.derive.var "_cli_pretty_colour_substring"
 
 _cli_pretty_colour_substrings() {
   # $1: the theme colour
@@ -60,6 +60,6 @@ _cli_pretty_colour_substrings() {
   echo -e "${3//${2}/${!RPI_CLI_PRETTY_THEME_COLOUR}${2}${THEME_NC}}"
 }
 
-_io_make_pipeable "_cli_pretty_colour_substrings" "3"
+stdlib.fn.derive.pipeable "_cli_pretty_colour_substrings" "3"
 
-_io_make_var_function "_cli_pretty_colour_substrings"
+stdlib.fn.derive.var "_cli_pretty_colour_substrings"

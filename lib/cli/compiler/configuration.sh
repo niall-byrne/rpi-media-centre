@@ -40,7 +40,7 @@ _cli_compiler_configuration_load_to_buffer() {
         ;;
     esac
 
-  done < "${RPI_WORKING_DIRECTORY}/lib/cli/config"
+  done < "${RPI_PATH_COMPILED_CLI_SOURCE}" # KCOV_EXCLUDE_LINE
 
   RPI_COMPILER_STAGE=4
   "${1}"

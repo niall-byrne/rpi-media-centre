@@ -26,7 +26,7 @@ _security_validate_ids_relationship() {
   # $2: the name of the required variable
   # $3: the name of the associated entity
 
-  _io_ensure_vars_set "3" "${@}"
+  stdlib.fn.args.require "3" "0" "${@}"
 
   if [[ -n "${!1}" ]] &&
     [[ -z "${!2}" ]]; then

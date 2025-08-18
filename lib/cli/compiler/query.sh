@@ -32,7 +32,7 @@ _cli_compiler_query_is_compilation_required() {
 }
 
 _cli_compiler_query_is_existing_cli_compatible() {
-  if [[ ! -f "${RPI_PATH_COMPILED_CLI}" ]]; then
+  if ! stdlib.io.path.query.is_file "${RPI_PATH_COMPILED_CLI}"; then
     echo "No existing CLI, compiling ..."
     return 1
   fi
