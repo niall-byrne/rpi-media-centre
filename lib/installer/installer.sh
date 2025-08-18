@@ -49,7 +49,7 @@ _installer_service_repository() {
 
   _cli_log_warning "INSTALLER: Installing repository to ${RPI_REPOSITORY_LOCATION} ..."
 
-  _security_path_mkdir "${RPI_REPOSITORY_LOCATION}" "${RPI_SVC_USERNAME}" "${RPI_SVC_GROUPNAME}" "700"
+  stdlib.security.path.make.dir "${RPI_REPOSITORY_LOCATION}" "${RPI_SVC_USERNAME}" "${RPI_SVC_GROUPNAME}" "700"
 
   if [[ -d "${RPI_REPOSITORY_LOCATION}/source/.git" ]]; then
     sudo chown "${RPI_SVC_USERNAME}":"${RPI_SVC_GROUPNAME}" -R "${RPI_REPOSITORY_LOCATION}/source"
@@ -79,7 +79,7 @@ _installer_service_shim() {
     '${RPI_REPOSITORY_LOCATION}' < services/cli/shim.sh \
     > /usr/local/sbin/pictl
 
-  _security_path_secure /usr/local/sbin/pictl "root" "root" "755"
+  stdlib.security.path.secure /usr/local/sbin/pictl "root" "root" "755"
 
   _cli_log_success "INSTALLER: Service shim installed!"
 }

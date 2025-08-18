@@ -15,11 +15,46 @@ _backup_cli_keyfile-s3() {
 
   _cli_log_warning "BACKUP SCHEDULER: Generating a new AWS S3 encryption key ..."
 
-  _filesystem_check_does_not_exist "${1}"
-  openssl rand 32 > "${1}"
-  _security_path_secure "${1}" "root" "root" "600"
+  stdlib.io.path.assert.not_exists "${1}"
+  openssl rand -out "${1}" 32
+  stdlib.security.path.secure "${1}" "root" "root" "600"
 
   _cli_log_success "BACKUP SCHEDULER: Successfully generated '${1}' !"
+}
+
+_backup_cli_queue_cli_remove() {
+  # $1: the name of the backup job to remove
+
+  if [[ -z "${1}" ]]; then
+    _backup_cli_queue_cli_usage_error
+  fi
+
+  _cli_log_warning "BACKUP SCHEDULER: Remove queued backup jobs matching '${1}' ..."
+
+  _backup_scheduler_make_queues
+
+  if stdlib.io.stdin.confirmation; then
+    find "${RPI_BACKUP_PATH_QUEUE_ROOT}" -type f -name "${1}" -delete
+    _cli_log_success "BACKUP SCHEDULER: Queued backup jobs matching '${1}' have been removed !"
+  fi
+}
+
+_backup_cli_queue_cli_remove-all() {
+  _cli_log_warning "BACKUP SCHEDULER: Remove *all* queued backup jobs ..."
+
+  _backup_scheduler_make_queues
+
+  if stdlib.io.stdin.confirmation; then
+    find "${RPI_BACKUP_PATH_QUEUE_ROOT}" -type f -delete
+    _cli_log_success "BACKUP SCHEDULER: All queued backup jobs have been removed !"
+  fi
+}
+
+_backup_cli_queue_cli_show() {
+  _backup_scheduler_make_queues
+
+  _dependencies_group_backups_cli_queue
+  tree "${RPI_BACKUP_PATH_QUEUE_ROOT}"
 }
 
 _backup_cli_recover() {
@@ -37,41 +72,6 @@ _backup_cli_recover() {
   RPI_BACKUP_JOB_RECOVERY_PATH="$(_filesystem_resolve_path_relative_to_cli "${2}")"
 
   _backup_manifest_all_command "_backup_job_task_recover" "" "${1}"
-}
-
-_backup_cli_queue_cli_remove() {
-  # $1: the name of the backup job to remove
-
-  if [[ -z "${1}" ]]; then
-    _backup_cli_queue_cli_usage_error
-  fi
-
-  _cli_log_warning "BACKUP SCHEDULER: Remove queued backup jobs matching '${1}' ..."
-
-  _backup_scheduler_make_queues
-
-  _io_prompt_confirmation
-  find "${RPI_BACKUP_PATH_QUEUE_ROOT}" -type f -name "${1}" -delete
-
-  _cli_log_success "BACKUP SCHEDULER: Queued backup jobs matching '${1}' have been removed !"
-}
-
-_backup_cli_queue_cli_remove-all() {
-  _cli_log_warning "BACKUP SCHEDULER: Remove *all* queued backup jobs ..."
-
-  _backup_scheduler_make_queues
-
-  _io_prompt_confirmation
-  find "${RPI_BACKUP_PATH_QUEUE_ROOT}" -type f -delete
-
-  _cli_log_success "BACKUP SCHEDULER: All queued backup jobs have been removed !"
-}
-
-_backup_cli_queue_cli_show() {
-  _backup_scheduler_make_queues
-
-  _dependencies_group_backups_cli_queue
-  tree "${RPI_BACKUP_PATH_QUEUE_ROOT}"
 }
 
 _backup_cli_schedule() {

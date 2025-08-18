@@ -34,36 +34,35 @@ _dependencies_group_containers() {
 }
 
 _dependencies_group_disks_cli_filesystem() {
-  _dependencies_enforce \
-    "lsblk" \
+  _dependencies_enforce "lsblk" \
     "The application lsblk" \
     "Please consider running: sudo apt-get install util-linux"
 }
 
 _dependencies_group_disks_cli_hardware() {
   _dependencies_requirement_generic "hdparm"
-  _dependencies_group_disks_cli_filesystem
+
+  _dependencies_enforce "lsblk" \
+    "The application lsblk" \
+    "Please consider running: sudo apt-get install util-linux"
 }
 
 _dependencies_group_disks_crypt() {
   _dependencies_requirement_generic "cryptsetup"
 }
 
-_dependencies_group_manifest_cli_editor() {
-  _dependencies_requirement_manifest_editor
-}
-
 _dependencies_group_installer() {
-  _dependencies_enforce \
-    "envsubst" \
+  _dependencies_enforce "envsubst" \
     "The application envsubst" \
     "Please consider running: sudo apt-get install gettext-base"
 
   _dependencies_requirement_generic "git"
 
-  _dependencies_enforce \
-    "systemd" \
+  _dependencies_enforce "systemd" \
     "The application systemd" \
-    "You may be using a different init system, that's ok, but it's not officially supported.
-    It's totally feasible to use a generic cron job to run the backup scheduler, but this is something that's hands on right now."
+    "  - You may be using a different init system, that's ok, but it's not officially supported."$'\n'"  - It's totally feasible to use a generic cron job to run the backup scheduler, but this is something that's hands on right now."
+}
+
+_dependencies_group_manifest_cli_editor() {
+  _dependencies_requirement_manifest_editor
 }

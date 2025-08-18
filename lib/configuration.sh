@@ -13,6 +13,7 @@ _configuration_pictl() {
 _configuration_pictl_check() {
   local RPI_CONFIGURATION_QUIET_LOAD=1
 
+  # KCOV_EXCLUDE_BEGIN
   _configuration_pictl_secure_load env -i bash -c "
   source /etc/rpi/config &&
   declare -p | \
@@ -21,6 +22,7 @@ _configuration_pictl_check() {
       sed 's/=.*//g' |
       sort
 "
+  # KCOV_EXCLUDE_END
 }
 
 _configuration_pictl_debug() {
@@ -29,12 +31,11 @@ _configuration_pictl_debug() {
   _cli_pretty_title "-- rpi-media-centre running configuration --"
   _cli_pretty_highlight "** credentials have been removed **"
   declare -p |
-    grep '^declare -. RPI_' |
+    grep -E '^declare -.x? RPI_' |
     grep -v "CREDENTIALS" |
-    grep -v "COLOUR" |
-    sed 's/^declare -. //g' |
+    sed 's/^declare \(-.\|-.x\) //g' |
     sort |
-    _cli_pretty_env_var
+    _cli_pretty_env_var_pipe
 }
 
 _configuration_pictl_help() {
@@ -44,8 +45,8 @@ _configuration_pictl_help() {
   grep '^| `RPI_' README.md |
     cut -d "|" -f2,3 |
     sort |
-    _cli_pretty_markdown_link |
-    _cli_pretty_columns
+    _cli_pretty_markdown_link_pipe |
+    _cli_pretty_columns_pipe
 
   echo "Please see ${RPI_PROJECT_REPOSITORY} for further details."
 }
@@ -53,34 +54,36 @@ _configuration_pictl_help() {
 _configuration_pictl_secure_load() {
   # $@: the commands to execute after loading the configuration
 
-  if [[ -f /etc/rpi/config ]]; then
+  if stdlib.io.path.query.is_file /etc/rpi/config; then
     if [[ "${RPI_CONFIGURATION_QUIET_LOAD}" -ne "1" ]]; then
       _cli_log_notice "-- loading /etc/rpi/config file ... --"
     fi
-    _security_path_check /etc/rpi/config "root" "root" "600"
+    stdlib.security.path.assert.is_secure /etc/rpi/config "root" "root" "600"
     "$@"
   fi
 }
 
 _configuration_pihole() {
-  _io_prompt "Enter PiHole Password: " "RPI_PIHOLE_CREDENTIALS_PASSWORD" "password"
+  _STDLIB_PASSWORD_BOOLEAN=1 \
+    stdlib.io.stdin.prompt RPI_PIHOLE_CREDENTIALS_PASSWORD "Enter PiHole Password: "
 }
 
 _configuration_samba() {
-  if [[ -f /etc/rpi/samba.yml ]]; then
+  if stdlib.io.path.query.is_file /etc/rpi/samba.yml; then
     _cli_log_notice "-- loading /etc/rpi/samba.yml file ... --"
-    _security_path_check /etc/rpi/samba.yml "root" "root" "600"
+    stdlib.security.path.assert.is_secure /etc/rpi/samba.yml "root" "root" "600"
     cp -a /etc/rpi/samba.yml "${RPI_SAMBA_PATH_CONFIG}"/config.yml
   else
     cp -a ./services/samba/config.yml "${RPI_SAMBA_PATH_CONFIG}"/config.yml
   fi
 
-  _io_prompt "Enter Samba Username: " "RPI_SAMBA_CREDENTIALS_USERNAME"
-  _io_prompt "Enter Samba Password: " "RPI_SAMBA_CREDENTIALS_PASSWORD" "password"
-  _io_prompt "Enter Samba Network CIDR: " "RPI_SAMBA_SUBNET"
+  stdlib.io.stdin.prompt RPI_SAMBA_CREDENTIALS_USERNAME "Enter Samba Username: "
+  _STDLIB_PASSWORD_BOOLEAN=1 \
+    stdlib.io.stdin.prompt RPI_SAMBA_CREDENTIALS_PASSWORD "Enter Samba Password: "
+  stdlib.io.stdin.prompt RPI_SAMBA_SUBNET "Enter Samba Network CIDR: "
 
-  _security_path_mkdir "/var/run/rpi" "root" "root" "700"
-  _docker_create_filtered_env "SAMBA_" "/var/run/rpi/samba.env"
+  stdlib.security.path.make.dir "/var/run/rpi" "root" "root" "700"
+  _docker_compose_filtered_env "SAMBA_" "/var/run/rpi/samba.env"
 }
 
 _configuration_syncthing() {
@@ -90,7 +93,7 @@ _configuration_syncthing() {
 
 _configuration_syncthing_setting() {
   # $1 the optional value to use
-  # $@ the config key to set
+  # $@ the config key path to set
 
   local VALUE="${1}"
 
