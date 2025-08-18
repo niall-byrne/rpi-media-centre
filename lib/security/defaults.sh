@@ -15,10 +15,9 @@ _security_defaults_set() {
 _security_defaults_set_gid() {
   local RPI_SVC_NEW_GID
 
-  RPI_SVC_NEW_GID="$(_security_id_get_gid "${RPI_SVC_GROUPNAME}")"
+  RPI_SVC_NEW_GID="$(stdlib.security.get.gid "${RPI_SVC_GROUPNAME}")"
 
-  _security_warning_variable_mutated \
-    "RPI_SVC_GID" \
+  _security_warning_variable_mutated "RPI_SVC_GID" \
     "RPI_SVC_NEW_GID" \
     "RPI_SVC_GROUPNAME"
 
@@ -62,10 +61,9 @@ _security_defaults_set_username() {
 _security_defaults_set_uid() {
   local RPI_SVC_NEW_UID
 
-  RPI_SVC_NEW_UID="$(_security_id_get_uid "${RPI_SVC_USERNAME}")"
+  RPI_SVC_NEW_UID="$(stdlib.security.get.uid "${RPI_SVC_USERNAME}")"
 
-  _security_warning_variable_mutated \
-    "RPI_SVC_UID" \
+  _security_warning_variable_mutated "RPI_SVC_UID" \
     "RPI_SVC_NEW_UID" \
     "RPI_SVC_USERNAME"
 
@@ -74,5 +72,5 @@ _security_defaults_set_uid() {
 }
 
 _security_defaults_set_uid_ro() {
-  RPI_SVC_UID_RO="${RPI_SVC_UID_RO:-"$(_security_id_get_uid_next_available)"}"
+  RPI_SVC_UID_RO="${RPI_SVC_UID_RO:-"$(stdlib.security.get.unused_uid)"}"
 }

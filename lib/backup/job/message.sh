@@ -6,8 +6,10 @@ set -eo pipefail
 
 _backup_job_message_remote_param() {
   _cli_pretty_header "Valid S3 Parameters:"
-  _cli_pretty_bullet_point "STANDARD " "3" | _cli_pretty_strip_trailing_newline
-  _cli_pretty_brackets_style_1 "(default)"
+  {
+    _cli_pretty_bullet_point "STANDARD " "3"
+    _cli_pretty_brackets_style_1 "(default)"
+  } | stdlib.string.lines.join_pipe
   _cli_pretty_bullet_point "REDUCED_REDUNDANCY" "3"
   _cli_pretty_bullet_point "STANDARD_IA" "3"
   _cli_pretty_bullet_point "ONEZONE_IA" "3"
@@ -20,28 +22,38 @@ _backup_job_message_remote_param() {
 
 _backup_job_message_queue() {
   _cli_pretty_header "Valid Queues:"
-  _cli_pretty_justify_left "10" "rsync" | _cli_pretty_bullet_point - "3" | _cli_pretty_strip_trailing_newline
-  _cli_pretty_info "- create rsync copy"
-  _cli_pretty_justify_left "10" "tar" | _cli_pretty_bullet_point - "3" | _cli_pretty_strip_trailing_newline
-  _cli_pretty_info "- create tar bundle"
-  _cli_pretty_justify_left "10" "upload" | _cli_pretty_bullet_point - "3" | _cli_pretty_strip_trailing_newline
-  _cli_pretty_info "- upload tar bundle to remote storage"
+  {
+    stdlib.string.justify.left "10" "rsync" | _cli_pretty_bullet_point_pipe - "3"
+    _cli_pretty_info "- create rsync copy"
+  } | stdlib.string.lines.join_pipe
+  {
+    stdlib.string.justify.left "10" "tar" | _cli_pretty_bullet_point_pipe - "3"
+    _cli_pretty_info "- create tar bundle"
+  } | stdlib.string.lines.join_pipe
+  {
+    stdlib.string.justify.left "10" "upload" | _cli_pretty_bullet_point_pipe - "3"
+    _cli_pretty_info "- upload tar bundle to remote storage"
+  } | stdlib.string.lines.join_pipe
 }
 
 _backup_job_message_remote_target() {
   _cli_pretty_header "Valid Remote Targets:"
-  _cli_pretty_bullet_point "s3:" "3" | _cli_pretty_strip_trailing_newline
-  _cli_pretty_detail "//" | _cli_pretty_strip_trailing_newline
-  _cli_pretty_entity "bucket_name" | _cli_pretty_strip_trailing_newline
-  _cli_pretty_detail "/" | _cli_pretty_strip_trailing_newline
-  _cli_pretty_entity "path_name"
+  {
+    _cli_pretty_bullet_point "s3:" "3"
+    _cli_pretty_detail "//"
+    _cli_pretty_entity "bucket_name"
+    _cli_pretty_detail "/"
+    _cli_pretty_entity "path_name"
+  } | stdlib.string.lines.join_pipe
 }
 
 _backup_job_message_tarball_versions() {
   _cli_pretty_header "Valid Version Count:"
-  _cli_pretty_bullet_point "any number between" "3" | _cli_pretty_strip_trailing_newline
-  _cli_pretty_detail " 1 " | _cli_pretty_strip_trailing_newline
-  _cli_pretty_entity "and" | _cli_pretty_strip_trailing_newline
-  _cli_pretty_detail " 9 " | _cli_pretty_strip_trailing_newline
-  _cli_pretty_brackets_style_1 "(inclusive)"
+  {
+    _cli_pretty_bullet_point "any number between" "3"
+    _cli_pretty_detail " 1 "
+    _cli_pretty_entity "and"
+    _cli_pretty_detail " 9 "
+    _cli_pretty_brackets_style_1 "(inclusive)"
+  } | stdlib.string.lines.join_pipe
 }
