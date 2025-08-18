@@ -4,41 +4,14 @@
 
 set -eo pipefail
 
-_filesystem_check_exists() {
-  # $1: the path to check
-
-  if [[ ! -e "${1}" ]]; then
-    _cli_log_error "The path '${1}' does not exist on the filesystem!"
-    return 127
-  fi
-}
-
-_filesystem_check_does_not_exist() {
-  # $1: the path to check
-
-  if [[ -e "${1}" ]]; then
-    _cli_log_error "The path '${1}' already exists on the filesystem!"
-    return 127
-  fi
-}
-
-_filesystem_check_is_folder() {
-  # $1: the folder to check
-
-  if [[ ! -d "${1}" ]]; then
-    _cli_log_error "The folder '${1}' is not a valid filesystem folder."
-    return 127
-  fi
-}
-
 _filesystem_resolve_path_relative_to_cli() {
   # $1: the path to resolve
 
-  local RPI_EXECUTION_DIRECTORY_RESOLVED_PATH
+  local resolved_path
 
-  pushd "${RPI_EXECUTION_DIRECTORY}" > /dev/null
-  RPI_EXECUTION_DIRECTORY_RESOLVED_PATH="$(realpath "${1}")"
-  popd > /dev/null
+  pushd "${RPI_EXECUTION_DIRECTORY}" >> /dev/null
+  resolved_path="$(realpath "$(realpath --relative-to "${RPI_EXECUTION_DIRECTORY}" "${1}")")"
+  popd >> /dev/null
 
-  echo "${RPI_EXECUTION_DIRECTORY_RESOLVED_PATH}"
+  echo "${resolved_path}"
 }

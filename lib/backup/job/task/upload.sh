@@ -12,7 +12,6 @@ _backup_job_task_upload() {
     "s3://"*)
       _backup_job_task_wrapper "_backup_job_task_upload_s3"
       ;;
-    *) ;;
   esac
 }
 
@@ -54,8 +53,7 @@ _backup_job_task_upload_s3_estimate_tarball_size() {
       -czf \
       /dev/null \
       "$(basename "${RPI_BACKUP_JOB_LOCAL_SOURCE}")" 2>&1 |
-      grep -Eo "written: [0-9]+" |
-      grep -Eo "[0-9]+"
+      sed 's/.*Total bytes written: \([0-9]*\) .*/\1/g'
   )"
   RPI_BACKUP_JOB_UPLOAD_OPTIONS+=("--expected-size=${RPI_BACKUP_JOB_UPLOAD_EXPECTED_SIZE}")
 }
@@ -66,10 +64,12 @@ _backup_job_task_upload_s3_from_tarball_stream() {
 }
 
 _backup_job_task_upload_s3_from_tarball_stream_retryable() {
+  # KCOV_EXCLUDE_BEGIN
   tar \
     c \
     "$(basename "${RPI_BACKUP_JOB_LOCAL_SOURCE}")" |
     aws s3 cp - \
       "${RPI_BACKUP_JOB_REMOTE_TARGET}/${RPI_BACKUP_JOB_NAME}.tar" \
       "${RPI_BACKUP_JOB_UPLOAD_OPTIONS[@]}"
+  # KCOV_EXCLUDE_END
 }

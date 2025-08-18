@@ -5,7 +5,7 @@
 set -eo pipefail
 
 _is_disk_encrypted() {
-  test -f "${RPI_MANIFEST_CRYPT}"
+  stdlib.io.path.query.is_file "${RPI_MANIFEST_CRYPT}"
 }
 
 _is_disk_mounted() {

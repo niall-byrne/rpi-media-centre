@@ -20,12 +20,12 @@ _disk_pretty_filesystem_status() {
       RPI_CLI_PRETTY_TITLE_BOOLEAN="1"
 
     elif [[ "${CONTENT_LINE}" =~ ${RPI_CLI_PRETTY_DEVICE_REGEX} ]]; then
-      _cli_pretty_colour_substring_var "DEVICE_CONNECTORS" "${BASH_REMATCH[1]}" "CONTENT_LINE"
-      _cli_pretty_colour_substring_var "DEVICE" "${BASH_REMATCH[2]}" "CONTENT_LINE"
+      [[ -n "${BASH_REMATCH[1]}" ]] && _cli_pretty_colour_substring_var "DEVICE_CONNECTORS" "${BASH_REMATCH[1]}" "CONTENT_LINE"
+      [[ -n "${BASH_REMATCH[2]}" ]] && _cli_pretty_colour_substring_var "DEVICE" "${BASH_REMATCH[2]}" "CONTENT_LINE"
     fi
 
     if [[ "${CONTENT_LINE}" =~ ${RPI_CLI_PRETTY_FREE_REGEX} ]]; then
-      _cli_pretty_colour_substring_var "DISK_INDICATOR_SPACE_FREE" "${BASH_REMATCH[1]}" "CONTENT_LINE"
+      [[ -n "${BASH_REMATCH[1]}" ]] && _cli_pretty_colour_substring_var "DISK_INDICATOR_SPACE_FREE" "${BASH_REMATCH[1]}" "CONTENT_LINE"
     fi
 
     if [[ "${CONTENT_LINE}" =~ ${RPI_CLI_PRETTY_PERCENT_REGEX} ]]; then
@@ -42,7 +42,7 @@ _disk_pretty_filesystem_status() {
   done <<< "${1}"
 }
 
-_io_make_pipeable "_disk_pretty_filesystem_status" "1"
+stdlib.fn.derive.pipeable "_disk_pretty_filesystem_status" "1"
 
 _disk_pretty_hardware_status() {
   # $1: the input string to colourize
@@ -71,4 +71,4 @@ _disk_pretty_hardware_status() {
   done <<< "${1}"
 }
 
-_io_make_pipeable "_disk_pretty_hardware_status" "1"
+stdlib.fn.derive.pipeable "_disk_pretty_hardware_status" "1"

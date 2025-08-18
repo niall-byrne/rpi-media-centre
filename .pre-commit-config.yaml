@@ -85,13 +85,7 @@ repos:
         args: [--multiline]
         language: pygrep
         files: "^lib/.+\\.sh$"
-        exclude: "^(.+tests/.+\\.sh|.+/__all__.sh|lib/defaults.sh|lib/trap.sh)$"
-      - id: headers-source-files-exporting-traps
-        name: ensure lib source files exporting traps have correct headers
-        entry: "\\A(?!#!/bin/bash\n(# shellcheck disable=.+\n){0,1}\n# pictl.+\nset -Eeo pipefail\n).+\\Z"
-        args: [--multiline]
-        language: pygrep
-        files: "^(lib/trap.sh)$"
+        exclude: "^(.+tests/.+\\.sh|.+/__all__.sh|lib/defaults.sh)$"
       - id: headers-stdlib-source-files
         name: ensure stdlib source files have correct headers
         entry: "\\A(?!#!/bin/bash\n(# shellcheck disable=.+\n){0,1}\n# stdlib.+\nbuiltin set -eo pipefail\n).+\\Z"

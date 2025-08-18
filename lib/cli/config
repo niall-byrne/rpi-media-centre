@@ -1,6 +1,6 @@
 pictl
 =
--- rpi-media-centre service manager --
+-- rpi-media-centre cli --
 Usage:
 pictl [SUBCOMMAND]
 account|provision a service account
@@ -9,15 +9,8 @@ compile [SUBCOMMAND]|manage the compiler service
 disk [SUBCOMMAND]|manage the local disks
 help|displays this message
 install|run the installer
-kill|kill all services immediately (unmounts encrypted disks)
-logs|tail the service logs
 manifest [SUBCOMMAND]|manage the service manifest files
-pause|pause all services
-resume|resume all services
-start|start all services (mounts encrypted disks)
-status|show all service statuses
-stop|stops all services (unmounts encrypted disks)
-upgrade|performs in place upgrade (services are restarted)
+service [SUBCOMMAND]|manage the provided services
 =
 account||_security_account_provision_service_account
 backup||_backup_cli
@@ -25,15 +18,8 @@ compile||_compile_cli
 disk||_disk_cli
 debug||_configuration_pictl_debug
 install||_installer_cli
-kill||
 manifest||_manifest_cli
-logs||
-pause||
-resume||
-start||
-status||
-stop||
-upgrade||
+service||_service_cli
 =
 
 backup
@@ -179,4 +165,28 @@ crypt|edit the crypt manifest file
 backup||_manifest_cli_edit_backup
 config||_manifest_cli_edit_config
 crypt||_manifest_cli_edit_crypt
+=
+
+service
+=
+-- rpi-media-centre service manager --
+Usage:
+pictl service [SUBCOMMAND]
+kill|kill all services immediately (unmounts encrypted disks)
+logs|tail the service logs
+pause|pause all services
+resume|resume all services
+start|start all services (mounts encrypted disks)
+status|show all service statuses
+stop|stops all services (unmounts encrypted disks)
+upgrade|performs in place upgrade (services are restarted)
+=
+kill||
+logs||
+pause||
+resume||
+start||
+status||
+stop||
+upgrade||
 =
