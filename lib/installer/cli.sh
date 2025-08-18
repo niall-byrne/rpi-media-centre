@@ -17,8 +17,7 @@ _installer_cli_ephemeral_installer() {
 
   RPI_EPHEMERAL_INSTALLER="$(mktemp)"
 
-  _security_path_secure \
-    "${RPI_EPHEMERAL_INSTALLER}" \
+  stdlib.security.path.secure "${RPI_EPHEMERAL_INSTALLER}" \
     "root" \
     "root" \
     700

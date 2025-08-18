@@ -13,11 +13,10 @@ _backup_scheduler_dequeue() {
   local RPI_BACKUP_JOB
 
   for RPI_BACKUP_JOB in "${RPI_BACKUP_PATH_QUEUE_ROOT}/${1}/"*; do
-    if [[ ! -e "${RPI_BACKUP_JOB}" ]]; then
-      continue
+    if stdlib.io.path.query.is_exists "${RPI_BACKUP_JOB}"; then
+      _backup_scheduler_job_run "${1}" "${RPI_BACKUP_JOB}"
+      _cli_log_notice "BACKUP SCHEDULER: =========================================="
     fi
-    _backup_scheduler_job_run "${1}" "${RPI_BACKUP_JOB}"
-    _cli_log_notice "BACKUP SCHEDULER: =========================================="
   done
 }
 
@@ -70,18 +69,15 @@ _backup_scheduler_job_run() {
   if ! "${2}" "${1}"; then
     _cli_log_error "BACKUP SCHEDULER: Backup job '${RPI_BACKUP_JOB_NAME}' - has failed the '${1}' task !"
     _cli_log_error "BACKUP SCHEDULER: This job will be retried tomorrow."
-
     (
       export RPI_BACKUP_JOB_NAME
       export RPI_BACKUP_JOB_FAILURE_QUEUE="${2}"
-
       # execute the failed job task again to fire a task error event with the job arguments
       if ! "${2}" "${RPI_BACKUP_QUEUE_FAILED_TASK_EVENT}"; then
         # if the job itself cannot be parsed then fire a scheduler error event
         _event_script "event-backup-scheduler-error.sh"
       fi
     )
-
     return 0
   fi
 
@@ -94,15 +90,13 @@ _backup_scheduler_make_queues() {
   local RPI_BACKUP_PATH_SELECTED_QUEUE
 
   for RPI_BACKUP_PATH_SELECTED_QUEUE in "${RPI_BACKUP_QUEUE_NAMES[@]}"; do
-    _security_path_mkdir \
-      "${RPI_BACKUP_PATH_QUEUE_ROOT}/${RPI_BACKUP_PATH_SELECTED_QUEUE}" \
+    stdlib.security.path.make.dir "${RPI_BACKUP_PATH_QUEUE_ROOT}/${RPI_BACKUP_PATH_SELECTED_QUEUE}" \
       "${RPI_SVC_USERNAME}" \
       "${RPI_SVC_GROUPNAME}" \
       "700"
   done
 
-  _security_path_secure \
-    "${RPI_BACKUP_PATH_QUEUE_ROOT}" \
+  stdlib.security.path.secure "${RPI_BACKUP_PATH_QUEUE_ROOT}" \
     "${RPI_SVC_USERNAME}" \
     "${RPI_SVC_GROUPNAME}" \
     "700"

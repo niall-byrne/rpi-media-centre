@@ -37,7 +37,7 @@ _backup_job_args() {
 
   _cli_log_info " -- BACKUP JOB: Received: $(printf "%q " "$@")"
 
-  while getopts "b:k:n:p:q:r:s:t:v:" OPTION; do
+  while getopts "b:k:n:p:q:r:s:t:v:" OPTION 2> /dev/null; do
     case "$OPTION" in
       b)
         RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER="${OPTARG}"
@@ -111,7 +111,7 @@ _backup_job_log() {
   echo "  RPI_BACKUP_JOB_REMOTE_TARGET='${RPI_BACKUP_JOB_REMOTE_TARGET}'"
   echo "  RPI_BACKUP_JOB_REMOTE_PARAMETER='${RPI_BACKUP_JOB_REMOTE_PARAMETER}'"
   if [[ -n "${RPI_BACKUP_JOB_QUEUE}" ]]; then
-    echo "  RPI_BACKUP_JOB_GROUP='${RPI_BACKUP_JOB_QUEUE}'"
+    echo "  RPI_BACKUP_JOB_QUEUE='${RPI_BACKUP_JOB_QUEUE}'"
   fi
 }
 
@@ -122,6 +122,6 @@ _backup_job_usage() {
     _backup_job_message_remote_target
     _backup_job_message_remote_param
     _backup_job_message_queue
-  } >&2
+  } >&2 # KCOV_EXCLUDE_LINE
   return 127
 }

@@ -10,7 +10,7 @@ _disk_cli_filesystem() {
   _cli_pretty_title "-- rpi-media-centre disk filesystem status --"
 
   lsblk -f |
-    _disk_pretty_filesystem_status
+    _disk_pretty_filesystem_status_pipe
 }
 
 _disk_cli_hardware() {
@@ -32,10 +32,11 @@ _disk_cli_hardware() {
       _disk_pretty_hardware_status "${RPI_DISK_DETAILS}"
 
     fi
-  done <<< "$(
-    lsblk |
-      grep disk |
-      grep -v "mmc" |
-      cut -d ' ' -f 1
-  )"
+  done <<< \
+    "$( # KCOV_EXCLUDE_LINE
+      lsblk |
+        grep disk |
+        grep -v "mmc" |
+        cut -d ' ' -f 1
+    )" # KCOV_EXCLUDE_LINE
 }

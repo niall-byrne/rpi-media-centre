@@ -7,9 +7,11 @@ set -eo pipefail
 # CLI General Settings
 
 # shellcheck disable=SC2034
-RPI_PATH_FRAGMENTS="lib/cli/compiler/fragments"
+RPI_PATH_FRAGMENTS="${RPI_WORKING_DIRECTORY}/lib/cli/compiler/fragments"
 RPI_PATH_COMPILED_ROOT="lib/cli/build"
 RPI_PATH_COMPILED_CLI="${RPI_PATH_COMPILED_ROOT}/cli.sh"
+# shellcheck disable=SC2034
+RPI_PATH_COMPILED_CLI_SOURCE="${RPI_WORKING_DIRECTORY}/lib/cli/config"
 RPI_PATH_COMPILED_COMPLETION="${RPI_PATH_COMPILED_ROOT}/bash_completion.sh"
 
 _cli_bootstrap() {
@@ -21,20 +23,23 @@ _cli_bootstrap() {
   local RPI_CLI_COMPILER_FORCED_BOOLEAN="${1:-"0"}"
 
   if _cli_compiler_query_is_compilation_required; then
-    _cli_make_build_folder
+
+    if ! _cli_compiler_query_is_compilation_memory_only; then
+      _cli_make_build_folder
+    fi
+
     _cli_compiler_cli
 
     # shellcheck disable=SC2034
     RPI_CLI_JUST_COMPILED_BOOLEAN="1"
-
-    _security_path_secure \
-      "${RPI_PATH_COMPILED_CLI}" \
-      "${RPI_SVC_USERNAME}" \
-      "${RPI_SVC_GROUPNAME}" \
-      "640"
   fi
 
   if ! _cli_compiler_query_is_compilation_memory_only; then
+    stdlib.security.path.secure "${RPI_PATH_COMPILED_CLI}" \
+      "root" \
+      "root" \
+      "640"
+
     # shellcheck source=/dev/null
     source "${RPI_PATH_COMPILED_CLI}"
   fi
@@ -47,10 +52,9 @@ _cli_completion() {
   _cli_make_build_folder
   _cli_compiler_completion
 
-  _security_path_secure \
-    "${RPI_PATH_COMPILED_COMPLETION}" \
-    "${RPI_SVC_USERNAME}" \
-    "${RPI_SVC_GROUPNAME}" \
+  stdlib.security.path.secure "${RPI_PATH_COMPILED_COMPLETION}" \
+    "root" \
+    "root" \
     "644"
 
   _cli_log_notice "Add the following to your .bashrc file to activate:"
@@ -58,9 +62,8 @@ _cli_completion() {
 }
 
 _cli_make_build_folder() {
-  _security_path_mkdir \
-    "${RPI_PATH_COMPILED_ROOT}" \
-    "${RPI_SVC_USERNAME}" \
-    "${RPI_SVC_GROUPNAME}" \
+  stdlib.security.path.make.dir "${RPI_PATH_COMPILED_ROOT}" \
+    "root" \
+    "root" \
     "755"
 }

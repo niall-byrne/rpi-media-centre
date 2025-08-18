@@ -8,7 +8,7 @@ _security_warning_single_user_mode() {
   _security_defaults_set
 
   if [[ "${RPI_SVC_USERNAME}" == "${SUDO_USER}" ]] &&
-    [[ -z "${RPI_DISABLE_SINGLE_USER_MODE_WARNING_BOOLEAN}" ]]; then
+    [[ "${RPI_DISABLE_SINGLE_USER_MODE_WARNING_BOOLEAN}" != "1" ]]; then
     _cli_log_warning "SECURITY: pictl is running in single user mode"
     _cli_log_warning "  Concurrent user access is not supported."
     _cli_log_info "Consider appending the following to your /etc/rpi/config file:"
