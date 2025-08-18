@@ -9,7 +9,7 @@ _cli_log_error() {
 
   {
     _cli_pretty_colour "LOGGER_ERROR" "${1}"
-  } >&2
+  } >&2 # KCOV_EXCLUDE_LINE
 }
 
 _cli_log_info() {
@@ -35,5 +35,5 @@ _cli_log_warning() {
 
   {
     _cli_pretty_colour "LOGGER_WARNING" "${1}"
-  } >&2
+  } >&2 # KCOV_EXCLUDE_LINE
 }

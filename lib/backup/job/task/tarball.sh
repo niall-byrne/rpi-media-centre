@@ -31,8 +31,7 @@ _backup_job_task_tarball_filesystem_build() {
   tar cf "${RPI_BACKUP_JOB_LOCAL_TARBALL_INCOMPLETE_FILENAME}" "$(basename "${RPI_BACKUP_JOB_LOCAL_SOURCE}")"
   mv "${RPI_BACKUP_JOB_LOCAL_TARBALL_INCOMPLETE_FILENAME}" "${RPI_BACKUP_JOB_LOCAL_TARBALL_FINISHED_FILENAME}"
 
-  _security_path_secure \
-    "${RPI_BACKUP_JOB_LOCAL_TARBALL_FINISHED_FILENAME}" \
+  stdlib.security.path.secure "${RPI_BACKUP_JOB_LOCAL_TARBALL_FINISHED_FILENAME}" \
     "${RPI_SVC_USERNAME}" \
     "${RPI_SVC_GROUPNAME}" \
     "600"
@@ -51,17 +50,17 @@ _backup_job_task_tarball_filesystem_prune() {
 
   # shellcheck disable=SC2012
   ls -t1 "${RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER}/${RPI_BACKUP_JOB_NAME}_"[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]_[0-9][0-9]-[0-9][0-9]-[0-9][0-9]".tar" |
-    tail -n +${RPI_BACKUP_JOB_PRUNE_INDEX} |
+    tail -n +"${RPI_BACKUP_JOB_PRUNE_INDEX}" |
     tr \\n \\0 |
     xargs -0 rm -f
-}
-
-_backup_job_task_tarball_get_new_filename() {
-  echo "${RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER}/${RPI_BACKUP_JOB_NAME}_$(date +%Y-%m-%d_%H-%M-%S).tar"
 }
 
 _backup_job_task_tarball_get_latest_filename() {
   # shellcheck disable=SC2012
   ls -t1 "${RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER}/${RPI_BACKUP_JOB_NAME}_"[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]_[0-9][0-9]-[0-9][0-9]-[0-9][0-9]".tar" |
     head -n1
+}
+
+_backup_job_task_tarball_get_new_filename() {
+  echo "${RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER}/${RPI_BACKUP_JOB_NAME}_$(date +%Y-%m-%d_%H-%M-%S).tar"
 }

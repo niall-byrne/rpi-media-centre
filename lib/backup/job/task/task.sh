@@ -4,19 +4,6 @@
 
 set -eo pipefail
 
-_backup_job_task_wrapper() {
-  # $1: the command to execute
-  # $@: arguments for the command
-
-  export RPI_BACKUP_JOB_COMMAND=("${@}")
-
-  _backup_job_task_event_wrapper "event-backup-job-task-before.sh"
-  "${RPI_BACKUP_JOB_COMMAND[0]}" "${RPI_BACKUP_JOB_COMMAND[@]:1}"
-  _backup_job_task_event_wrapper "event-backup-job-task-after.sh"
-
-  export -n RPI_BACKUP_JOB_COMMAND
-}
-
 _backup_job_task_event_wrapper() {
   # $1: the event script to call
 
@@ -32,4 +19,17 @@ _backup_job_task_event_wrapper() {
 
     _event_script "${1}"
   )
+}
+
+_backup_job_task_wrapper() {
+  # $1: the command to execute
+  # $@: arguments for the command
+
+  export RPI_BACKUP_JOB_COMMAND=("${@}")
+
+  _backup_job_task_event_wrapper "event-backup-job-task-before.sh"
+  "${RPI_BACKUP_JOB_COMMAND[0]}" "${RPI_BACKUP_JOB_COMMAND[@]:1}"
+  _backup_job_task_event_wrapper "event-backup-job-task-after.sh"
+
+  export -n RPI_BACKUP_JOB_COMMAND
 }
