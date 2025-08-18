@@ -39,16 +39,14 @@ _security_account_provision_service_account_group() {
   if ! getent group "${1}" > /dev/null; then
     _cli_log_warning "SECURITY: Adding the service account group '${1}' ..."
 
-    _io_prompt_confirmation
+    stdlib.io.stdin.confirmation
 
     if [[ -n "${RPI_SVC_GID}" ]]; then
-      groupadd \
-        -g "${RPI_SVC_GID}" \
+      groupadd -g "${RPI_SVC_GID}" \
         -r \
         "${1}"
     else
-      groupadd \
-        -r \
+      groupadd -r \
         "${1}"
     fi
 
@@ -67,19 +65,17 @@ _security_account_provision_service_account_username() {
   if ! getent passwd "${1}" > /dev/null; then
     _cli_log_warning "SECURITY: Adding the service account user '${1}' ..."
 
-    _io_prompt_confirmation
+    stdlib.io.stdin.confirmation
 
     if [[ -n "${RPI_SVC_UID}" ]]; then
-      useradd \
-        -u "${RPI_SVC_UID}" \
+      useradd -u "${RPI_SVC_UID}" \
         -g "${RPI_SVC_GID}" \
         -r \
         -s /usr/sbin/nologin \
         -o \
         "${1}"
     else
-      useradd \
-        -g "${RPI_SVC_GID}" \
+      useradd -g "${RPI_SVC_GID}" \
         -r \
         -s /usr/sbin/nologin \
         "${1}"

@@ -180,8 +180,6 @@ jobs:
             name: "headers-source-file-module-roots"
           - id: "headers-source-files"
             name: "headers-source-files"
-          - id: "headers-source-files-exporting-traps"
-            name: "headers-source-files-exporting-traps"
           - id: "headers-test-files"
             name: "headers-test-files"
       max-parallel: ${{ fromJSON(needs.configuration.outputs.JSON_FILE_DATA).ci_concurrency_limit }}

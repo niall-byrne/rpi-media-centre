@@ -7,6 +7,8 @@ set -eo pipefail
 _backup_cli_keyfile-s3() {
   # $1: the filename for the new keyfile
 
+  local keyfile_target_path
+
   if [[ -z "${1}" ]]; then
     _backup_cli_usage_error
   fi
@@ -15,28 +17,13 @@ _backup_cli_keyfile-s3() {
 
   _cli_log_warning "BACKUP SCHEDULER: Generating a new AWS S3 encryption key ..."
 
-  _filesystem_check_does_not_exist "${1}"
-  openssl rand 32 > "${1}"
-  _security_path_secure "${1}" "root" "root" "600"
+  keyfile_target_path="$(_filesystem_resolve_path_relative_to_cli "${1}")"
+
+  stdlib.io.path.assert.not_exists "${keyfile_target_path}"
+  openssl rand -out "${keyfile_target_path}" 32
+  stdlib.security.path.secure "${keyfile_target_path}" "root" "root" "600"
 
   _cli_log_success "BACKUP SCHEDULER: Successfully generated '${1}' !"
-}
-
-_backup_cli_recover() {
-  # $1: the name of the backup job
-  # $2: the local bath to restore it to
-
-  local RPI_BACKUP_JOB_RECOVERY_PATH
-
-  if [[ -z "${1}" ]] ||
-    [[ -z "${2}" ]]; then
-    _backup_cli_usage_error
-  fi
-
-  # shellcheck disable=SC2034
-  RPI_BACKUP_JOB_RECOVERY_PATH="$(_filesystem_resolve_path_relative_to_cli "${2}")"
-
-  _backup_manifest_all_command "_backup_job_task_recover" "" "${1}"
 }
 
 _backup_cli_queue_cli_remove() {
@@ -50,10 +37,10 @@ _backup_cli_queue_cli_remove() {
 
   _backup_scheduler_make_queues
 
-  _io_prompt_confirmation
-  find "${RPI_BACKUP_PATH_QUEUE_ROOT}" -type f -name "${1}" -delete
-
-  _cli_log_success "BACKUP SCHEDULER: Queued backup jobs matching '${1}' have been removed !"
+  if stdlib.io.stdin.confirmation; then
+    find "${RPI_BACKUP_PATH_QUEUE_ROOT}" -type f -name "${1}" -delete
+    _cli_log_success "BACKUP SCHEDULER: Queued backup jobs matching '${1}' have been removed !"
+  fi
 }
 
 _backup_cli_queue_cli_remove-all() {
@@ -61,10 +48,10 @@ _backup_cli_queue_cli_remove-all() {
 
   _backup_scheduler_make_queues
 
-  _io_prompt_confirmation
-  find "${RPI_BACKUP_PATH_QUEUE_ROOT}" -type f -delete
-
-  _cli_log_success "BACKUP SCHEDULER: All queued backup jobs have been removed !"
+  if stdlib.io.stdin.confirmation; then
+    find "${RPI_BACKUP_PATH_QUEUE_ROOT}" -type f -delete
+    _cli_log_success "BACKUP SCHEDULER: All queued backup jobs have been removed !"
+  fi
 }
 
 _backup_cli_queue_cli_show() {
@@ -72,6 +59,23 @@ _backup_cli_queue_cli_show() {
 
   _dependencies_group_backups_cli_queue
   tree "${RPI_BACKUP_PATH_QUEUE_ROOT}"
+}
+
+_backup_cli_recover() {
+  # $1: the name of the backup job
+  # $2: the local path to restore it to
+
+  local RPI_BACKUP_JOB_RECOVERY_PATH
+
+  if [[ -z "${1}" ]] ||
+    [[ -z "${2}" ]]; then
+    _backup_cli_usage_error
+  fi
+
+  # shellcheck disable=SC2034
+  RPI_BACKUP_JOB_RECOVERY_PATH="$(_filesystem_resolve_path_relative_to_cli "${2}")"
+
+  _backup_manifest_all_command "_backup_job_task_recover" "" "${1}"
 }
 
 _backup_cli_schedule() {

@@ -20,28 +20,24 @@ _dependencies_enforce() {
 _dependencies_requirement_generic() {
   # $1: the required application
 
-  _dependencies_enforce \
-    "${1}" \
+  _dependencies_enforce "${1}" \
     "The application ${1}" \
     "Please consider running: sudo apt-get install ${1}"
 }
 
 _dependencies_requirement_awscli() {
-  _dependencies_enforce \
-    aws \
+  _dependencies_enforce "aws" \
     "The aws cli" \
     "Please see https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html for further details"
 }
 
 _dependencies_requirement_manifest_editor() {
   if [[ "${RPI_MANIFEST_EDITOR}" == "/usr/bin/vi" ]]; then
-    _dependencies_enforce \
-      "${RPI_MANIFEST_EDITOR}" \
+    _dependencies_enforce "${RPI_MANIFEST_EDITOR}" \
       "The application vim" \
       "Please consider running: sudo apt-get install vim"
   else
-    _dependencies_enforce \
-      "${RPI_MANIFEST_EDITOR}" \
+    _dependencies_enforce "${RPI_MANIFEST_EDITOR}" \
       "The configured manifest editor" \
       "Please install it or review the value of RPI_MANIFEST_EDITOR."
   fi
