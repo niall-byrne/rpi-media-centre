@@ -61,21 +61,21 @@ repos:
     hooks:
       - id: bash-coverage-lib
         name: ensure the lib folder meets coverage requirements
-        entry: bash -c 'TEST_CONTAINER_CI=1 ./testing/container.sh bashcov --root lib t lib/'
+        entry: bash -c 'TEST_CONTAINER_CI=1 ./testing/container.sh run collect_coverage lib'
         language: system
         stages: [manual]
         pass_filenames: false
         require_serial: true
       - id: bash-coverage-stdlib
         name: ensure the stdlib folder meets coverage requirements
-        entry: bash -c 'TEST_CONTAINER_CI=1 ./testing/container.sh collect_coverage stdlib'
+        entry: bash -c 'TEST_CONTAINER_CI=1 ./testing/container.sh run collect_coverage stdlib'
         language: system
         stages: [manual]
         pass_filenames: false
         require_serial: true
       - id: bash-unit-tests
         name: ensure unit tests pass
-        entry: bash -c 'TEST_CONTAINER_CI=1 ./testing/container.sh t'
+        entry: ./testing/container.sh ci
         language: system
         stages: [manual]
         pass_filenames: false

@@ -2,7 +2,7 @@
 
 set -eo pipefail
 
-export RPI_WORKING_DIRECTORY="/rpi-media-centre"
+export RPI_WORKING_DIRECTORY="${RPI_WORKING_DIRECTORY:-"${PWD}"}"
 export STDLIB_TRACEBACK_DISABLE_BOOLEAN=1
 
 # $1: a filter to match tests by
