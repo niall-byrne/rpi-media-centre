@@ -1,0 +1,69 @@
+#!/bin/bash
+
+set -eo pipefail
+
+export RPI_WORKING_DIRECTORY="/rpi-media-centre"
+export STDLIB_TRACEBACK_DISABLE_BOOLEAN=1
+
+# $1: a filter to match tests by
+
+_test_runner_discover() {
+  # $1: a filter to match tests by
+
+  local __RPI_TEST_RUNNER_DISCOVERED_TEST_FILE
+
+  while read -r -d $'\0' __RPI_TEST_RUNNER_DISCOVERED_TEST_FILE; do
+    if [[ -n "${1}" ]] && [[ "${__RPI_TEST_RUNNER_DISCOVERED_TEST_FILE}" != *"${1}"* ]]; then
+      continue
+    fi
+    __RPI_TEST_RUNNER_DISCOVERED_TEST_MODULES+=("${__RPI_TEST_RUNNER_DISCOVERED_TEST_FILE}")
+  done < <(find "${RPI_WORKING_DIRECTORY}"/{lib,stdlib} -name "test_*" -type f -print0)
+}
+
+_test_runner_execute() {
+  # shellcheck disable=SC2034
+  local TEST_INPUT
+  # shellcheck disable=SC2034
+  local TEST_OUTPUT
+  # shellcheck disable=SC2034
+  local TEST_RC
+
+  set +e
+  (
+    # shellcheck source=/dev/null
+    source /usr/local/bin/bash_unit -p "${1}" "${__RPI_TEST_RUNNER_DISCOVERED_TEST_MODULES[@]}"
+  )
+  __RPI_TEST_RUNNER_EXIT_CODE="$?"
+  set -e
+}
+
+_test_runner_load_testing_framework() {
+  # shellcheck source=lib/testing/__all__.sh
+  source "${RPI_WORKING_DIRECTORY}/stdlib/testing/__lib__.sh"
+}
+
+_test_runner_load_stdlib() {
+  # shellcheck source=lib/__all__.sh
+  source "${RPI_WORKING_DIRECTORY}/stdlib/__lib__.sh"
+}
+
+_test_runner_main() {
+  local __RPI_TEST_RUNNER_DISCOVERED_TEST_MODULES=()
+  local __RPI_TEST_RUNNER_EXIT_CODE
+
+  _test_runner_load_stdlib
+  _test_runner_load_testing_framework
+
+  stdlib.trap.handler.exit.fn.register __mock.persistence.registry.cleanup
+
+  # Allow specifying a file as the first argument
+  _test_runner_discover "$1"
+
+  shift || true
+
+  _test_runner_execute "$@"
+
+  exit "${__RPI_TEST_RUNNER_EXIT_CODE}"
+}
+
+_test_runner_main "$@"
