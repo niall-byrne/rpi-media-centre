@@ -6,4 +6,5 @@
 !.vale/Vocab
 *.key
 lib/cli/build
+stdlib/coverage
 poetry.lock
