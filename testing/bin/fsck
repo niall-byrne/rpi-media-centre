@@ -1,4 +1,0 @@
-#!/bin/bash
-
-echo "fsck: test double script"
-echo "  -- $*"

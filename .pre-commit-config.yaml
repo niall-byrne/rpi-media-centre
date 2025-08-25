@@ -59,6 +59,13 @@ repos:
         stages: [pre-commit]
   - repo: local
     hooks:
+      - id: bash-coverage-stdlib
+        name: ensure the stdlib folder meets coverage requirements
+        entry: bash -c 'TEST_CONTAINER_CI=1 ./testing/container.sh collect_coverage stdlib'
+        language: system
+        stages: [manual]
+        pass_filenames: false
+        require_serial: true
       - id: headers-source-file-library-root
         name: ensure lib root has correct header
         entry: "\\A(?!#!/bin/bash\n(# shellcheck disable=.+\n){0,1}\nset -Eeo pipefail\n).+\\Z"
@@ -98,6 +105,18 @@ repos:
         args: [--multiline]
         language: pygrep
         files: "^stdlib/trap/trap.sh$"
+      - id: headers-test-files
+        name: ensure test files have correct headers
+        entry: "\\A(?!#!/bin/bash\n).+\\Z"
+        args: [--multiline]
+        language: pygrep
+        files: "^(.+tests/.*/test_.+\\.sh)$"
+      - id: source-test-files
+        name: ensure test files do not use the source keyword for imports
+        entry: "\\A#!/bin/bash\n.+((^ *|^ +|; *|\\| *|\\& *)(source |\\. )(\".+?\"|\\S+) *(;*)$)+.+\\Z"
+        args: [--multiline]
+        language: pygrep
+        files: "^(.+tests/.*/test_.+\\.sh)$"
       - id: stdlib-builtins-source-files
         name: ensure stdlib source files use builtins prefaced with the 'builtin' command
         entry: "^(?!\\s*#).*(?<!builtin )(?!.*# noqa)(?<!\\.)(declare|echo|eval|false|printf|true|unset) .*$"
