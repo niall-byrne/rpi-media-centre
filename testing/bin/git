@@ -1,4 +1,0 @@
-#!/bin/bash
-
-echo "git: test double script"
-echo "  -- $*"

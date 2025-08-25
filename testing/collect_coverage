@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# $1: the target folder to collect coverage from
+# $@: additional exclude patterns
+
+main() {
+  [[ -e coverage ]] && rm -r coverage
+
+  kcov \
+    --include-pattern="rpi-media-centre/${1}" \
+    --exclude-pattern=tests,testing \
+    --exclude-line=KCOV_EXCLUDE_LINE \
+    --exclude-region=KCOV_EXCLUDE_BEGIN:KCOV_EXCLUDE_END \
+    --limits 75,100 \
+    coverage t "rpi-media-centre/${1}"
+
+  if ! { grep percent_covered "coverage/t/coverage.json" | grep -v 100; } then
+   echo "Coverage SUCCEEDED"
+   return 0
+  fi
+
+  echo "Coverage FAILED"
+  return 127
+}
+
+main "${@}"
