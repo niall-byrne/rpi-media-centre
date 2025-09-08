@@ -1,0 +1,8 @@
+RPI_DISK_UUID='UUID0'
+RPI_DISK_NAME='mocked_disk0'
+RPI_DISK_CRYPT_GROUP='crypt_group0'
+RPI_DISK_MOUNT_POINT='/mnt/mocked/path0'
+RPI_DISK_UUID='UUID1'
+RPI_DISK_NAME='mocked_disk1'
+RPI_DISK_CRYPT_GROUP='crypt_group1'
+RPI_DISK_MOUNT_POINT='/mnt/mocked/path1'
