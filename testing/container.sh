@@ -32,7 +32,7 @@ main() {
     -v "${HOME}"/.gitconfig:/home/pi1/.gitconfig \
     -v "${HOME}"/.gitconfig_global:/home/pi1/.gitconfig_global \
     -v "${HOME}"/.gitignore_global:/home/pi1/.gitignore_global \
-    --tmpfs /tmp \
+    --tmpfs /tmp:exec \
     rpi-media-centre:test \
     "${TEST_CONTAINER_COMMAND}" "${@:2}"
 

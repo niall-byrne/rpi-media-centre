@@ -1,0 +1,3 @@
+UUID0,mocked_disk0,crypt_group0,/mnt/mocked/path0
+# making sure comments are ignored
+UUID1,mocked_disk1,crypt_group1,/mnt/mocked/path1
