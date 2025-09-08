@@ -1,0 +1,32 @@
+test
+=
+-- pictl cli generator scenario 1 --
+Usage:
+test [SUBCOMMAND]
+command1|run the default command1 function
+command2|run a custom command2 function
+command3 [SUBCOMMAND]|run a custom command3 function that has subcommands
+command4|run the default command4 function with a setup command
+command5|run a custom command5 function with a setup command
+=
+command1||
+command2||custom2_function
+command3||custom3_cli
+command4|setup_command_4|
+command5|setup_command_5|custom5_function
+=
+
+command3
+=
+-- pictl cli generator scenario 1 command3 --
+Usage:
+test command3 [SUBCOMMAND]
+subcommand1 (FILENAME)|run the default subcommand1 function
+subcommand2 [SUBCOMMAND]|run the custom subcommand2 function with a setup command
+subcommand3 [ARG]|run the custom subcommand3 function with arguments
+=
+>command3_before_all_setup_command
+subcommand1||
+subcommand2|setup_subcommand3|subcommand2_cli
+subcommand3||subcommand3_function arg1 arg2 arg3
+=

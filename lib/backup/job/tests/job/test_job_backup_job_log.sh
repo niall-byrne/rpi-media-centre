@@ -1,0 +1,88 @@
+#!/bin/bash
+
+_VARS_QUEUE_SET_GROUP_SET=(
+  "RPI_BACKUP_JOB_NAME"
+  "RPI_BACKUP_JOB_GROUP"
+  "RPI_BACKUP_JOB_LOCAL_SOURCE"
+  "RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER"
+  "RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER"
+  "RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS"
+  "RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH"
+  "RPI_BACKUP_JOB_REMOTE_TARGET"
+  "RPI_BACKUP_JOB_REMOTE_PARAMETER"
+  "RPI_BACKUP_JOB_QUEUE"
+)
+_VARS_QUEUE_NOT_SET_GROUP_NOT_SET=(
+  "RPI_BACKUP_JOB_NAME"
+  "RPI_BACKUP_JOB_LOCAL_SOURCE"
+  "RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER"
+  "RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER"
+  "RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS"
+  "RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH"
+  "RPI_BACKUP_JOB_REMOTE_TARGET"
+  "RPI_BACKUP_JOB_REMOTE_PARAMETER"
+)
+_VARS_QUEUE_NOT_SET_GROUP_SET=(
+  "RPI_BACKUP_JOB_NAME"
+  "RPI_BACKUP_JOB_GROUP"
+  "RPI_BACKUP_JOB_LOCAL_SOURCE"
+  "RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER"
+  "RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER"
+  "RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS"
+  "RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH"
+  "RPI_BACKUP_JOB_REMOTE_TARGET"
+  "RPI_BACKUP_JOB_REMOTE_PARAMETER"
+)
+_VARS_QUEUE_SET_GROUP_NOT_SET=(
+  "RPI_BACKUP_JOB_NAME"
+  "RPI_BACKUP_JOB_LOCAL_SOURCE"
+  "RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER"
+  "RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER"
+  "RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS"
+  "RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH"
+  "RPI_BACKUP_JOB_REMOTE_TARGET"
+  "RPI_BACKUP_JOB_REMOTE_PARAMETER"
+  "RPI_BACKUP_JOB_QUEUE"
+)
+
+_format_variable_for_log_output() {
+  # $1: the variable name to print
+
+  local var_name="${1}"
+
+  echo "  ${var_name}='${!var_name}'"
+}
+
+teardown() {
+  unset RPI_BACKUP_JOB_NAME
+  unset RPI_BACKUP_JOB_GROUP
+  unset RPI_BACKUP_JOB_LOCAL_SOURCE
+  unset RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER
+  unset RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER
+  unset RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS
+  unset RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH
+  unset RPI_BACKUP_JOB_REMOTE_TARGET
+  unset RPI_BACKUP_JOB_REMOTE_PARAMETER
+  unset RPI_BACKUP_JOB_QUEUE
+}
+
+@parametrize_with_job_log_scenarios() {
+  # $1: the test function to parametrize
+
+  @parametrize \
+    "$1" \
+    "RPI_BACKUP_JOB_NAME;RPI_BACKUP_JOB_GROUP;RPI_BACKUP_JOB_LOCAL_SOURCE;RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER;RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER;RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS;RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH;RPI_BACKUP_JOB_REMOTE_TARGET;RPI_BACKUP_JOB_REMOTE_PARAMETER;RPI_BACKUP_JOB_QUEUE;TEST_EXPECTED_VARS_ARRAY_NAME" \
+    "QUEUE_SET______GROUP_SET;job_name;job_group;local_source;rsync_folder;tarball_folder;tarball_versions;key_path;remote_target;remote_param;job_queue;_VARS_QUEUE_SET_GROUP_SET" \
+    "QUEUE_NOT_SET__GROUP_NOT_SET;job_name;;local_source;rsync_folder;tarball_folder;tarball_versions;key_path;remote_target;remote_param;;_VARS_QUEUE_NOT_SET_GROUP_NOT_SET" \
+    "QUEUE_NOT_SET__GROUP_SET;job_name;job_group;local_source;rsync_folder;tarball_folder;tarball_versions;key_path;remote_target;remote_param;;_VARS_QUEUE_NOT_SET_GROUP_SET" \
+    "QUEUE_SET______GROUP_NOT_SET;job_name;;local_source;rsync_folder;tarball_folder;tarball_versions;key_path;remote_target;remote_param;job_queue;_VARS_QUEUE_SET_GROUP_NOT_SET"
+}
+
+test_backup_job_log__@vary__returns_expected_string() {
+  _capture.output _backup_job_log
+
+  assert_output "$(stdlib.array.map.fn _format_variable_for_log_output "${TEST_EXPECTED_VARS_ARRAY_NAME}")"
+}
+
+@parametrize_with_job_log_scenarios \
+  test_backup_job_log__@vary__returns_expected_string
