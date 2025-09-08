@@ -1,0 +1,12 @@
+test_with_switches
+=
+-- test_with_switches cli generator scenario 2 --
+Usage:
+test (OPTIONS)
+-a [EXAMPLE_SWITCH_1]|
+-b [<optional> EXAMPLE_SWITCH_2]|
+=
+option1||
+option2||
+option3||
+=
