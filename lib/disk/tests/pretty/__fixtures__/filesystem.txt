@@ -1,0 +1,16 @@
+NAME                 FSTYPE      FSVER LABEL            UUID                                 FSAVAIL FSUSE% MOUNTPOINTS
+sda
+└─sda1               crypto_LUKS 2     disk1            d6a44bed-c317-4cd0-89f7-77f299ec16de
+  └─disk1            ext4        1.0   disk1            a675fefa-5859-41a4-bdf8-9e834a9c6625  157.2G    91% /mnt/disk1
+sdb
+└─sdb1               crypto_LUKS 2     disk2            ca17153a-4747-4618-9493-d0f189e64bf1
+  └─disk2            ext4        1.0   disk2            5045bd03-9de3-4ab9-9e17-b09f857e000b  607.9G    62% /mnt/disk2
+sdc
+└─sdc1               crypto_LUKS 2     disk3            0ec1d047-61b1-4dac-bdfd-45a2c96daa76
+  └─disk3            ext4        1.0   disk3            27f41391-bd3a-423b-8114-7440441c4082  176.4G    76% /mnt/disk3
+sdd
+└─sdd1               crypto_LUKS 2     disk4            7b1fde8a-2f9b-448c-8e2e-d6fd57ddd9b8
+  └─disk4            ext4        1.0   disk4            71f54b67-02e6-4fb9-8d59-3047fabba48e  662.8G    59% /mnt/disk4
+mmcblk0
+├─mmcblk0p1          vfat        FAT32 bootfs           78EA-4177                             442.7M    13% /boot/firmware
+└─mmcblk0p2          ext4        1.0   rootfs           29bad4f5-d6fc-428f-aa2e-4a9e1f37224e   19.7G    26% /

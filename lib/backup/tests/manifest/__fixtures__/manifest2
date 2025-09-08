@@ -1,0 +1,3 @@
+test1,yearly,/path/folder1,,,,/path/key1,s3://bucket/path1,GLACIER
+# comment
+test2,daily,/path/folder2,/path/rsync2,/path/tarball1,4,/path/key2,s3://bucket/path1/path2,,
