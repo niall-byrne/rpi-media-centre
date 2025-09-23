@@ -64,17 +64,15 @@ _backup_job_validation_key_file() {
     "400"
 }
 
-_backup_job_validation_path() {
+_backup_job_validation_path_and_permissions() {
   # $1: the path to check
+  # $2: the octal permission to check for
 
   stdlib.io.path.assert.is_folder "${1}"
-  # TODO: NOT SURE ABOUT THIS
-  if [[ "${RPI_RUNTIME_ENVIRONMENT}" != "service" ]]; then
-    stdlib.security.path.assert.is_secure "${1}" \
-      "${RPI_SVC_USERNAME}" \
-      "${RPI_SVC_GROUPNAME}" \
-      "700"
-  fi
+  stdlib.security.path.assert.is_secure "${1}" \
+    "${RPI_SVC_USERNAME}" \
+    "${RPI_SVC_GROUPNAME}" \
+    "${2}"
 }
 
 _backup_job_validation_queue() {
@@ -142,8 +140,13 @@ _backup_job_validation_remote_target() {
 
 _backup_job_validation_source() {
   # $1: the path to check
+  # $2: the source path to check
 
   stdlib.io.path.assert.is_exists "${1}"
+  stdlib.security.path.assert.is_secure "${1}" \
+    "${RPI_SVC_USERNAME}" \
+    "${RPI_SVC_GROUPNAME}" \
+    "${2}"
 }
 
 _backup_job_validation_tarball_versions() {
