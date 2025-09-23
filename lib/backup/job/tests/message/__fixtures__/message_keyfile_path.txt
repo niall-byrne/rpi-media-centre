@@ -1,0 +1,1 @@
+${THEME_INFO} *Please check the encryption key path value.${THEME_NC}
