@@ -1,0 +1,3 @@
+${THEME_HEADER}Valid Destination Path:${THEME_NC}
+   - ${THEME_ENTITY}path${THEME_NC}${THEME_DETAIL}:${THEME_NC}${THEME_ENTITY}permission${THEME_NC}
+${THEME_INFO} *Please check the path value and it's permission.${THEME_NC}

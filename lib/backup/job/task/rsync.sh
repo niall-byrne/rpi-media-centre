@@ -21,7 +21,7 @@ _backup_job_task_rsync_filesystem() {
   stdlib.security.path.make.dir "${RPI_BACKUP_JOB_LOCAL_RSYNC_TARGET}" \
     "${RPI_SVC_USERNAME}" \
     "${RPI_SVC_GROUPNAME}" \
-    "700"
+    "${RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER_PERMISSION}"
 
   rsync -a --delete "${RPI_BACKUP_JOB_LOCAL_SOURCE}" "${RPI_BACKUP_JOB_LOCAL_RSYNC_TARGET}/"
 }
