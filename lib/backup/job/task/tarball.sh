@@ -34,7 +34,7 @@ _backup_job_task_tarball_filesystem_build() {
   stdlib.security.path.secure "${RPI_BACKUP_JOB_LOCAL_TARBALL_FINISHED_FILENAME}" \
     "${RPI_SVC_USERNAME}" \
     "${RPI_SVC_GROUPNAME}" \
-    "600"
+    "${RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER_PERMISSION}"
 }
 
 _backup_job_task_tarball_filesystem_clean() {

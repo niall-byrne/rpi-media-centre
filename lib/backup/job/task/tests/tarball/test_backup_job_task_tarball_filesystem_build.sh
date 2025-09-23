@@ -13,14 +13,15 @@ setup() {
 
   @parametrize \
     "${1}" \
-    "TEST_LOCAL_SOURCE;TEST_SVC_USERNAME;TEST_SVC_GROUPNAME;TEST_NEW_FILENAME;TEST_EXISTING_CLEANUP_PATHS_DEFINITION" \
-    "simple__no_existing_cleanup_paths;/path/to/source;user1;group1;/path/to/new1.tar;;" \
-    "simple__with_existing_cleanup_path;/path/to/source;user1;group1;/path/to/new1.tar;existing_file1|existing_file2"
+    "TEST_LOCAL_SOURCE;TEST_SVC_USERNAME;TEST_SVC_GROUPNAME;TEST_NEW_FILENAME;TEST_NEW_FILENAME_PERMISSION;TEST_EXISTING_CLEANUP_PATHS_DEFINITION" \
+    "simple__no_existing_cleanup_paths;/path/to/source;user1;group1;/path/to/new1.tar;600;;" \
+    "simple__with_existing_cleanup_path;/path/to/source;user1;group1;/path/to/new1.tar;640;existing_file1|existing_file2"
 }
 
 # shellcheck disable=SC2034
 test_backup_job_task_tarball_filesystem_build__@vary__calls_get_new_filename_with_correct_args() {
   local RPI_BACKUP_JOB_LOCAL_SOURCE="${TEST_LOCAL_SOURCE}"
+  local RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER_PERMISSION="${TEST_NEW_FILENAME_PERMISSION}"
   local RPI_EXIT_CLEANUP_PATHS=()
   local RPI_SVC_USERNAME="${TEST_SVC_USERNAME}"
   local RPI_SVC_GROUPNAME="${TEST_SVC_GROUPNAME}"
@@ -38,6 +39,7 @@ test_backup_job_task_tarball_filesystem_build__@vary__calls_get_new_filename_wit
 # shellcheck disable=SC2034
 test_backup_job_task_tarball_filesystem_build__@vary__adds_incomplete_to_cleanup_paths() {
   local RPI_BACKUP_JOB_LOCAL_SOURCE="${TEST_LOCAL_SOURCE}"
+  local RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER_PERMISSION="${TEST_NEW_FILENAME_PERMISSION}"
   local RPI_EXIT_CLEANUP_PATHS=()
   local RPI_SVC_USERNAME="${TEST_SVC_USERNAME}"
   local RPI_SVC_GROUPNAME="${TEST_SVC_GROUPNAME}"
@@ -58,6 +60,7 @@ test_backup_job_task_tarball_filesystem_build__@vary__adds_incomplete_to_cleanup
 # shellcheck disable=SC2034
 test_backup_job_task_tarball_filesystem_build__@vary__logs_notice_message() {
   local RPI_BACKUP_JOB_LOCAL_SOURCE="${TEST_LOCAL_SOURCE}"
+  local RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER_PERMISSION="${TEST_NEW_FILENAME_PERMISSION}"
   local RPI_EXIT_CLEANUP_PATHS=()
   local RPI_SVC_USERNAME="${TEST_SVC_USERNAME}"
   local RPI_SVC_GROUPNAME="${TEST_SVC_GROUPNAME}"
@@ -76,6 +79,7 @@ test_backup_job_task_tarball_filesystem_build__@vary__logs_notice_message() {
 # shellcheck disable=SC2034
 test_backup_job_task_tarball_filesystem_build__@vary__calls_tar_with_correct_args() {
   local RPI_BACKUP_JOB_LOCAL_SOURCE="${TEST_LOCAL_SOURCE}"
+  local RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER_PERMISSION="${TEST_NEW_FILENAME_PERMISSION}"
   local RPI_EXIT_CLEANUP_PATHS=()
   local RPI_SVC_USERNAME="${TEST_SVC_USERNAME}"
   local RPI_SVC_GROUPNAME="${TEST_SVC_GROUPNAME}"
@@ -97,6 +101,7 @@ test_backup_job_task_tarball_filesystem_build__@vary__calls_tar_with_correct_arg
 # shellcheck disable=SC2034
 test_backup_job_task_tarball_filesystem_build__@vary__calls_mv_with_correct_args() {
   local RPI_BACKUP_JOB_LOCAL_SOURCE="${TEST_LOCAL_SOURCE}"
+  local RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER_PERMISSION="${TEST_NEW_FILENAME_PERMISSION}"
   local RPI_EXIT_CLEANUP_PATHS=()
   local RPI_SVC_USERNAME="${TEST_SVC_USERNAME}"
   local RPI_SVC_GROUPNAME="${TEST_SVC_GROUPNAME}"
@@ -116,6 +121,7 @@ test_backup_job_task_tarball_filesystem_build__@vary__calls_mv_with_correct_args
 # shellcheck disable=SC2034
 test_backup_job_task_tarball_filesystem_build__@vary__calls_path_secure_with_correct_args() {
   local RPI_BACKUP_JOB_LOCAL_SOURCE="${TEST_LOCAL_SOURCE}"
+  local RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER_PERMISSION="${TEST_NEW_FILENAME_PERMISSION}"
   local RPI_EXIT_CLEANUP_PATHS=()
   local RPI_SVC_USERNAME="${TEST_SVC_USERNAME}"
   local RPI_SVC_GROUPNAME="${TEST_SVC_GROUPNAME}"
@@ -125,7 +131,7 @@ test_backup_job_task_tarball_filesystem_build__@vary__calls_path_secure_with_cor
   _backup_job_task_tarball_filesystem_build
 
   stdlib.security.path.secure.mock.assert_called_once_with \
-    "1(${TEST_NEW_FILENAME}) 2(${TEST_SVC_USERNAME}) 3(${TEST_SVC_GROUPNAME}) 4(600)"
+    "1(${TEST_NEW_FILENAME}) 2(${TEST_SVC_USERNAME}) 3(${TEST_SVC_GROUPNAME}) 4(${TEST_NEW_FILENAME_PERMISSION})"
 }
 
 @parametrize_with_tarball_jobs \
