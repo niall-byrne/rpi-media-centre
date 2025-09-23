@@ -69,8 +69,8 @@ _backup_manifest_help() {
     echo " RPI_BACKUP_JOB_NAME                       |a unique name for the backup job"
     echo " RPI_BACKUP_JOB_GROUP                      |a group for the backup job *(daily, weekly, monthly)"
     echo " RPI_BACKUP_JOB_LOCAL_SOURCE               |the local path to the backup source"
-    echo " RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER         |an optional local path to rsync the data to *(--delete is used) *(required when \`RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER\` is blank and \`RPI_BACKUP_JOB_REMOTE_TARGET\` is also blank)"
-    echo " RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER       |an optional local path to keep a tarball copy at *(required when \`RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER\` is blank and \`RPI_BACKUP_JOB_REMOTE_TARGET\` is also blank) *(required when \`RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS\` is set)"
+    echo " RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER         |an optional local path to rsync the data to *(--delete is used) *(required when \`RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER\` is blank and \`RPI_BACKUP_JOB_REMOTE_TARGET\` is also blank) *(format this value as a 'path:permission' pair, i.e. /path:0755)"
+    echo " RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER       |an optional local path to keep a tarball copy at *(required when \`RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER\` is blank and \`RPI_BACKUP_JOB_REMOTE_TARGET\` is also blank) *(required when \`RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS\` is set) *(format this value as a 'path:permission' pair, i.e. /path:0755)"
     echo " RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS     |an optional count of local tarball versions to keep *(required when \`RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER\` is set)"
     echo " RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH |an optional local path to an encryption key file"
     echo " RPI_BACKUP_JOB_REMOTE_TARGET              |an optional remote target for archival *(required when \`RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER\` is blank and \`RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER\` is also blank)"
@@ -143,8 +143,6 @@ _backup_manifest_load() {
       RPI_BACKUP_JOB_REMOTE_PARAMETER \
       <<< "$FILE_LINE"
 
-    _backup_job_validation "_backup_manifest_line_invalid"
-
     for ((RPI_BACKUP_JOB_INDEX = 0; RPI_BACKUP_JOB_INDEX < "${#RPI_BACKUP_JOBS_NAMES[@]}"; RPI_BACKUP_JOB_INDEX++)); do
       if [[ "${RPI_BACKUP_JOBS_NAMES["${RPI_BACKUP_JOB_INDEX}"]}" == "${RPI_BACKUP_JOB_NAME}" ]]; then
         _cli_log_error "The backup job name '${RPI_BACKUP_JOB_NAME}' is used multiple times, this value must be unique."
@@ -161,6 +159,9 @@ _backup_manifest_load() {
     RPI_BACKUP_JOBS_REMOTE_ENCRYPTION_KEY_PATHS+=("${RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH}")
     RPI_BACKUP_JOBS_REMOTE_TARGETS+=("${RPI_BACKUP_JOB_REMOTE_TARGET}")
     RPI_BACKUP_JOBS_REMOTE_PARAMETERS+=("${RPI_BACKUP_JOB_REMOTE_PARAMETER}")
+
+    _backup_job_unpack_folders
+    _backup_job_validation "_backup_manifest_line_invalid"
 
   done < "${RPI_MANIFEST_BACKUP}" # KCOV_EXCLUDE_LINE
 }

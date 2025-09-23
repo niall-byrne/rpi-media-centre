@@ -50,7 +50,7 @@ _fixture_set_variable_content_except() {
   local variable_name
   local variable_names=()
 
-  TEST_VARIABLE_NAMES_DEFINITION="NAME|GROUP|LOCAL_SOURCE|LOCAL_RSYNC_FOLDER|LOCAL_TARBALL_FOLDER|LOCAL_TARBALL_VERSIONS|REMOTE_ENCRYPTION_KEY_PATH|REMOTE_TARGET|REMOTE_PARAMETER"
+  TEST_VARIABLE_NAMES_DEFINITION="NAME|GROUP|LOCAL_SOURCE|LOCAL_SOURCE_PERMISSION|LOCAL_RSYNC_FOLDER|LOCAL_RSYNC_FOLDER_PERMISSION|LOCAL_TARBALL_FOLDER|LOCAL_TARBALL_FOLDER_PERMISSION|LOCAL_TARBALL_VERSIONS|REMOTE_ENCRYPTION_KEY_PATH|REMOTE_TARGET|REMOTE_PARAMETER"
 
   _fixture_set_variable_content
 
@@ -65,7 +65,7 @@ _fixture_set_variable_content_except() {
   @parametrize \
     "${1}" \
     "TEST_VARIABLE_NAMES_DEFINITION" \
-    "everything_defined;NAME|GROUP|LOCAL_SOURCE|LOCAL_RSYNC_FOLDER|LOCAL_TARBALL_FOLDER|LOCAL_TARBALL_VERSIONS|REMOTE_ENCRYPTION_KEY_PATH|REMOTE_TARGET|REMOTE_PARAMETER"
+    "everything_defined;NAME|GROUP|LOCAL_SOURCE|LOCAL_SOURCE_PERMISSION|LOCAL_RSYNC_FOLDER|LOCAL_RSYNC_FOLDER_PERMISSION|LOCAL_TARBALL_FOLDER|LOCAL_TARBALL_FOLDER_PERMISSION|LOCAL_TARBALL_VERSIONS|REMOTE_ENCRYPTION_KEY_PATH|REMOTE_TARGET|REMOTE_PARAMETER"
 }
 
 @parametrize_with_invalid_arguments() {
@@ -74,14 +74,14 @@ _fixture_set_variable_content_except() {
   @parametrize \
     "${1}" \
     "TEST_VARIABLE_NAMES_DEFINITION" \
-    "name_is_undefined;GROUP|LOCAL_SOURCE|LOCAL_RSYNC_FOLDER|LOCAL_TARBALL_FOLDER|LOCAL_TARBALL_VERSIONS|REMOTE_ENCRYPTION_KEY_PATH|REMOTE_TARGET|REMOTE_PARAMETER" \
-    "group_is_undefined;NAME|LOCAL_SOURCE|LOCAL_RSYNC_FOLDER|LOCAL_TARBALL_FOLDER|LOCAL_TARBALL_VERSIONS|REMOTE_ENCRYPTION_KEY_PATH|REMOTE_TARGET|REMOTE_PARAMETER" \
-    "no_task_defined;NAME|GROUP|LOCAL_RSYNC_FOLDER|LOCAL_TARBALL_FOLDER|LOCAL_TARBALL_VERSIONS|REMOTE_ENCRYPTION_KEY_PATH|REMOTE_TARGET|REMOTE_PARAMETER" \
-    "source_is_undefined;NAME|GROUP|LOCAL_SOURCE" \
-    "tarball_without_version_count;NAME|GROUP|LOCAL_SOURCE|LOCAL_RSYNC_FOLDER|LOCAL_TARBALL_FOLDER|REMOTE_ENCRYPTION_KEY_PATH|REMOTE_TARGET|REMOTE_PARAMETER" \
-    "version_count_without_tarball;NAME|GROUP|LOCAL_SOURCE|LOCAL_RSYNC_FOLDER|LOCAL_TARBALL_FOLDER|REMOTE_ENCRYPTION_KEY_PATH|REMOTE_TARGET|REMOTE_PARAMETER" \
-    "remote_parameter_without_remote_target;NAME|GROUP|LOCAL_SOURCE|LOCAL_RSYNC_FOLDER|LOCAL_TARBALL_FOLDER|LOCAL_TARBALL_VERSIONS|REMOTE_PARAMETER" \
-    "encryption_key_without_remote_target;NAME|GROUP|LOCAL_SOURCE|LOCAL_RSYNC_FOLDER|LOCAL_TARBALL_FOLDER|LOCAL_TARBALL_VERSIONS|REMOTE_ENCRYPTION_KEY_PATH"
+    "name_is_undefined;GROUP|LOCAL_SOURCE|LOCAL_SOURCE_PERMISSION|LOCAL_RSYNC_FOLDER|LOCAL_RSYNC_FOLDER_PERMISSION|LOCAL_TARBALL_FOLDER|LOCAL_TARBALL_FOLDER_PERMISSION|LOCAL_TARBALL_VERSIONS|REMOTE_ENCRYPTION_KEY_PATH|REMOTE_TARGET|REMOTE_PARAMETER" \
+    "group_is_undefined;NAME|LOCAL_SOURCE|LOCAL_SOURCE_PERMISSION|LOCAL_RSYNC_FOLDER_PERMISSION|LOCAL_RSYNC_FOLDER|LOCAL_TARBALL_FOLDER|LOCAL_TARBALL_FOLDER_PERMISSION|LOCAL_TARBALL_VERSIONS|REMOTE_ENCRYPTION_KEY_PATH|REMOTE_TARGET|REMOTE_PARAMETER" \
+    "no_task_defined;NAME|GROUP|LOCAL_RSYNC_FOLDER|LOCAL_RSYNC_FOLDER_PERMISSION|LOCAL_TARBALL_FOLDER|LOCAL_TARBALL_FOLDER_PERMISSION|LOCAL_TARBALL_VERSIONS|REMOTE_ENCRYPTION_KEY_PATH|REMOTE_TARGET|REMOTE_PARAMETER" \
+    "source_is_undefined;NAME|GROUP|LOCAL_RSYNC_FOLDER|LOCAL_RSYNC_FOLDER_PERMISSION|LOCAL_TARBALL_FOLDER|LOCAL_TARBALL_FOLDER_PERMISSION|LOCAL_TARBALL_VERSIONS|REMOTE_ENCRYPTION_KEY_PATH|REMOTE_TARGET|REMOTE_PARAMETER" \
+    "tarball_without_version_count;NAME|GROUP|LOCAL_SOURCE|LOCAL_SOURCE_PERMISSION|LOCAL_RSYNC_FOLDER|LOCAL_RSYNC_FOLDER_PERMISSION|LOCAL_TARBALL_FOLDER|LOCAL_TARBALL_FOLDER_PERMISSION|REMOTE_ENCRYPTION_KEY_PATH|REMOTE_TARGET|REMOTE_PARAMETER" \
+    "version_count_without_tarball;NAME|GROUP|LOCAL_SOURCE|LOCAL_SOURCE_PERMISSION|LOCAL_RSYNC_FOLDER|LOCAL_RSYNC_FOLDER_PERMISSION|LOCAL_TARBALL_FOLDER|LOCAL_TARBALL_FOLDER_PERMISSION|REMOTE_ENCRYPTION_KEY_PATH|REMOTE_TARGET|REMOTE_PARAMETER" \
+    "remote_parameter_without_remote_target;NAME|GROUP|LOCAL_SOURCE|LOCAL_SOURCE_PERMISSION|LOCAL_RSYNC_FOLDER|LOCAL_RSYNC_FOLDER_PERMISSION|LOCAL_TARBALL_FOLDER|LOCAL_TARBALL_FOLDER_PERMISSION|LOCAL_TARBALL_VERSIONS|REMOTE_PARAMETER" \
+    "encryption_key_without_remote_target;NAME|GROUP|LOCAL_SOURCE|LOCAL_SOURCE_PERMISSION|LOCAL_RSYNC_FOLDER|LOCAL_RSYNC_FOLDER_PERMISSION|LOCAL_TARBALL_FOLDER|LOCAL_TARBALL_FOLDER_PERMISSION|LOCAL_TARBALL_VERSIONS|REMOTE_ENCRYPTION_KEY_PATH"
 }
 
 @parametrize_with_logging_toggle() {
@@ -165,8 +165,8 @@ test_backup_job_validation__@vary__@vary______________________performs_local_rsy
   _backup_job_validation _mock_help_function
 
   _backup_job_validation_path.mock.assert_calls_are \
-    "1(LOCAL_RSYNC_FOLDER)" \
-    "1(LOCAL_TARBALL_FOLDER)"
+    "1(LOCAL_RSYNC_FOLDER) 2(LOCAL_RSYNC_FOLDER_PERMISSION)" \
+    "1(LOCAL_TARBALL_FOLDER) 2(LOCAL_TARBALL_FOLDER_PERMISSION)"
 }
 
 @parametrize.compose \
@@ -175,12 +175,12 @@ test_backup_job_validation__@vary__@vary______________________performs_local_rsy
   @parametrize_with_all_arguments
 
 test_backup_job_validation__@vary__without_rsync___________________________skips_rsync_path_validation() {
-  _fixture_set_variable_content_except "LOCAL_RSYNC_FOLDER"
+  _fixture_set_variable_content_except "LOCAL_RSYNC_FOLDER" "LOCAL_RSYNC_FOLDER_PERMISSION"
 
   _backup_job_validation _mock_help_function
 
   _backup_job_validation_path.mock.assert_calls_are \
-    "1(LOCAL_TARBALL_FOLDER)"
+    "1(LOCAL_TARBALL_FOLDER) 2(LOCAL_TARBALL_FOLDER_PERMISSION)"
 }
 
 @parametrize.compose \
@@ -193,8 +193,8 @@ test_backup_job_validation__@vary__@vary______________________performs_local_tar
   _backup_job_validation _mock_help_function
 
   _backup_job_validation_path.mock.assert_calls_are \
-    "1(LOCAL_RSYNC_FOLDER)" \
-    "1(LOCAL_TARBALL_FOLDER)"
+    "1(LOCAL_RSYNC_FOLDER) 2(LOCAL_RSYNC_FOLDER_PERMISSION)" \
+    "1(LOCAL_TARBALL_FOLDER) 2(LOCAL_TARBALL_FOLDER_PERMISSION)"
 }
 
 @parametrize.compose \
@@ -230,12 +230,12 @@ test_backup_job_validation__@vary__@vary______________________performs_tarball_d
   @parametrize_with_all_arguments
 
 test_backup_job_validation__@vary__without_tarball_________________________skips_local_tarball_path_validation() {
-  _fixture_set_variable_content_except "LOCAL_TARBALL_FOLDER" "LOCAL_TARBALL_VERSIONS"
+  _fixture_set_variable_content_except "LOCAL_TARBALL_FOLDER" "LOCAL_TARBALL_FOLDER_PERMISSION" "LOCAL_TARBALL_VERSIONS"
 
   _backup_job_validation _mock_help_function
 
   _backup_job_validation_path.mock.assert_calls_are \
-    "1(LOCAL_RSYNC_FOLDER)"
+    "1(LOCAL_RSYNC_FOLDER) 2(LOCAL_RSYNC_FOLDER_PERMISSION)"
 }
 
 @parametrize.compose \
@@ -243,7 +243,7 @@ test_backup_job_validation__@vary__without_tarball_________________________skips
   @parametrize_with_logging_toggle
 
 test_backup_job_validation__@vary__without_tarball_________________________skips_local_tarball_version_count_validation() {
-  _fixture_set_variable_content_except "LOCAL_TARBALL_FOLDER" "LOCAL_TARBALL_VERSIONS"
+  _fixture_set_variable_content_except "LOCAL_TARBALL_FOLDER" "LOCAL_TARBALL_FOLDER_PERMISSION" "LOCAL_TARBALL_VERSIONS"
 
   _backup_job_validation _mock_help_function
 
@@ -255,7 +255,7 @@ test_backup_job_validation__@vary__without_tarball_________________________skips
   @parametrize_with_logging_toggle
 
 test_backup_job_validation__@vary__without_tarball_________________________skips_tarball_dependency_check() {
-  _fixture_set_variable_content_except "LOCAL_TARBALL_FOLDER" "LOCAL_TARBALL_VERSIONS"
+  _fixture_set_variable_content_except "LOCAL_TARBALL_FOLDER" "LOCAL_TARBALL_FOLDER_PERMISSION" "LOCAL_TARBALL_VERSIONS"
 
   _backup_job_validation _mock_help_function
 
@@ -272,7 +272,7 @@ test_backup_job_validation__@vary__@vary______________________performs_source_va
   _backup_job_validation _mock_help_function
 
   _backup_job_validation_source.mock.assert_called_once_with \
-    "1(LOCAL_SOURCE)"
+    "1(LOCAL_SOURCE) 2(LOCAL_SOURCE_PERMISSION)"
 }
 
 @parametrize.compose \

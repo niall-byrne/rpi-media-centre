@@ -35,23 +35,39 @@ _backup_job_validation() {
   fi
 
   if [[ -n "${RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER}" ]]; then
-    _backup_job_validation_path "${RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER}"
     _dependencies_group_backups_rsync
   fi
 
   if [[ -n "${RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER}" ]]; then
-    _backup_job_validation_path "${RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER}"
     _backup_job_validation_tarball_versions "${RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS}"
     _dependencies_group_backups_tarball
   fi
-
-  _backup_job_validation_source "${RPI_BACKUP_JOB_LOCAL_SOURCE}"
 
   if [[ -n "${RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH}" ]]; then
     _backup_job_validation_key_file "${RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH}"
   fi
 
+  _backup_job_validate_filesystem "${1}"
+
   _backup_job_validation_remote_target "${RPI_BACKUP_JOB_REMOTE_TARGET}" "${RPI_BACKUP_JOB_REMOTE_PARAMETER}"
+}
+
+_backup_job_validate_filesystem() {
+  # $1: the help function to call in the event that the job is invalid
+
+  if [[ -n "${RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER}" ]]; then
+    _backup_job_validation_path \
+      "${RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER}" \
+      "${RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER_PERMISSION}" || "${1}"
+  fi
+
+  if [[ -n "${RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER}" ]]; then
+    _backup_job_validation_path \
+      "${RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER}" \
+      "${RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER_PERMISSION}" || "${1}"
+  fi
+
+  _backup_job_validation_source "${RPI_BACKUP_JOB_LOCAL_SOURCE}" || "${1}"
 }
 
 _backup_job_validation_key_file() {
@@ -64,11 +80,12 @@ _backup_job_validation_key_file() {
     "400"
 }
 
-_backup_job_validation_path_and_permissions() {
+_backup_job_validation_path() {
   # $1: the path to check
   # $2: the octal permission to check for
 
   stdlib.io.path.assert.is_folder "${1}"
+  stdlib.string.assert.is_octal_permission "${2}"
   stdlib.security.path.assert.is_secure "${1}" \
     "${RPI_SVC_USERNAME}" \
     "${RPI_SVC_GROUPNAME}" \
@@ -140,13 +157,8 @@ _backup_job_validation_remote_target() {
 
 _backup_job_validation_source() {
   # $1: the path to check
-  # $2: the source path to check
 
   stdlib.io.path.assert.is_exists "${1}"
-  stdlib.security.path.assert.is_secure "${1}" \
-    "${RPI_SVC_USERNAME}" \
-    "${RPI_SVC_GROUPNAME}" \
-    "${2}"
 }
 
 _backup_job_validation_tarball_versions() {
