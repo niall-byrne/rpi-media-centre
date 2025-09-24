@@ -145,10 +145,16 @@ _backup_manifest_load() {
 
     for ((RPI_BACKUP_JOB_INDEX = 0; RPI_BACKUP_JOB_INDEX < "${#RPI_BACKUP_JOBS_NAMES[@]}"; RPI_BACKUP_JOB_INDEX++)); do
       if [[ "${RPI_BACKUP_JOBS_NAMES["${RPI_BACKUP_JOB_INDEX}"]}" == "${RPI_BACKUP_JOB_NAME}" ]]; then
+
         _cli_log_error "The backup job name '${RPI_BACKUP_JOB_NAME}' is used multiple times, this value must be unique."
         _backup_manifest_line_invalid
       fi
     done
+
+    (
+      _backup_job_parse_destination_folders
+      _backup_job_validation "_backup_manifest_line_invalid"
+    )
 
     RPI_BACKUP_JOBS_NAMES+=("${RPI_BACKUP_JOB_NAME}")
     RPI_BACKUP_JOBS_GROUPS+=("${RPI_BACKUP_JOB_GROUP}")
@@ -159,9 +165,6 @@ _backup_manifest_load() {
     RPI_BACKUP_JOBS_REMOTE_ENCRYPTION_KEY_PATHS+=("${RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH}")
     RPI_BACKUP_JOBS_REMOTE_TARGETS+=("${RPI_BACKUP_JOB_REMOTE_TARGET}")
     RPI_BACKUP_JOBS_REMOTE_PARAMETERS+=("${RPI_BACKUP_JOB_REMOTE_PARAMETER}")
-
-    _backup_job_unpack_folders
-    _backup_job_validation "_backup_manifest_line_invalid"
 
   done < "${RPI_MANIFEST_BACKUP}" # KCOV_EXCLUDE_LINE
 }

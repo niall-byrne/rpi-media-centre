@@ -14,9 +14,9 @@ setup() {
     "${1}" \
     "@fixture _fixture_environment_variable_positions" \
     "TEST_ARGS_DEFINITION" \
-    "all_specified_perms;-b|/path_tarball:0700|-k|/path_encryption_key|-n|job_name|-p|remote_parameter|-q|queue_name|-r|/path_rsync:750|-s|/path_source:0750|-t|remote_target://path|-v|version_count" \
-    "missing_tarball____;-k|/path_encryption_key|-n|job_name|-p|remote_parameter|-q|queue_name|-r|/path_rsync:0750|-s|/path_source:750|-t|remote_target://path|-v|version_count" \
-    "missing_encryption_;-n|job_name|-p|remote_parameter|-q|queue_name|-r|/path_rsync:0700|-s|/path_source:700|-t|remote_target://path|-v|version_count" \
+    "all_specified_perms;-b|/path_tarball:0700|-k|/path_encryption_key|-n|job_name|-p|remote_parameter|-q|queue_name|-r|/path_rsync:750|-s|/path_source|-t|remote_target://path|-v|version_count" \
+    "missing_tarball____;-k|/path_encryption_key|-n|job_name|-p|remote_parameter|-q|queue_name|-r|/path_rsync:0750|-s|/path_source|-t|remote_target://path|-v|version_count" \
+    "missing_encryption_;-n|job_name|-p|remote_parameter|-q|queue_name|-r|/path_rsync:0700|-s|/path_source|-t|remote_target://path|-v|version_count" \
     "no_args____________;;"
 }
 
@@ -37,16 +37,16 @@ _fixture_environment_variable_positions() {
 
   case "${PARAMETRIZE_SCENARIO_NAME}" in
     all_specified_perms)
-      TEST_VARIABLE_FOLDER_PAIR_DEFINITION="RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER:RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER_PERMISSION|1 RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER:RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER_PERMISSION|11 RPI_BACKUP_JOB_LOCAL_SOURCE:RPI_BACKUP_JOB_LOCAL_SOURCE_PERMISSION|13"
-      TEST_VARIABLE_PAIR_DEFINITION="RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH|3 RPI_BACKUP_JOB_NAME|5 RPI_BACKUP_JOB_REMOTE_PARAMETER|7 RPI_BACKUP_JOB_QUEUE|9  RPI_BACKUP_JOB_REMOTE_TARGET|15 RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS|17"
+      TEST_VARIABLE_FOLDER_PAIR_DEFINITION="RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER:RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER_PERMISSION|1 RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER:RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER_PERMISSION|11"
+      TEST_VARIABLE_PAIR_DEFINITION="RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH|3 RPI_BACKUP_JOB_NAME|5 RPI_BACKUP_JOB_REMOTE_PARAMETER|7 RPI_BACKUP_JOB_QUEUE|9 RPI_BACKUP_JOB_LOCAL_SOURCE|13 RPI_BACKUP_JOB_REMOTE_TARGET|15 RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS|17"
       ;;
     missing_tarball____)
-      TEST_VARIABLE_FOLDER_PAIR_DEFINITION="RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER:RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER_PERMISSION|9 RPI_BACKUP_JOB_LOCAL_SOURCE:RPI_BACKUP_JOB_LOCAL_SOURCE_PERMISSION|11"
-      TEST_VARIABLE_PAIR_DEFINITION="RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH|1 RPI_BACKUP_JOB_NAME|3 RPI_BACKUP_JOB_REMOTE_PARAMETER|5 RPI_BACKUP_JOB_QUEUE|7 RPI_BACKUP_JOB_REMOTE_TARGET|13 RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS|15"
+      TEST_VARIABLE_FOLDER_PAIR_DEFINITION="RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER:RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER_PERMISSION|9"
+      TEST_VARIABLE_PAIR_DEFINITION="RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH|1 RPI_BACKUP_JOB_NAME|3 RPI_BACKUP_JOB_REMOTE_PARAMETER|5 RPI_BACKUP_JOB_QUEUE|7 RPI_BACKUP_JOB_LOCAL_SOURCE|11 RPI_BACKUP_JOB_REMOTE_TARGET|13 RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS|15"
       ;;
     missing_encryption_)
-      TEST_VARIABLE_FOLDER_PAIR_DEFINITION="RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER:RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER_PERMISSION|7 RPI_BACKUP_JOB_LOCAL_SOURCE:RPI_BACKUP_JOB_LOCAL_SOURCE_PERMISSION|9"
-      TEST_VARIABLE_PAIR_DEFINITION="RPI_BACKUP_JOB_NAME|1 RPI_BACKUP_JOB_REMOTE_PARAMETER|3 RPI_BACKUP_JOB_QUEUE|5 RPI_BACKUP_JOB_REMOTE_TARGET|11 RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS|13"
+      TEST_VARIABLE_FOLDER_PAIR_DEFINITION="RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER:RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER_PERMISSION|7"
+      TEST_VARIABLE_PAIR_DEFINITION="RPI_BACKUP_JOB_NAME|1 RPI_BACKUP_JOB_REMOTE_PARAMETER|3 RPI_BACKUP_JOB_QUEUE|5 RPI_BACKUP_JOB_LOCAL_SOURCE|9 RPI_BACKUP_JOB_REMOTE_TARGET|11 RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS|13"
       ;;
     no_args____________)
       TEST_VARIABLE_PAIR_DEFINITION=""
@@ -63,7 +63,7 @@ _fixture_environment_variable_positions() {
   stdlib.array.make.from_string TEST_VARIABLE_FOLDER_PAIRS " " "${TEST_VARIABLE_FOLDER_PAIR_DEFINITION}"
 }
 
-test_backup_job_args__@vary__@vary__folder_and_permission_environment_variables_are_set_as_expected() {
+test_backup_job_args__@vary__@vary__destination_path_and_permissions_variables_are_set_as_expected() {
   local command_args
   local variable_pair=()
   local variable_pair_definition
@@ -86,11 +86,11 @@ test_backup_job_args__@vary__@vary__folder_and_permission_environment_variables_
 }
 
 @parametrize.apply \
-  test_backup_job_args__@vary__@vary__folder_and_permission_environment_variables_are_set_as_expected \
+  test_backup_job_args__@vary__@vary__destination_path_and_permissions_variables_are_set_as_expected \
   @parametrize_with_success_args \
   @parametrize_with_failure_args
 
-test_backup_job_args__@vary__@vary__non_folder_and_permission_environment_variables_are_set_as_expected() {
+test_backup_job_args__@vary__@vary__standard_variables_are_set_as_expected() {
   local command_args
   local variable_pair=()
   local variable_pair_definition
@@ -106,7 +106,7 @@ test_backup_job_args__@vary__@vary__non_folder_and_permission_environment_variab
 }
 
 @parametrize.apply \
-  test_backup_job_args__@vary__@vary__non_folder_and_permission_environment_variables_are_set_as_expected \
+  test_backup_job_args__@vary__@vary__standard_variables_are_set_as_expected \
   @parametrize_with_success_args \
   @parametrize_with_failure_args
 
