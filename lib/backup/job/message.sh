@@ -34,6 +34,10 @@ _backup_job_message_queue() {
   } | stdlib.string.lines.join_pipe
 }
 
+_backup_job_message_remote_param() {
+  _backup_job_message_remote_param_s3
+}
+
 _backup_job_message_remote_param_s3() {
   _cli_pretty_header "Valid S3 Parameters:"
   {
