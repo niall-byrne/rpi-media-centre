@@ -87,26 +87,26 @@ _configuration_samba() {
 }
 
 _configuration_syncthing() {
-  _configuration_syncthing_setting RPI_SYNCTHING_CREDENTIALS_USERNAME gui user
-  _configuration_syncthing_setting RPI_SYNCTHING_CREDENTIALS_PASSWORD gui password
+  _cli_log_warning "Configuring syncthing service credentials..."
+
+  _configuration_syncthing_healthcheck
+
+  _docker_compose_exec syncthing \
+    syncthing \
+    generate \
+    --gui-password="${RPI_SYNCTHING_CREDENTIALS_PASSWORD}" \
+    --gui-user="${RPI_SYNCTHING_CREDENTIALS_USERNAME}"
+  _docker_compose_exec syncthing \
+    chown "${RPI_SVC_UID}":"${RPI_SVC_GID}" /config/config.xml
+  docker restart syncthing
+
+  _configuration_syncthing_healthcheck
+
+  _cli_log_success "Configuration complete!"
 }
 
-_configuration_syncthing_setting() {
-  # $1 the optional value to use
-  # $@ the config key path to set
-
-  local VALUE="${1}"
-
-  shift
-
-  if [[ -n "${!VALUE}" ]]; then
-    _cli_log_warning "Configuring syncthing '${*}' with environment variable '${VALUE}' ..."
-
-    while ! curl -fkLsS -m 2 127.0.0.1:8384/rest/noauth/health >> /dev/null 2>&1; do
-      sleep 1
-    done
-
-    _docker_compose_exec syncthing syncthing cli config "$@" set "${!VALUE}" >> /dev/null 2>&1
+_configuration_syncthing_healthcheck() {
+  while ! curl -fkLsS -m 2 127.0.0.1:8384/rest/noauth/health >> /dev/null 2>&1; do
     sleep 1
-  fi
+  done
 }
