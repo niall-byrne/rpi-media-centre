@@ -38,7 +38,9 @@ _backup_job_task_upload_s3_from_latest_tarball() {
 }
 
 _backup_job_task_upload_s3_from_latest_tarball_retryable() {
-  aws s3 cp \
+  aws --cli-connect-timeout "${RPI_BACKUP_S3_REMOTE_TIMEOUT_CONNECT}" \
+    --cli-read-timeout "${RPI_BACKUP_S3_REMOTE_TIMEOUT_READ}" \
+    s3 cp \
     --no-progress \
     "$(_backup_job_task_tarball_get_latest_filename)" \
     "${RPI_BACKUP_JOB_REMOTE_TARGET}/${RPI_BACKUP_JOB_NAME}.tar" \
@@ -64,12 +66,13 @@ _backup_job_task_upload_s3_from_tarball_stream() {
 }
 
 _backup_job_task_upload_s3_from_tarball_stream_retryable() {
-  # KCOV_EXCLUDE_BEGIN
-  tar \
-    c \
+  tar c \
     "$(basename "${RPI_BACKUP_JOB_LOCAL_SOURCE}")" |
-    aws s3 cp - \
+    aws --cli-connect-timeout "${RPI_BACKUP_S3_REMOTE_TIMEOUT_CONNECT}" \
+      --cli-read-timeout "${RPI_BACKUP_S3_REMOTE_TIMEOUT_READ}" \
+      s3 cp \
+      --no-progress \
+      - \
       "${RPI_BACKUP_JOB_REMOTE_TARGET}/${RPI_BACKUP_JOB_NAME}.tar" \
       "${RPI_BACKUP_JOB_UPLOAD_OPTIONS[@]}"
-  # KCOV_EXCLUDE_END
 }
