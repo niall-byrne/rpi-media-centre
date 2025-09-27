@@ -12,7 +12,8 @@ setup() {
   _mock.create stdlib.security.path.query.is_secure
   _mock.create _backup_job_validation
   _mock.create _backup_manifest_help
-  _mock.create _backup_manifest_line_invalid
+  _mock.create _backup_manifest_line_log_invalid
+  _mock.create _backup_manifest_line_validate
 
   RPI_BACKUP_JOBS_NAMES=()
   RPI_BACKUP_JOBS_GROUPS=()
@@ -117,30 +118,18 @@ test_backup_manifest_load__@vary__checks_manifest_permissions() {
   test_backup_manifest_load__@vary__checks_manifest_permissions
 
 test_backup_manifest_load__@vary__checks_each_line_for_validity() {
-  local _MANIFEST_INDEX
+  local manifest_index
 
   _backup_manifest_load
 
-  _backup_job_validation.mock.assert_count_is "${TEST_MANIFEST_LENGTH}"
-  for ((_MANIFEST_INDEX = 1; _MANIFEST_INDEX < TEST_MANIFEST_LENGTH; _MANIFEST_INDEX++)); do
-    _backup_job_validation.mock.assert_call_n_is "${_MANIFEST_INDEX}" \
-      "1(_backup_manifest_line_invalid)"
+  _backup_manifest_line_validate.mock.assert_count_is "${TEST_MANIFEST_LENGTH}"
+  for ((manifest_index = 1; manifest_index < TEST_MANIFEST_LENGTH; manifest_index++)); do
+    _backup_manifest_line_validate.mock.assert_call_n_is "${manifest_index}" ""
   done
 }
 
 @parametrize_with_mock_manifests \
   test_backup_manifest_load__@vary__checks_each_line_for_validity
-
-test_backup_manifest_load__@vary__sets_environment_variables_for_validity_check() {
-  _backup_job_validation.mock.set.subcommand _backup_manifest_line_log_all
-
-  _capture.output _backup_manifest_load
-
-  assert_snapshot "${RPI_MANIFEST_BACKUP}.log"
-}
-
-@parametrize_with_mock_manifests \
-  test_backup_manifest_load__@vary__sets_environment_variables_for_validity_check
 
 test_backup_manifest_load__@vary__@vary__is_correctly_populated() {
   # shellcheck disable=SC2034
@@ -160,12 +149,12 @@ test_backup_manifest_load__@vary__@vary__is_correctly_populated() {
   @parametrize_with_mock_manifests \
   @parametrize_with_each_env_var
 
-test_backup_manifest_load__manifest_with_duplicate_job_names__calls_backup_manifest_line_invalid() {
+test_backup_manifest_load__manifest_with_duplicate_job_names__calls_backup_manifest_line_log_invalid() {
   RPI_MANIFEST_BACKUP="${ORIGINAL_RPI_WORKING_DIRECTORY}/lib/backup/tests/manifest/__fixtures__/manifest-duplicate-job-names"
 
   _backup_manifest_load
 
-  _backup_manifest_line_invalid.mock.assert_called_once_with ""
+  _backup_manifest_line_log_invalid.mock.assert_called_once_with ""
 }
 
 test_backup_manifest_load__manifest_with_duplicate_names__logs_an_error() {
