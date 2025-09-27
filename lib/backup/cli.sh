@@ -81,6 +81,9 @@ _backup_cli_recover() {
 _backup_cli_schedule() {
   # $1: the group of backup jobs to schedule
 
+  # Disable filesystem access during scheduling to prevent waking hard disks
+  local _RPI_BACKUP_JOB_DISABLED_VALIDATORS=("filesystem")
+
   if [[ -z "${1}" ]]; then
     _backup_cli_usage_error
   fi
