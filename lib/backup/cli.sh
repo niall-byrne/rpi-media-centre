@@ -81,6 +81,9 @@ _backup_cli_recover() {
 _backup_cli_schedule() {
   # $1: the group of backup jobs to schedule
 
+  # shellcheck disable=SC2034
+  local RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY=("filesystem")
+
   if [[ -z "${1}" ]]; then
     _backup_cli_usage_error
   fi

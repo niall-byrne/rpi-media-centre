@@ -78,7 +78,13 @@ _backup_manifest_help() {
   } | _cli_pretty_columns_pipe
 }
 
-_backup_manifest_line_invalid() {
+_backup_manifest_line_log_all() {
+  _cli_log_notice "== Start of Job '${RPI_BACKUP_JOB_NAME}' =="
+  _backup_job_log
+  _cli_log_notice "== End of Job '${RPI_BACKUP_JOB_NAME}' =="
+}
+
+_backup_manifest_line_log_invalid() {
   {
     echo "The ${RPI_MANIFEST_BACKUP} file is improperly formatted!"
     echo "Input Line: ${FILE_LINE}"
@@ -88,10 +94,11 @@ _backup_manifest_line_invalid() {
   return 127
 }
 
-_backup_manifest_line_log_all() {
-  _cli_log_notice "== Start of Job '${RPI_BACKUP_JOB_NAME}' =="
-  _backup_job_log
-  _cli_log_notice "== End of Job '${RPI_BACKUP_JOB_NAME}' =="
+_backup_manifest_line_validate() {
+  (
+    _backup_job_parse_destination_folders
+    _backup_job_validation "_backup_manifest_line_log_invalid"
+  )
 }
 
 _backup_manifest_load() {
@@ -147,14 +154,11 @@ _backup_manifest_load() {
       if [[ "${RPI_BACKUP_JOBS_NAMES["${RPI_BACKUP_JOB_INDEX}"]}" == "${RPI_BACKUP_JOB_NAME}" ]]; then
 
         _cli_log_error "The backup job name '${RPI_BACKUP_JOB_NAME}' is used multiple times, this value must be unique."
-        _backup_manifest_line_invalid
+        _backup_manifest_line_log_invalid
       fi
     done
 
-    (
-      _backup_job_parse_destination_folders
-      _backup_job_validation "_backup_manifest_line_invalid"
-    )
+    _backup_manifest_line_validate
 
     RPI_BACKUP_JOBS_NAMES+=("${RPI_BACKUP_JOB_NAME}")
     RPI_BACKUP_JOBS_GROUPS+=("${RPI_BACKUP_JOB_GROUP}")
@@ -186,8 +190,6 @@ _backup_manifest_write_jobs_all() {
 
   RPI_BACKUP_JOB_DATA="${RPI_BACKUP_JOB_DATA//$'\n'"    "/" "}"
   RPI_BACKUP_JOB_DATA="${RPI_BACKUP_JOB_DATA//$'\n'/""}"
-
-  eval "_backup_job_args ${RPI_BACKUP_JOB_DATA} -q ${RPI_BACKUP_QUEUE_NAMES[0]}"
 
   {
     echo "#!/bin/bash"

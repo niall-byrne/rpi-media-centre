@@ -29,7 +29,7 @@ setup() {
     "${1}" \
     "@fixture _fixture_environment_variable_positions" \
     "TEST_ARGS_DEFINITION" \
-    "invalid_arguments;-k|/path_encryption_key|-x|ddd|-b;"
+    "invalid_arguments__;-k|/path_encryption_key|-x|ddd|-b;"
 }
 
 _fixture_environment_variable_positions() {
@@ -51,7 +51,7 @@ _fixture_environment_variable_positions() {
     no_args____________)
       TEST_VARIABLE_PAIR_DEFINITION=""
       ;;
-    invalid_arguments)
+    invalid_arguments__)
       TEST_VARIABLE_PAIR_DEFINITION="RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH|1"
       ;;
     *)
@@ -145,11 +145,31 @@ test_backup_job_args__@vary__@vary__calls_backup_job_validation_as_expected() {
 
   _backup_job_args "${command_args[@]}"
 
-  _backup_job_validation.mock.assert_called_once_with "1(_backup_job_usage)"
+  _backup_job_validation.mock.assert_called_once_with \
+    "1(_backup_job_usage)"
 }
 
 @parametrize.apply \
   test_backup_job_args__@vary__@vary__calls_backup_job_validation_as_expected \
+  @parametrize_with_success_args \
+  @parametrize_with_failure_args
+
+# shellcheck disable=SC2034
+test_backup_job_args__@vary__@vary__ensures_correct_validators_are_run() {
+  local RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY=("mock_disabled_validator")
+  local command_args
+
+  _backup_job_validation.mock.set.keywords "RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY"
+  stdlib.array.make.from_string command_args "|" "${TEST_ARGS_DEFINITION}"
+
+  _backup_job_args "${command_args[@]}"
+
+  _backup_job_validation.mock.assert_called_once_with \
+    "1(_backup_job_usage) RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY('mock_disabled_validator')"
+}
+
+@parametrize.apply \
+  test_backup_job_args__@vary__@vary__ensures_correct_validators_are_run \
   @parametrize_with_success_args \
   @parametrize_with_failure_args
 

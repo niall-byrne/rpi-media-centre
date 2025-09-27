@@ -17,7 +17,6 @@ teardown_suite() {
 
 setup() {
   _fixture_mock_logs
-  _mock.create _backup_job_args
   _mock.create stdlib.security.path.secure
 }
 
@@ -37,19 +36,6 @@ _fixture_generate_job_args() {
  -k ${1}${RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH}${1}
  -t ${1}${RPI_BACKUP_JOB_REMOTE_TARGET}${1}
  -p ${1}${RPI_BACKUP_JOB_REMOTE_PARAMETER}${1}" | tr -d $'\n'
-}
-
-# shellcheck disable=SC2034
-test_backup_manifest_write_jobs_all__calls_backup_job_args_to_verify_data() {
-  local expected_args
-
-  fake_backup_job_n "0"
-  stdlib.array.make.from_string expected_args " " "$(_fixture_generate_job_args) -q ${RPI_BACKUP_QUEUE_NAMES[0]}"
-
-  _backup_manifest_write_jobs_all
-
-  _backup_job_args.mock.assert_called_once_with \
-    "$(_mock.arg_string.from_array expected_args)"
 }
 
 test_backup_manifest_write_jobs_all__writes_a_job_file_to_the_first_queue() {
