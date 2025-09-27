@@ -9,18 +9,18 @@ setup() {
   _backup_manifest_help.mock.set.stdout "mocked_manifest_help"
 }
 
-test_backup_manifest_line_invalid__returns_status_code_127() {
+test_backup_manifest_line_log_invalid__returns_status_code_127() {
   local FILE_LINE="mock_file_line"
 
-  _capture.rc _backup_manifest_line_invalid > /dev/null 2>&1
+  _capture.rc _backup_manifest_line_log_invalid > /dev/null 2>&1
 
   assert_rc "127"
 }
 
-test_backup_manifest_line_invalid__outputs_expected_stderr() {
+test_backup_manifest_line_log_invalid__outputs_expected_stderr() {
   local FILE_LINE="mock_file_line"
 
-  _capture.stderr _backup_manifest_line_invalid
+  _capture.stderr _backup_manifest_line_log_invalid
 
   assert_output "The ${RPI_MANIFEST_BACKUP} file is improperly formatted!
 Input Line: ${FILE_LINE}
