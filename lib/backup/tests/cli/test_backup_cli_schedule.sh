@@ -91,6 +91,18 @@ test_backup_cli_schedule__@vary__calls_manifest_all_command_with_correct_args() 
 @parametrize_with_group_names \
   test_backup_cli_schedule__@vary__calls_manifest_all_command_with_correct_args
 
+test_backup_cli_schedule__@vary__calls_manifest_all_command_with_disabled_filesystem_validators() {
+  _backup_manifest_all_command.mock.set.keywords "_RPI_BACKUP_JOB_DISABLED_VALIDATORS"
+
+  _backup_cli_schedule "${TEST_GROUP_NAME}"
+
+  _backup_manifest_all_command.mock.assert_called_once_with \
+    "1(_backup_manifest_write_jobs_all) 2(${TEST_GROUP_NAME}) _RPI_BACKUP_JOB_DISABLED_VALIDATORS('filesystem')"
+}
+
+@parametrize_with_group_names \
+  test_backup_cli_schedule__@vary__calls_manifest_all_command_with_disabled_filesystem_validators
+
 test_backup_cli_schedule__@vary__logs_success_message() {
   _backup_cli_schedule "${TEST_GROUP_NAME}"
 
