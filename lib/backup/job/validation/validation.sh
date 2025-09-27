@@ -4,19 +4,20 @@
 
 set -eo pipefail
 
-RPI_BACKUP_JOB_ALL_VALIDATORS_ARRAY=("argument" "dependency" "filesystem")
+RPI_BACKUP_JOB_VALIDATORS_ALL_ARRAY=("argument" "dependency" "filesystem")
+RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY=""
 
 _backup_job_validation() {
   # $1: the help function to call in the event that the job is invalid
   # $2: enable logging by setting this boolean
-  # _RPI_BACKUP_JOB_DISABLED_VALIDATORS: an array of validators to skip running
+  # RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY: an array of validators to skip running
 
   # shellcheck disable=SC2034
-  local backup_job_disabled_validators=("${_RPI_BACKUP_JOB_DISABLED_VALIDATORS[@]}")
+  local backup_job_disabled_validators=("${RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY[@]}")
   local backup_job_help_details_fn="${1}"
   local backup_job_log_valid_jobs_boolean="${2}"
   local backup_job_validator
-  local backup_job_validators=("${RPI_BACKUP_JOB_ALL_VALIDATORS_ARRAY[@]}")
+  local backup_job_validators=("${RPI_BACKUP_JOB_VALIDATORS_ALL_ARRAY[@]}")
 
   if ! _backup_job_validation_argument_combinations; then
     _cli_log_error " -- BACKUP JOB: Backup Job is INVALID!"
@@ -38,13 +39,12 @@ _backup_job_validation() {
 }
 
 _backup_job_validation_argument_combinations() {
-  # Enforce Mandatory Fields: RPI_BACKUP_JOB_NAME, RPI_BACKUP_JOB_GROUP, RPI_BACKUP_JOB_LOCAL_SOURCE
+  # Enforce Mandatory Fields: RPI_BACKUP_JOB_NAME, RPI_BACKUP_JOB_LOCAL_SOURCE
   # Also Require One Of: RPI_BACKUP_JOB_REMOTE_TARGET, RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER
   # Also Require Mutually: RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS, RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER
   # Also Allow Params Conditionally: RPI_BACKUP_JOB_REMOTE_PARAMETER, RPI_BACKUP_JOB_REMOTE_ENCRYPTION_KEY_PATH
 
   if [[ -z "${RPI_BACKUP_JOB_NAME}" ]] ||
-    [[ -z "${RPI_BACKUP_JOB_GROUP}" ]] ||
     [[ -z "${RPI_BACKUP_JOB_LOCAL_SOURCE}" ]] ||
     [[ -z "${RPI_BACKUP_JOB_LOCAL_RSYNC_FOLDER}" && -z "${RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER}" && -z "${RPI_BACKUP_JOB_REMOTE_TARGET}" ]] ||
     [[ -n "${RPI_BACKUP_JOB_LOCAL_TARBALL_FOLDER}" && -z "${RPI_BACKUP_JOB_LOCAL_TARBALL_VERSIONS}" ]] ||

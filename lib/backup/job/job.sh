@@ -38,6 +38,7 @@ _backup_job_args() {
   local OPTARG
   local OPTIND
   local option
+  local RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY=()
 
   _cli_log_info " -- BACKUP JOB: Received: $(printf "%q " "$@")"
 

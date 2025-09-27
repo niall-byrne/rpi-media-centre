@@ -39,9 +39,9 @@ setup() {
 }
 
 test_backup_job_validation__@vary__@vary__calls_backup_job_validation_argument_combinations() {
-  local _RPI_BACKUP_JOB_DISABLED_VALIDATORS=()
+  local RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY=()
 
-  stdlib.array.make.from_string _RPI_BACKUP_JOB_DISABLED_VALIDATORS "|" "${TEST_DISABLED_VALIDATOR_SET_DEFINITION}"
+  stdlib.array.make.from_string RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY "|" "${TEST_DISABLED_VALIDATOR_SET_DEFINITION}"
 
   _backup_job_validation \
     _mock_help_fn \
@@ -57,10 +57,10 @@ test_backup_job_validation__@vary__@vary__calls_backup_job_validation_argument_c
   @parametrize_with_validator_sets
 
 test_backup_job_validation__@vary__@vary__job_is_invalid__logs_error_message() {
-  local _RPI_BACKUP_JOB_DISABLED_VALIDATORS=()
+  local RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY=()
 
   _backup_job_validation_argument_combinations.mock.set.rc 1
-  stdlib.array.make.from_string _RPI_BACKUP_JOB_DISABLED_VALIDATORS "|" "${TEST_DISABLED_VALIDATOR_SET_DEFINITION}"
+  stdlib.array.make.from_string RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY "|" "${TEST_DISABLED_VALIDATOR_SET_DEFINITION}"
 
   _backup_job_validation \
     _mock_help_fn \
@@ -77,10 +77,10 @@ test_backup_job_validation__@vary__@vary__job_is_invalid__logs_error_message() {
   @parametrize_with_validator_sets
 
 test_backup_job_validation__@vary__@vary__job_is_invalid__generates_expected_stderr() {
-  local _RPI_BACKUP_JOB_DISABLED_VALIDATORS=()
+  local RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY=()
 
   _backup_job_validation_argument_combinations.mock.set.rc 1
-  stdlib.array.make.from_string _RPI_BACKUP_JOB_DISABLED_VALIDATORS "|" "${TEST_DISABLED_VALIDATOR_SET_DEFINITION}"
+  stdlib.array.make.from_string RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY "|" "${TEST_DISABLED_VALIDATOR_SET_DEFINITION}"
 
   _capture.stderr _backup_job_validation \
     _mock_help_fn \
@@ -95,10 +95,10 @@ test_backup_job_validation__@vary__@vary__job_is_invalid__generates_expected_std
   @parametrize_with_validator_sets
 
 test_backup_job_validation__@vary__@vary__job_is_invalid__generates_no_stdout() {
-  local _RPI_BACKUP_JOB_DISABLED_VALIDATORS=()
+  local RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY=()
 
   _backup_job_validation_argument_combinations.mock.set.rc 1
-  stdlib.array.make.from_string _RPI_BACKUP_JOB_DISABLED_VALIDATORS "|" "${TEST_DISABLED_VALIDATOR_SET_DEFINITION}"
+  stdlib.array.make.from_string RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY "|" "${TEST_DISABLED_VALIDATOR_SET_DEFINITION}"
 
   _capture.stdout _backup_job_validation \
     _mock_help_fn \
@@ -113,10 +113,10 @@ test_backup_job_validation__@vary__@vary__job_is_invalid__generates_no_stdout() 
   @parametrize_with_validator_sets
 
 test_backup_job_validation__@vary__@vary__job_is_valid____logs_no_error_message() {
-  local _RPI_BACKUP_JOB_DISABLED_VALIDATORS=()
+  local RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY=()
 
   _backup_job_validation_argument_combinations.mock.set.rc 0
-  stdlib.array.make.from_string _RPI_BACKUP_JOB_DISABLED_VALIDATORS "|" "${TEST_DISABLED_VALIDATOR_SET_DEFINITION}"
+  stdlib.array.make.from_string RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY "|" "${TEST_DISABLED_VALIDATOR_SET_DEFINITION}"
 
   _backup_job_validation \
     _mock_help_fn \
@@ -131,10 +131,10 @@ test_backup_job_validation__@vary__@vary__job_is_valid____logs_no_error_message(
   @parametrize_with_validator_sets
 
 test_backup_job_validation__job_log_enabled___@vary__job_is_valid____logs_success_message() {
-  local _RPI_BACKUP_JOB_DISABLED_VALIDATORS=()
+  local RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY=()
 
   _backup_job_validation_argument_combinations.mock.set.rc 0
-  stdlib.array.make.from_string _RPI_BACKUP_JOB_DISABLED_VALIDATORS "|" "${TEST_DISABLED_VALIDATOR_SET_DEFINITION}"
+  stdlib.array.make.from_string RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY "|" "${TEST_DISABLED_VALIDATOR_SET_DEFINITION}"
 
   _backup_job_validation \
     _mock_help_fn \
@@ -149,10 +149,10 @@ test_backup_job_validation__job_log_enabled___@vary__job_is_valid____logs_succes
   @parametrize_with_validator_sets
 
 test_backup_job_validation__job_log_enabled___@vary__job_is_valid____calls_backup_job_log() {
-  local _RPI_BACKUP_JOB_DISABLED_VALIDATORS=()
+  local RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY=()
 
   _backup_job_validation_argument_combinations.mock.set.rc 0
-  stdlib.array.make.from_string _RPI_BACKUP_JOB_DISABLED_VALIDATORS "|" "${TEST_DISABLED_VALIDATOR_SET_DEFINITION}"
+  stdlib.array.make.from_string RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY "|" "${TEST_DISABLED_VALIDATOR_SET_DEFINITION}"
 
   _backup_job_validation \
     _mock_help_fn \
@@ -166,10 +166,10 @@ test_backup_job_validation__job_log_enabled___@vary__job_is_valid____calls_backu
   @parametrize_with_validator_sets
 
 test_backup_job_validation__job_log_disabled__@vary__job_is_valid____does_not_log_success_message() {
-  local _RPI_BACKUP_JOB_DISABLED_VALIDATORS=()
+  local RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY=()
 
   _backup_job_validation_argument_combinations.mock.set.rc 0
-  stdlib.array.make.from_string _RPI_BACKUP_JOB_DISABLED_VALIDATORS "|" "${TEST_DISABLED_VALIDATOR_SET_DEFINITION}"
+  stdlib.array.make.from_string RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY "|" "${TEST_DISABLED_VALIDATOR_SET_DEFINITION}"
 
   _backup_job_validation \
     _mock_help_fn \
@@ -182,13 +182,14 @@ test_backup_job_validation__job_log_disabled__@vary__job_is_valid____does_not_lo
   test_backup_job_validation__job_log_disabled__@vary__job_is_valid____does_not_log_success_message \
   @parametrize_with_validator_sets
 
+# shellcheck disable=SC2034
 test_backup_job_validation__@vary__@vary__job_is_valid____calls_expected_validators() {
-  local _RPI_BACKUP_JOB_DISABLED_VALIDATORS=()
+  local RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY=()
   local expected_validators=()
   local validator_name
 
   _backup_job_validation_argument_combinations.mock.set.rc 0
-  stdlib.array.make.from_string _RPI_BACKUP_JOB_DISABLED_VALIDATORS "|" "${TEST_DISABLED_VALIDATOR_SET_DEFINITION}"
+  stdlib.array.make.from_string RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY "|" "${TEST_DISABLED_VALIDATOR_SET_DEFINITION}"
   stdlib.array.make.from_string expected_validators "|" "${TEST_EXPECTED_VALIDATOR_SET_DEFINITION}"
 
   _backup_job_validation \
