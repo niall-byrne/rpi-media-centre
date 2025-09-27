@@ -28,7 +28,9 @@ _backup_job_task_recover_s3() {
 
   RPI_BACKUP_JOB_RECOVERED_FILENAME="${RPI_BACKUP_JOB_RECOVERY_PATH}/${RPI_BACKUP_JOB_NAME}-recovered.tar"
 
-  aws s3 cp \
+  aws --cli-connect-timeout "${RPI_BACKUP_S3_REMOTE_TIMEOUT_CONNECT}" \
+    --cli-read-timeout "${RPI_BACKUP_S3_REMOTE_TIMEOUT_READ}" \
+    s3 cp \
     "${RPI_BACKUP_JOB_REMOTE_TARGET}/${RPI_BACKUP_JOB_NAME}.tar" \
     "${RPI_BACKUP_JOB_RECOVERED_FILENAME}" \
     "${RPI_BACKUP_JOB_UPLOAD_OPTIONS[@]}"
