@@ -36,8 +36,8 @@ _fixture_setup_date() {
     "start_before_end;1753005000;1753025000;0"
 }
 
-test_backup_scheduler_validate_schedule__@vary__@vary__calls_date_correctly() {
-  _backup_scheduler_validate_schedule
+test_backup_scheduler_validation__@vary__@vary__calls_date_correctly() {
+  _backup_scheduler_validation
 
   date.mock.assert_count_is "2"
   date.mock.assert_calls_are \
@@ -46,26 +46,26 @@ test_backup_scheduler_validate_schedule__@vary__@vary__calls_date_correctly() {
 }
 
 @parametrize.apply \
-  test_backup_scheduler_validate_schedule__@vary__@vary__calls_date_correctly \
+  test_backup_scheduler_validation__@vary__@vary__calls_date_correctly \
   @parametrize_with_invalid_epoch_combos \
   @parametrize_with_valid___epoch_combos
 
-test_backup_scheduler_validate_schedule__@vary______logs_error_messages() {
-  _capture.rc _backup_scheduler_validate_schedule
+test_backup_scheduler_validation__@vary______logs_error_messages() {
+  _capture.rc _backup_scheduler_validation
 
   assert_rc "${EXPECTED_RC}"
 }
 
 @parametrize_with_invalid_epoch_combos \
-  test_backup_scheduler_validate_schedule__@vary______logs_error_messages
+  test_backup_scheduler_validation__@vary______logs_error_messages
 
-test_backup_scheduler_validate_schedule__@vary__@vary__returns_expected_status_code() {
-  _capture.rc _backup_scheduler_validate_schedule
+test_backup_scheduler_validation__@vary__@vary__returns_expected_status_code() {
+  _capture.rc _backup_scheduler_validation
 
   assert_rc "${EXPECTED_RC}"
 }
 
 @parametrize.apply \
-  test_backup_scheduler_validate_schedule__@vary__@vary__returns_expected_status_code \
+  test_backup_scheduler_validation__@vary__@vary__returns_expected_status_code \
   @parametrize_with_invalid_epoch_combos \
   @parametrize_with_valid___epoch_combos
