@@ -22,8 +22,7 @@ _backup_job() {
 
   _cli_log_notice " -- BACKUP JOB: Executing '${RPI_BACKUP_JOB_QUEUE}' task for job '${RPI_BACKUP_JOB_NAME}' ..."
 
-  if [[ "${RPI_BACKUP_JOB_QUEUE}" == "${RPI_BACKUP_QUEUE_FAILED_TASK_EVENT}" ]]; then
-    RPI_BACKUP_JOB_QUEUE="${RPI_BACKUP_JOB_FAILURE_QUEUE}"
+  if [[ "${RPI_BACKUP_JOB_STATUS}" == "${RPI_BACKUP_JOB_STATUSES[1]}" ]]; then
     _backup_job_task_event_wrapper "event-backup-job-task-error.sh"
     return 0
   fi

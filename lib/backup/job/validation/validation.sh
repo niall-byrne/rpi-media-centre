@@ -59,7 +59,7 @@ _backup_job_validation_argument_combinations() {
 
 _backup_job_validation_queue() {
   local selected_queue_name
-  local valid_queue_names_array=("${RPI_BACKUP_QUEUE_NAMES[@]}" "${RPI_BACKUP_QUEUE_FAILED_TASK_EVENT}")
+  local valid_queue_names_array=("${RPI_BACKUP_QUEUE_NAMES[@]}" "${RPI_BACKUP_FAILED_JOB_QUEUE_NAME}")
 
   # shellcheck disable=SC2153
   for selected_queue_name in "${valid_queue_names_array[@]}"; do

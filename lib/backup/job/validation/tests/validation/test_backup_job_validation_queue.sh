@@ -3,12 +3,12 @@
 # shellcheck disable=SC2034
 setup_suite() {
   RPI_BACKUP_QUEUE_NAMES=("queue1" "queue2")
-  RPI_BACKUP_QUEUE_FAILED_TASK_EVENT="failed_task"
+  RPI_BACKUP_FAILED_JOB_QUEUE_NAME="failed_task"
 }
 
 teardown_suite() {
   unset RPI_BACKUP_QUEUE_NAMES
-  unset RPI_BACKUP_QUEUE_FAILED_TASK_EVENT
+  unset RPI_BACKUP_FAILED_JOB_QUEUE_NAME
 }
 
 # shellcheck disable=SC2034
