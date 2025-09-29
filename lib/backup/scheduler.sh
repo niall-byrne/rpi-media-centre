@@ -107,7 +107,7 @@ _backup_scheduler_make_queues() {
     "700"
 }
 
-_backup_scheduler_validate_schedule() {
+_backup_scheduler_validation() {
   RPI_SCHEDULER_START_EPOCH=$(date -ud "${RPI_BACKUP_SCHEDULER_START_TIME} today" +%s)
   RPI_SCHEDULER_END_EPOCH=$(date -ud "${RPI_BACKUP_SCHEDULER_END_TIME} today" +%s)
 
