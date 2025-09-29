@@ -1,7 +1,7 @@
 #!/bin/bash
 
 setup() {
-  _mock.create _bootstrap_configuration_and_security
+  _mock.create _bootstrap_configuration
   _mock.create _cli_bootstrap
   _mock.create _pictl_cli
 
@@ -19,19 +19,19 @@ setup() {
     "2_arguments______;arg1|arg2"
 }
 
-test_bootstrap__@vary__passes_args_to_bootstrap_configuration_and_security_correctly() {
+test_bootstrap__@vary__passes_args_to_bootstrap_configuration_correctly() {
   local command_args=()
 
   stdlib.array.make.from_string command_args "|" "${TEST_COMMAND_ARGS_DEFINITION}"
 
   _bootstrap "${command_args[@]}"
 
-  _bootstrap_configuration_and_security.mock.assert_called_once_with \
+  _bootstrap_configuration.mock.assert_called_once_with \
     "$(_mock.arg_string.from_array command_args)"
 }
 
 @parametrize_with_args \
-  test_bootstrap__@vary__passes_args_to_bootstrap_configuration_and_security_correctly
+  test_bootstrap__@vary__passes_args_to_bootstrap_configuration_correctly
 
 test_bootstrap__@vary__calls_cli_bootstrap_correctly() {
   local command_args=()
@@ -73,7 +73,7 @@ test_bootstrap__@vary__calls_dependencies_in_the_correct_sequence() {
   _bootstrap "${command_args[@]}"
 
   _mock.sequence.assert_is \
-    "_bootstrap_configuration_and_security" \
+    "_bootstrap_configuration" \
     "_cli_bootstrap" \
     "_pictl_cli"
 }
