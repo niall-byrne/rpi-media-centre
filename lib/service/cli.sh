@@ -43,19 +43,11 @@ _service_cli_start() {
   _disk_manifest_mount_all
   _disk_initialize_mounts
 
-  if _service_query_is_selected "pihole"; then
-    _configuration_pihole
-  fi
-
-  if _service_query_is_selected "samba"; then
-    _configuration_samba
-  fi
+  _service_configuration "pihole" "samba"
 
   _docker_compose_command up -d
 
-  if _service_query_is_selected "syncthing"; then
-    _configuration_syncthing
-  fi
+  _service_configuration "syncthing"
 }
 
 _service_cli_status() {
