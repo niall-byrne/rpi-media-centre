@@ -8,22 +8,22 @@ setup() {
   _cli_pretty_env_var_pipe.mock.set.pipeable 1
 }
 
-test_configuration_pictl_debug__calls_title() {
-  _configuration_pictl_debug > /dev/null
+test_config_pictl_debug__calls_title() {
+  _config_pictl_debug > /dev/null
 
   _cli_pretty_title.mock.assert_called_once_with \
-    "1(-- rpi-media-centre running configuration --)"
+    "1(-- rpi-media-centre running config --)"
 }
 
-test_configuration_pictl_debug__calls_highlight() {
-  _configuration_pictl_debug > /dev/null
+test_config_pictl_debug__calls_highlight() {
+  _config_pictl_debug > /dev/null
 
   _cli_pretty_highlight.mock.assert_called_once_with \
     "1(** credentials have been removed **)"
 }
 
 # shellcheck disable=SC2034
-test_configuration_pictl_debug__pipes_correct_output_to_pretty_env_var() {
+test_config_pictl_debug__pipes_correct_output_to_pretty_env_var() {
   TEST_OUTPUT="$(
     local variable
 
@@ -43,7 +43,7 @@ test_configuration_pictl_debug__pipes_correct_output_to_pretty_env_var() {
     local RPI_LOCAL_CREDENTIALS_VARIABLE_1="secret1"
     local RPI_LOCAL_CREDENTIALS_VARIABLE_2="secret2"
 
-    _configuration_pictl_debug
+    _config_pictl_debug
   )"
 
   _cli_pretty_env_var_pipe.mock.assert_calls_are \
