@@ -1,9 +1,9 @@
 #!/bin/bash
 
 setup() {
-  _mock.create _configuration_pictl_validation_account
-  _mock.create _configuration_pictl_validation_backup
-  _mock.create _configuration_pictl_validation_security
+  _mock.create _config_pictl_validation_account
+  _mock.create _config_pictl_validation_backup
+  _mock.create _config_pictl_validation_security
 }
 
 @parametrize_with_validator_sets() {
@@ -23,28 +23,28 @@ setup() {
 }
 
 # shellcheck disable=SC2034
-test_configuration_pictl_validation__default_____________________________calls_expected_validators() {
-  _configuration_pictl_validation
+test_config_pictl_validation__default_____________________________calls_expected_validators() {
+  _config_pictl_validation
 
   for validator_name in "${RPI_CONFIGURATION_VALIDATORS_ALL_ARRAY[@]}"; do
-    "_configuration_pictl_validation_${validator_name}.mock.assert_called_once_with" ""
+    "_config_pictl_validation_${validator_name}.mock.assert_called_once_with" ""
   done
 }
 
 # shellcheck disable=SC2034
-test_configuration_pictl_validation__@vary__calls_expected_validators() {
+test_config_pictl_validation__@vary__calls_expected_validators() {
   local expected_validators
   local RPI_CONFIGURATION_VALIDATORS_DISABLED_ARRAY=()
 
   stdlib.array.make.from_string RPI_CONFIGURATION_VALIDATORS_DISABLED_ARRAY "|" "${TEST_DISABLED_VALIDATOR_SET_DEFINITION}"
   stdlib.array.make.from_string expected_validators "|" "${TEST_EXPECTED_VALIDATOR_SET_DEFINITION}"
 
-  _configuration_pictl_validation
+  _config_pictl_validation
 
   for validator_name in "${expected_validators[@]}"; do
-    "_configuration_pictl_validation_${validator_name}.mock.assert_called_once_with" ""
+    "_config_pictl_validation_${validator_name}.mock.assert_called_once_with" ""
   done
 }
 
 @parametrize_with_validator_sets \
-  test_configuration_pictl_validation__@vary__calls_expected_validators
+  test_config_pictl_validation__@vary__calls_expected_validators

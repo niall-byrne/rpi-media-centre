@@ -22,8 +22,8 @@ _bootstrap_configuration() {
 
   _dependencies_group_cli
   _security_root_require
-  _configuration_pictl
+  _config_pictl
   _io_colours_load
 
-  _configuration_pictl_validation
+  _config_pictl_validation
 }
