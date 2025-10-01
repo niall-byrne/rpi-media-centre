@@ -3,7 +3,7 @@
 setup() {
   _fixture_mock_logs
 
-  _mock.create _security_validate_ids_relationship
+  _mock.create _security_validation_ids_relationship
 }
 
 @parametrize_invalid_uid_gid_combos() {
@@ -17,8 +17,8 @@ setup() {
     "invalid_gid__invalid_uid;0;0"
 }
 
-test_security_validate_ids__@vary__logs_error_messages() {
-  _security_validate_ids
+test_security_validation_ids__@vary__logs_error_messages() {
+  _security_validation_ids
 
   _cli_log_error.mock.assert_count_is "2"
   _cli_log_error.mock.assert_call_n_is "1" "1(SECURITY: invalid configuration!)"
@@ -26,48 +26,48 @@ test_security_validate_ids__@vary__logs_error_messages() {
 }
 
 @parametrize_invalid_uid_gid_combos \
-  test_security_validate_ids__@vary__logs_error_messages
+  test_security_validation_ids__@vary__logs_error_messages
 
-test_security_validate_ids__@vary__does_not_call_security_validate_ids_relationship() {
-  _security_validate_ids
+test_security_validation_ids__@vary__does_not_call_security_validation_ids_relationship() {
+  _security_validation_ids
 
-  _security_validate_ids_relationship.mock.assert_count_is "0"
+  _security_validation_ids_relationship.mock.assert_count_is "0"
 }
 
 @parametrize_invalid_uid_gid_combos \
-  test_security_validate_ids__@vary__does_not_call_security_validate_ids_relationship
+  test_security_validation_ids__@vary__does_not_call_security_validation_ids_relationship
 
-test_security_validate_ids__@vary__returns_correct_status_code() {
-  _capture.rc _security_validate_ids
+test_security_validation_ids__@vary__returns_correct_status_code() {
+  _capture.rc _security_validation_ids
 
   assert_rc "127"
 }
 
 @parametrize_invalid_uid_gid_combos \
-  test_security_validate_ids__@vary__returns_correct_status_code
+  test_security_validation_ids__@vary__returns_correct_status_code
 
-test_security_validate_ids__valid_gid____valid_uid____calls_security_validate_ids_relationship() {
+test_security_validation_ids__valid_gid____valid_uid____calls_security_validation_ids_relationship() {
   # shellcheck disable=SC2034
   local RPI_SVC_GID=1000
   # shellcheck disable=SC2034
   local RPI_SVC_UID=1000
 
-  _security_validate_ids
+  _security_validation_ids
 
-  _security_validate_ids_relationship.mock.assert_count_is "2"
-  _security_validate_ids_relationship.mock.assert_call_n_is "1" \
+  _security_validation_ids_relationship.mock.assert_count_is "2"
+  _security_validation_ids_relationship.mock.assert_call_n_is "1" \
     "1(RPI_SVC_GID) 2(RPI_SVC_GROUPNAME) 3(group)"
-  _security_validate_ids_relationship.mock.assert_call_n_is "2" \
+  _security_validation_ids_relationship.mock.assert_call_n_is "2" \
     "1(RPI_SVC_UID) 2(RPI_SVC_USERNAME) 3(user)"
 }
 
-test_security_validate_ids__valid_gid____valid_uid____returns_correct_status_code() {
+test_security_validation_ids__valid_gid____valid_uid____returns_correct_status_code() {
   # shellcheck disable=SC2034
   local RPI_SVC_GID=1000
   # shellcheck disable=SC2034
   local RPI_SVC_UID=1000
 
-  _capture.rc _security_validate_ids
+  _capture.rc _security_validation_ids
 
   assert_rc "0"
 }
