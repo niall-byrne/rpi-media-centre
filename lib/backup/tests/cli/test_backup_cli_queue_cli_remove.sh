@@ -3,10 +3,8 @@
 setup() {
   _mock.create _backup_cli_queue_cli_usage_error
   _mock.create _cli_log_warning
-  _mock.create _backup_scheduler_make_queues
   _mock.create stdlib.io.stdin.confirmation
-  _mock.create find
-  _mock.create _cli_log_success
+  _mock.create _backup_scheduler_queue_remove_name
 }
 
 @parametrize_with_job_names() {
@@ -59,73 +57,28 @@ test_backup_cli_queue_cli_remove__user_denies____@vary__logs_warning_message() {
 @parametrize_with_job_names \
   test_backup_cli_queue_cli_remove__user_denies____@vary__logs_warning_message
 
-test_backup_cli_queue_cli_remove__user_confirms__@vary__creates_backup_queues() {
+test_backup_cli_queue_cli_remove__user_confirms__@vary__calls_remove_name() {
   stdlib.io.stdin.confirmation.mock.set.rc 0
 
   _backup_cli_queue_cli_remove "${TEST_JOB_NAME}"
 
-  _backup_scheduler_make_queues.mock.assert_called_once_with ""
+  _backup_scheduler_queue_remove_name.mock.assert_called_once_with \
+    "1(${TEST_JOB_NAME})"
 }
 
 @parametrize_with_job_names \
-  test_backup_cli_queue_cli_remove__user_confirms__@vary__creates_backup_queues
+  test_backup_cli_queue_cli_remove__user_confirms__@vary__calls_remove_name
 
-test_backup_cli_queue_cli_remove__user_denies____@vary__creates_backup_queues() {
+test_backup_cli_queue_cli_remove__user_denies____@vary__does_not_call_remove_name() {
   stdlib.io.stdin.confirmation.mock.set.rc 1
 
   _backup_cli_queue_cli_remove "${TEST_JOB_NAME}"
 
-  _backup_scheduler_make_queues.mock.assert_called_once_with ""
+  _backup_scheduler_queue_remove_name.mock.assert_not_called
 }
 
 @parametrize_with_job_names \
-  test_backup_cli_queue_cli_remove__user_denies____@vary__creates_backup_queues
-
-test_backup_cli_queue_cli_remove__user_confirms__@vary__calls_find_with_delete() {
-  stdlib.io.stdin.confirmation.mock.set.rc 0
-
-  _backup_cli_queue_cli_remove "${TEST_JOB_NAME}"
-
-  find.mock.assert_called_once_with \
-    "1(${RPI_BACKUP_PATH_QUEUE_ROOT}) 2(-type) 3(f) 4(-name) 5(${TEST_JOB_NAME}) 6(-delete)"
-}
-
-@parametrize_with_job_names \
-  test_backup_cli_queue_cli_remove__user_confirms__@vary__calls_find_with_delete
-
-test_backup_cli_queue_cli_remove__user_denies____@vary__does_not_call_find() {
-  stdlib.io.stdin.confirmation.mock.set.rc 1
-
-  _backup_cli_queue_cli_remove "${TEST_JOB_NAME}"
-
-  find.mock.assert_not_called
-}
-
-@parametrize_with_job_names \
-  test_backup_cli_queue_cli_remove__user_denies____@vary__does_not_call_find
-
-test_backup_cli_queue_cli_remove__user_confirms__@vary__logs_success_message() {
-  stdlib.io.stdin.confirmation.mock.set.rc 0
-
-  _backup_cli_queue_cli_remove "${TEST_JOB_NAME}"
-
-  _cli_log_success.mock.assert_called_once_with \
-    "1(BACKUP SCHEDULER: Queued backup jobs matching '${TEST_JOB_NAME}' have been removed !)"
-}
-
-@parametrize_with_job_names \
-  test_backup_cli_queue_cli_remove__user_confirms__@vary__logs_success_message
-
-test_backup_cli_queue_cli_remove__user_denies____@vary__does_not_log_success_message() {
-  stdlib.io.stdin.confirmation.mock.set.rc 1
-
-  _backup_cli_queue_cli_remove "${TEST_JOB_NAME}"
-
-  _cli_log_success.mock.assert_not_called
-}
-
-@parametrize_with_job_names \
-  test_backup_cli_queue_cli_remove__user_denies____@vary__does_not_log_success_message
+  test_backup_cli_queue_cli_remove__user_denies____@vary__does_not_call_remove_name
 
 test_backup_cli_queue_cli_remove__user_confirms__@vary__calls_dependencies_in_sequence() {
   stdlib.io.stdin.confirmation.mock.set.rc 0
@@ -135,10 +88,8 @@ test_backup_cli_queue_cli_remove__user_confirms__@vary__calls_dependencies_in_se
 
   _mock.sequence.assert_is \
     "_cli_log_warning" \
-    "_backup_scheduler_make_queues" \
     "stdlib.io.stdin.confirmation" \
-    "find" \
-    "_cli_log_success"
+    "_backup_scheduler_queue_remove_name"
 }
 
 @parametrize_with_job_names \
@@ -152,7 +103,6 @@ test_backup_cli_queue_cli_remove__user_denies____@vary__calls_dependencies_in_se
 
   _mock.sequence.assert_is \
     "_cli_log_warning" \
-    "_backup_scheduler_make_queues" \
     "stdlib.io.stdin.confirmation"
 }
 

@@ -17,13 +17,13 @@ setup() {
 }
 
 # shellcheck disable=SC2034
-test_backup_job_get_next_queue__current_index_@vary__emits_expected_value() {
+test_backup_scheduler_queue_forward_from__current_index_@vary__emits_expected_value() {
   local RPI_BACKUP_QUEUE_NAMES=("${MOCK_QUEUES[@]}")
 
-  _capture.output _backup_job_get_next_queue "${MOCK_QUEUES[TEST_QUEUE_INDEX]}"
+  _capture.output _backup_scheduler_queue_forward_from "${MOCK_QUEUES[TEST_QUEUE_INDEX]}"
 
   assert_equals "${TEST_EXPECTED_OUTPUT}" "${TEST_OUTPUT}"
 }
 
 @parametrize_with_queue_names \
-  test_backup_job_get_next_queue__current_index_@vary__emits_expected_value
+  test_backup_scheduler_queue_forward_from__current_index_@vary__emits_expected_value
