@@ -35,30 +35,23 @@ _backup_cli_queue_cli_remove() {
 
   _cli_log_warning "BACKUP SCHEDULER: Remove queued backup jobs matching '${1}' ..."
 
-  _backup_scheduler_make_queues
-
   if stdlib.io.stdin.confirmation; then
-    find "${RPI_BACKUP_PATH_QUEUE_ROOT}" -type f -name "${1}" -delete
-    _cli_log_success "BACKUP SCHEDULER: Queued backup jobs matching '${1}' have been removed !"
+    _backup_scheduler_queue_remove_name "${1}"
   fi
 }
 
 _backup_cli_queue_cli_remove-all() {
   _cli_log_warning "BACKUP SCHEDULER: Remove *all* queued backup jobs ..."
 
-  _backup_scheduler_make_queues
-
   if stdlib.io.stdin.confirmation; then
-    find "${RPI_BACKUP_PATH_QUEUE_ROOT}" -type f -delete
-    _cli_log_success "BACKUP SCHEDULER: All queued backup jobs have been removed !"
+    _backup_scheduler_queue_remove_all
   fi
 }
 
 _backup_cli_queue_cli_show() {
-  _backup_scheduler_make_queues
-
   _dependencies_group_backups_cli_queue
-  tree "${RPI_BACKUP_PATH_QUEUE_ROOT}"
+
+  _backup_scheduler_queue_show
 }
 
 _backup_cli_recover() {
@@ -85,15 +78,7 @@ _backup_cli_schedule() {
     _backup_cli_usage_error
   fi
 
-  _is_disk_mounted_all
-
-  _control_lock "rpi-backup-scheduler.pid" "15"
-
-  _backup_scheduler_make_queues
-
-  _cli_log_warning "BACKUP SCHEDULER: Scheduling the '${1}' group of backup jobs ..."
-  _backup_manifest_all_command "_backup_manifest_write_jobs_all" "${1}"
-  _cli_log_success "BACKUP SCHEDULER: Scheduling complete !"
+  _backup_scheduler_queue_enqueue "group" "${1}"
 }
 
 _backup_cli_service_cli_--restricted--() {
@@ -105,24 +90,9 @@ _backup_cli_service_cli_--restricted--() {
 
 _backup_cli_service_cli_before_all() {
   _is_disk_mounted_all
-  _backup_scheduler_make_queues
+  _backup_scheduler_queue_make
 }
 
 _backup_cli_service_cli_start() {
-  local RPI_BACKUP_QUEUE_INDEX
-
-  if _backup_scheduler_is_available; then
-    _event_script "event-backup-scheduler-before.sh"
-    _cli_log_notice "BACKUP SCHEDULER: Executing all processable backup jobs ..."
-
-    # Iterate over jobs in reverse queue order, so that failed jobs are finished before new ones.
-    for ((RPI_BACKUP_QUEUE_INDEX = ${#RPI_BACKUP_QUEUE_NAMES[@]} - 1; RPI_BACKUP_QUEUE_INDEX >= 0; RPI_BACKUP_QUEUE_INDEX--)); do
-      _backup_scheduler_dequeue "${RPI_BACKUP_QUEUE_NAMES[RPI_BACKUP_QUEUE_INDEX]}"
-    done
-
-    _cli_log_notice "BACKUP SCHEDULER: Execution has stopped cleanly."
-    _event_script "event-backup-scheduler-after.sh"
-  else
-    _cli_log_error "BACKUP SCHEDULER: The scheduler is available between ${RPI_BACKUP_SCHEDULER_START_TIME} and ${RPI_BACKUP_SCHEDULER_END_TIME} daily."
-  fi
+  _backup_scheduler_start
 }

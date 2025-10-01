@@ -82,27 +82,6 @@ _backup_job_args() {
   _backup_job_validation_queue "${RPI_BACKUP_JOB_QUEUE}"
 }
 
-_backup_job_get_next_queue() {
-  # $1: the current queue
-
-  local selected_queue
-  local queue_is_matching="0"
-
-  # shellcheck disable=SC2153
-  for selected_queue in "${RPI_BACKUP_QUEUE_NAMES[@]}"; do
-    if [[ "${1}" == "${selected_queue}" ]]; then
-      queue_is_matching="1"
-      continue
-    fi
-    if [[ "${queue_is_matching}" == "1" ]]; then
-      echo "${selected_queue}"
-      return 0
-    fi
-  done
-
-  echo ""
-}
-
 _backup_job_usage() {
   {
     _backup_job_cli_usage

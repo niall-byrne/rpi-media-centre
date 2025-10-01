@@ -2,7 +2,7 @@
 
 setup() {
   _mock.create _is_disk_mounted_all
-  _mock.create _backup_scheduler_make_queues
+  _mock.create _backup_scheduler_queue_make
 }
 
 test_backup_cli_service_cli_before_all__calls_dependencies_in_sequence() {
@@ -12,7 +12,7 @@ test_backup_cli_service_cli_before_all__calls_dependencies_in_sequence() {
 
   _mock.sequence.assert_is \
     "_is_disk_mounted_all" \
-    "_backup_scheduler_make_queues"
+    "_backup_scheduler_queue_make"
 }
 
 test_backup_cli_service_cli_before_all__checks_disks_are_all_mounted() {
@@ -24,5 +24,5 @@ test_backup_cli_service_cli_before_all__checks_disks_are_all_mounted() {
 test_backup_cli_service_cli_before_all__creates_scheduler_queues() {
   _backup_cli_service_cli_before_all
 
-  _backup_scheduler_make_queues.mock.assert_called_once_with ""
+  _backup_scheduler_queue_make.mock.assert_called_once_with ""
 }
