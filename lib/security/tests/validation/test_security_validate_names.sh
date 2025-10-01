@@ -15,8 +15,8 @@ setup() {
     "invalid_username__valid_group__;root;group"
 }
 
-test_security_validate_names__@vary__logs_error_messages() {
-  _security_validate_names
+test_security_validation_names__@vary__logs_error_messages() {
+  _security_validation_names
 
   _cli_log_error.mock.assert_count_is "2"
   _cli_log_error.mock.assert_call_n_is "1" \
@@ -26,23 +26,23 @@ test_security_validate_names__@vary__logs_error_messages() {
 }
 
 @parametrize_with_invalid_names \
-  test_security_validate_names__@vary__logs_error_messages
+  test_security_validation_names__@vary__logs_error_messages
 
-test_security_validate_names__@vary__return_status_code_127() {
-  _capture.rc _security_validate_names
+test_security_validation_names__@vary__return_status_code_127() {
+  _capture.rc _security_validation_names
 
   assert_rc "127"
 }
 
 @parametrize_with_invalid_names \
-  test_security_validate_names__@vary__return_status_code_127
+  test_security_validation_names__@vary__return_status_code_127
 
 # shellcheck disable=SC2034
-test_security_validate_names__valid_username____valid_group__return_status_code_127() {
+test_security_validation_names__valid_username____valid_group__return_status_code_127() {
   RPI_SVC_USERNAME="user"
   RPI_SVC_GROUPNAME="group"
 
-  _capture.rc _security_validate_names
+  _capture.rc _security_validation_names
 
   assert_rc "0"
 }

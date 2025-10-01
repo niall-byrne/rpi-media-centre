@@ -30,5 +30,5 @@ _config_pictl_validation_backup() {
 }
 
 _config_pictl_validation_security() {
-  _security_validate
+  _security_validation
 }
