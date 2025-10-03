@@ -18,7 +18,7 @@ _manifest_cli_check_config() {
 }
 
 _manifest_cli_check_crypt() {
-  _disk_manifest_all_command _disk_manifest_line_log_all
+  _disk_manifest_all_command _disk_manifest_line_log_all || return "$?"
   _cli_log_success "The rpi-media-centre crypt manifest file is valid!"
 }
 
@@ -83,4 +83,39 @@ _manifest_cli_edit_crypt() {
 
   "${RPI_MANIFEST_EDITOR}" "${RPI_MANIFEST_CRYPT}"
   _manifest_cli_check_crypt
+}
+
+_manifest_cli_editor() {
+  # $1: the manifest type name
+
+  case "${1}" in
+    crypt)
+      _manifest_safe_edit "${RPI_MANIFEST_CRYPT}" crypt
+      ;;
+  esac
+}
+
+_manifest_safe_edit() {
+  # $1: the manifest filename to edit
+  # $2: the manifest type name
+
+  if ! stdlib.io.path.query.is_file "${1}"; then
+    _io_colours_unload
+    {
+      echo
+      "_manifest_cli_details_${3}" |
+        stdlib.string.lines.map.format_pipe "# %s"
+    } > "${1}" # KCOV_EXCLUDE_LINE
+    stdlib.security.path.secure "${1}" "root" "root" "600"
+    _io_colours_load
+  fi
+
+  "${RPI_MANIFEST_EDITOR}" "${1}"
+
+  "_manifest_cli_check_${2}"
+
+  _cli_log_error "The manifest file has failed validation!"
+  if stdlib.io.stdin.confirmation "Would you like to edit it again (Y/n) ?"; then
+    _manifest_safe_edit "${@}"
+  fi
 }

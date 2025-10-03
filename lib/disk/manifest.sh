@@ -14,19 +14,20 @@ _disk_manifest_all_command() {
   local RPI_DISK_MOUNT_POINT_SET=()
   local RPI_DISK_CRYPT_PASSWORD_SET=()
 
-  if _is_disk_encrypted; then
-
-    _disk_manifest_load
-    _dependencies_group_disks_crypt
-
-    for ((RPI_DISK_INDEX = 0; RPI_DISK_INDEX < "${#RPI_DISK_UUID_SET[@]}"; RPI_DISK_INDEX++)); do
-      __disk_manifest_all_command_wrapper "${1}" \
-        "${RPI_DISK_UUID_SET[RPI_DISK_INDEX]}" \
-        "${RPI_DISK_NAME_SET[RPI_DISK_INDEX]}" \
-        "${RPI_DISK_CRYPT_GROUP_SET[RPI_DISK_INDEX]}" \
-        "${RPI_DISK_MOUNT_POINT_SET[RPI_DISK_INDEX]}"
-    done
+  if ! _is_disk_encrypted; then
+    return
   fi
+
+  _disk_manifest_load || return "$?"
+  _dependencies_group_disks_crypt || return "10"
+
+  for ((RPI_DISK_INDEX = 0; RPI_DISK_INDEX < "${#RPI_DISK_UUID_SET[@]}"; RPI_DISK_INDEX++)); do
+    __disk_manifest_all_command_wrapper "${1}" \
+      "${RPI_DISK_UUID_SET[RPI_DISK_INDEX]}" \
+      "${RPI_DISK_NAME_SET[RPI_DISK_INDEX]}" \
+      "${RPI_DISK_CRYPT_GROUP_SET[RPI_DISK_INDEX]}" \
+      "${RPI_DISK_MOUNT_POINT_SET[RPI_DISK_INDEX]}" || return "$?"
+  done
 }
 
 __disk_manifest_all_command_wrapper() {
@@ -56,7 +57,6 @@ _disk_manifest_line_invalid() {
     _disk_manifest_line_log
     _disk_manifest_help
   } >&2 # KCOV_EXCLUDE_LINE
-  return 127
 }
 
 _disk_manifest_line_log() {
@@ -75,6 +75,13 @@ _disk_manifest_line_log_all() {
 _disk_manifest_line_validate() {
   # $1: the help function to call in the event that the line is invalid
 
+  if [[ -z "${RPI_DISK_UUID}" ]] ||
+    [[ -z "${RPI_DISK_NAME}" ]] ||
+    [[ -z "${RPI_DISK_MOUNT_POINT}" ]]; then
+    "${1}"
+    return 127
+  fi
+
   if ! stdlib.io.path.assert.is_folder "${RPI_DISK_MOUNT_POINT}"; then
     "${1}"
     return 127
@@ -86,13 +93,6 @@ _disk_manifest_line_validate() {
       "${1}"
       return 127
     fi
-  fi
-
-  if [[ -z "${RPI_DISK_UUID}" ]] ||
-    [[ -z "${RPI_DISK_NAME}" ]] ||
-    [[ -z "${RPI_DISK_MOUNT_POINT}" ]]; then
-    "${1}"
-    return 127
   fi
 
   if ! blkid | grep "${RPI_DISK_UUID}" > /dev/null; then

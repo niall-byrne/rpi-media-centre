@@ -162,9 +162,9 @@ config|edit the config manifest file
 crypt|edit the crypt manifest file
 =
 >_dependencies_requirement_manifest_editor
-backup||_manifest_cli_edit_backup
-config||_manifest_cli_edit_config
-crypt||_manifest_cli_edit_crypt
+backup||_manifest_cli_editor backup
+config||_manifest_cli_editor config
+crypt||_manifest_cli_editor crypt
 =
 
 service
