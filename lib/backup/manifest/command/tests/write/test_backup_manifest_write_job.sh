@@ -38,31 +38,31 @@ _fixture_generate_job_args() {
  -p ${1}${RPI_BACKUP_JOB_REMOTE_PARAMETER}${1}" | tr -d $'\n'
 }
 
-test_backup_manifest_write_jobs_all__writes_a_job_file_to_the_first_queue() {
+test_backup_manifest_command_write_job__writes_a_job_file_to_the_first_queue() {
   fake_backup_job_n "0"
 
-  _backup_manifest_write_jobs_all
+  _backup_manifest_command_write_job
 
   assert_equals \
     "${RPI_BACKUP_JOB_NAME}" \
     "$(ls "${RPI_BACKUP_PATH_QUEUE_ROOT}/${RPI_BACKUP_QUEUE_NAMES[0]}")"
 }
 
-test_backup_manifest_write_jobs_all__the_file_contains_the_job_args() {
+test_backup_manifest_command_write_job__the_file_contains_the_job_args() {
   fake_backup_job_n "0"
   TEST_EXPECTED="#!/bin/bash"$'\n'"pictl backup service job  $(_fixture_generate_job_args '"')   -q \"\${1}\""
 
-  _backup_manifest_write_jobs_all
+  _backup_manifest_command_write_job
 
   assert_equals \
     "${TEST_EXPECTED}" \
     "$(cat "${RPI_BACKUP_PATH_QUEUE_ROOT}/${RPI_BACKUP_QUEUE_NAMES[0]}/${RPI_BACKUP_JOB_NAME}")"
 }
 
-test_backup_manifest_write_jobs_all__secures_the_new_job_file() {
+test_backup_manifest_command_write_job__secures_the_new_job_file() {
   fake_backup_job_n "0"
 
-  _backup_manifest_write_jobs_all
+  _backup_manifest_command_write_job
 
   stdlib.security.path.secure.mock.assert_called_once_with \
     "1(${RPI_BACKUP_PATH_QUEUE_ROOT}/${RPI_BACKUP_QUEUE_NAMES[0]}/${RPI_BACKUP_JOB_NAME}) 2(root) 3(root) 4(700)"

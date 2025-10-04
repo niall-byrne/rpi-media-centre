@@ -8,7 +8,7 @@ _manifest_cli_check_backup() {
   # shellcheck disable=SC2034
   local RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY=()
 
-  _backup_manifest_all_command _backup_manifest_line_log_all
+  _backup_manifest_command_all _backup_manifest_line_log_all
   _cli_log_success "The rpi-media-centre backup manifest file is valid!"
 }
 

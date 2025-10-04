@@ -68,7 +68,7 @@ _backup_cli_recover() {
   # shellcheck disable=SC2034
   RPI_BACKUP_JOB_RECOVERY_PATH="$(_filesystem_resolve_path_relative_to_cli "${2}")"
 
-  _backup_manifest_all_command "_backup_job_task_recover" "" "${1}"
+  _backup_manifest_command_all "_backup_job_task_recover" "" "${1}"
 }
 
 _backup_cli_schedule() {
