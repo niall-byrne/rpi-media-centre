@@ -3,7 +3,7 @@
 setup() {
   _mock.create _backup_cli_usage_error
   _mock.create _filesystem_resolve_path_relative_to_cli
-  _mock.create _backup_manifest_all_command
+  _mock.create _backup_manifest_command_all
 }
 
 @parametrize_with_missing_args() {
@@ -61,7 +61,7 @@ test_backup_cli_recover__@vary__calls_manifest_command() {
 
   _backup_cli_recover "${command_args[@]}"
 
-  _backup_manifest_all_command.mock.assert_called_once_with \
+  _backup_manifest_command_all.mock.assert_called_once_with \
     "1(_backup_job_task_recover) 2() 3(${command_args[0]})"
 }
 

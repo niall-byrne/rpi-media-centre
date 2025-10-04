@@ -4,7 +4,7 @@ _testing.load "${RPI_WORKING_DIRECTORY}/lib/backup/tests/__fakes__/backup_data.s
 
 setup() {
   _mock.create _backup_manifest_load
-  _mock.create mocked_backup_manifest_all_command
+  _mock.create mocked_backup_manifest_command_all
 }
 
 @parametrize_with_fake_manifests() {
@@ -20,31 +20,31 @@ setup() {
     "3_manifest_entries__filtered_by_job;3;1;2;2;2;;job_name2"
 }
 
-test_backup_manifest_all_command__loads_manifest() {
-  _backup_manifest_all_command mocked_backup_manifest_all_command "${MANIFEST_GROUP_FILTER}" "${MANIFEST_JOB_FILTER}"
+test_backup_manifest_command_all__loads_manifest() {
+  _backup_manifest_command_all mocked_backup_manifest_command_all "${MANIFEST_GROUP_FILTER}" "${MANIFEST_JOB_FILTER}"
 
   _backup_manifest_load.mock.assert_called_once_with ""
 }
 
-test_backup_manifest_all_command__@vary__return_code_0() {
-  _capture.rc _backup_manifest_all_command mocked_backup_manifest_all_command "${MANIFEST_GROUP_FILTER}" "${MANIFEST_JOB_FILTER}"
+test_backup_manifest_command_all__@vary__return_code_0() {
+  _capture.rc _backup_manifest_command_all mocked_backup_manifest_command_all "${MANIFEST_GROUP_FILTER}" "${MANIFEST_JOB_FILTER}"
 
   assert_rc "0"
 }
 
 @parametrize_with_fake_manifests \
-  test_backup_manifest_all_command__@vary__return_code_0
+  test_backup_manifest_command_all__@vary__return_code_0
 
-test_backup_manifest_all_command__@vary__calls_mocked_backup_all_command() {
-  _backup_manifest_all_command mocked_backup_manifest_all_command "${MANIFEST_GROUP_FILTER}" "${MANIFEST_JOB_FILTER}"
+test_backup_manifest_command_all__@vary__calls_mocked_backup_all_command() {
+  _backup_manifest_command_all mocked_backup_manifest_command_all "${MANIFEST_GROUP_FILTER}" "${MANIFEST_JOB_FILTER}"
 
-  mocked_backup_manifest_all_command.mock.assert_count_is "${MANIFEST_COMMAND_CALL_COUNT}"
+  mocked_backup_manifest_command_all.mock.assert_count_is "${MANIFEST_COMMAND_CALL_COUNT}"
 }
 
 @parametrize_with_fake_manifests \
-  test_backup_manifest_all_command__@vary__calls_mocked_backup_all_command
+  test_backup_manifest_command_all__@vary__calls_mocked_backup_all_command
 
-test_backup_manifest_all_command__@vary__sets_environment() {
+test_backup_manifest_command_all__@vary__sets_environment() {
   TEST_EXPECTED="$(
     _create_fake_job_n_log_entries \
       "${MANIFEST_COMMAND_CALL_COUNT}" \
@@ -53,10 +53,10 @@ test_backup_manifest_all_command__@vary__sets_environment() {
       "${FAKE_MANIFEST_GROUP_LIMIT}"
   )"
 
-  _capture.stdout _backup_manifest_all_command _backup_job_log "${MANIFEST_GROUP_FILTER}" "${MANIFEST_JOB_FILTER}"
+  _capture.stdout _backup_manifest_command_all _backup_job_log "${MANIFEST_GROUP_FILTER}" "${MANIFEST_JOB_FILTER}"
 
   assert_output "${TEST_EXPECTED}"
 }
 
 @parametrize_with_fake_manifests \
-  test_backup_manifest_all_command__@vary__sets_environment
+  test_backup_manifest_command_all__@vary__sets_environment
