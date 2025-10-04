@@ -18,7 +18,7 @@ _manifest_cli_check_config() {
 }
 
 _manifest_cli_check_crypt() {
-  _disk_manifest_all_command _disk_manifest_line_log_all
+  _disk_manifest_command_all _disk_manifest_line_log_all
   _cli_log_success "The rpi-media-centre crypt manifest file is valid!"
 }
 

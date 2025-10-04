@@ -2,7 +2,7 @@
 
 setup() {
   _mock.create _cli_log_warning
-  _mock.create _disk_manifest_mount_all
+  _mock.create _disk_manifest_command_mount
   _mock.create _disk_initialize_mounts
   _mock.create _service_config
   _mock.create _docker_compose_command
@@ -20,7 +20,7 @@ test_service_cli_start__logs_warning_message() {
 test_service_cli_start__mounts_all_disks() {
   _service_cli_start
 
-  _disk_manifest_mount_all.mock.assert_called_once_with ""
+  _disk_manifest_command_mount.mock.assert_called_once_with ""
 }
 
 test_service_cli_start__initializes_mounts() {
@@ -51,7 +51,7 @@ test_service_cli_start__calls_dependencies_in_correct_sequence() {
 
   _mock.sequence.assert_is \
     "_cli_log_warning" \
-    "_disk_manifest_mount_all" \
+    "_disk_manifest_command_mount" \
     "_disk_initialize_mounts" \
     "_service_config" \
     "_docker_compose_command" \

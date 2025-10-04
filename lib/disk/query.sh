@@ -16,5 +16,5 @@ _is_disk_mounted() {
 }
 
 _is_disk_mounted_all() {
-  _disk_manifest_all_command "_is_disk_mounted"
+  _disk_manifest_command_all "_is_disk_mounted"
 }
