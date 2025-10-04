@@ -3,7 +3,7 @@
 setup() {
   _mock.create _cli_log_warning
   _mock.create _docker_compose_command
-  _mock.create _disk_manifest_unmount_all
+  _mock.create _disk_manifest_command_unmount
 
   _docker_compose_command.mock.set.keywords "_RPI_SERVICE_REMOVE_CONTAINERS"
 }
@@ -25,7 +25,7 @@ test_service_cli_kill__calls_docker_compose_kill() {
 test_service_cli_kill__unmounts_all_disks() {
   _service_cli_kill
 
-  _disk_manifest_unmount_all.mock.assert_called_once_with ""
+  _disk_manifest_command_unmount.mock.assert_called_once_with ""
 }
 
 test_service_cli_kill__calls_dependencies_in_correct_sequence() {
@@ -36,5 +36,5 @@ test_service_cli_kill__calls_dependencies_in_correct_sequence() {
   _mock.sequence.assert_is \
     "_cli_log_warning" \
     "_docker_compose_command" \
-    "_disk_manifest_unmount_all"
+    "_disk_manifest_command_unmount"
 }

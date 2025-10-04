@@ -10,7 +10,7 @@ _service_cli_kill() {
   _cli_log_warning "Media centre now being killed ..."
 
   _docker_compose_command kill
-  _disk_manifest_unmount_all
+  _disk_manifest_command_unmount
 }
 
 _service_cli_logs() {
@@ -40,7 +40,7 @@ _service_cli_start() {
   local _RPI_SERVICE_REMOVE_CONTAINERS=0
 
   _cli_log_warning "Media centre now starting ..."
-  _disk_manifest_mount_all
+  _disk_manifest_command_mount
   _disk_initialize_mounts
 
   _service_config "pihole" "samba"
@@ -62,7 +62,7 @@ _service_cli_stop() {
   _cli_log_warning "Media centre now stopping ..."
 
   _docker_compose_command stop
-  _disk_manifest_unmount_all
+  _disk_manifest_command_unmount
 }
 
 _service_cli_upgrade() {

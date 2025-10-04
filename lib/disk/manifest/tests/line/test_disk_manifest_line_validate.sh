@@ -1,6 +1,6 @@
 #!/bin/bash
 
-_testing.load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/manifest/__fixtures__/disk_manifest_line_validate.sh"
+_testing.load "${RPI_WORKING_DIRECTORY}/lib/disk/manifest/tests/__fixtures__/disk_manifest_line_validate.sh"
 
 setup_suite() {
   _fixture_escape_rpi_vars

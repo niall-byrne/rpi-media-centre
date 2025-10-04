@@ -9,69 +9,69 @@ setup() {
   _mock.create mocked_disk_all_command
 }
 
-test_disk_manifest_all_command__not_encrypted__return_code_0() {
+test_disk_manifest_command_all__not_encrypted__return_code_0() {
   _is_disk_encrypted.mock.set.rc "1"
 
-  _capture.rc _disk_manifest_all_command mocked_disk_all_command
+  _capture.rc _disk_manifest_command_all mocked_disk_all_command
 
   assert_rc "0"
 }
 
-test_disk_manifest_all_command__not_encrypted__does_not_call_command() {
+test_disk_manifest_command_all__not_encrypted__does_not_call_command() {
   _is_disk_encrypted.mock.set.rc "1"
 
-  _disk_manifest_all_command mocked_disk_all_command
+  _disk_manifest_command_all mocked_disk_all_command
 
   mocked_disk_all_command.mock.assert_not_called
 }
 
-test_disk_manifest_all_command______encrypted__loads_manifest() {
+test_disk_manifest_command_all______encrypted__loads_manifest() {
   _is_disk_encrypted.mock.set.rc "0"
 
-  _disk_manifest_all_command mocked_disk_all_command
+  _disk_manifest_command_all mocked_disk_all_command
 
   _disk_manifest_load.mock.assert_called_once_with ""
 }
 
-test_disk_manifest_all_command______encrypted__correct_dependency_group() {
+test_disk_manifest_command_all______encrypted__correct_dependency_group() {
   _is_disk_encrypted.mock.set.rc "0"
 
-  _disk_manifest_all_command mocked_disk_all_command
+  _disk_manifest_command_all mocked_disk_all_command
 
   _dependencies_group_disks_crypt.mock.assert_called_once_with ""
 }
 
-test_disk_manifest_all_command______encrypted__@vary__return_code_0() {
+test_disk_manifest_command_all______encrypted__@vary__return_code_0() {
   _is_disk_encrypted.mock.set.rc "0"
   _disk_manifest_load.mock.set.subcommand fake_manifest_n_entries "${MANIFEST_ENTRIES}"
 
-  _capture.rc _disk_manifest_all_command mocked_disk_all_command
+  _capture.rc _disk_manifest_command_all mocked_disk_all_command
 
   assert_rc "0"
 }
 
 @parametrize \
-  test_disk_manifest_all_command______encrypted__@vary__return_code_0 \
+  test_disk_manifest_command_all______encrypted__@vary__return_code_0 \
   "MANIFEST_ENTRIES" \
   "2_manifest_entries;2" \
   "3_manifest_entries;3"
 
-test_disk_manifest_all_command______encrypted__2_manifest_entries__calls_command_2_times() {
+test_disk_manifest_command_all______encrypted__2_manifest_entries__calls_command_2_times() {
   _is_disk_encrypted.mock.set.rc "0"
   _disk_manifest_load.mock.set.subcommand fake_manifest_n_entries "2"
 
-  _disk_manifest_all_command mocked_disk_all_command
+  _disk_manifest_command_all mocked_disk_all_command
 
   mocked_disk_all_command.mock.assert_count_is "2"
   mocked_disk_all_command.mock.assert_call_n_is "1" ""
   mocked_disk_all_command.mock.assert_call_n_is "2" ""
 }
 
-test_disk_manifest_all_command______encrypted__2_manifest_entries__sets_environment_2_times() {
+test_disk_manifest_command_all______encrypted__2_manifest_entries__sets_environment_2_times() {
   _is_disk_encrypted.mock.set.rc "0"
   _disk_manifest_load.mock.set.subcommand fake_manifest_n_entries "2"
 
-  _capture.stdout _disk_manifest_all_command _disk_manifest_line_log
+  _capture.stdout _disk_manifest_command_all _disk_manifest_line_log
 
   assert_equals \
     "RPI_DISK_UUID='UUID0'
@@ -85,11 +85,11 @@ RPI_DISK_MOUNT_POINT='/mnt/mocked/path1'" \
     "${TEST_OUTPUT}"
 }
 
-test_disk_manifest_all_command______encrypted__3_manifest_entries__calls_command_3_times() {
+test_disk_manifest_command_all______encrypted__3_manifest_entries__calls_command_3_times() {
   _is_disk_encrypted.mock.set.rc "0"
   _disk_manifest_load.mock.set.subcommand fake_manifest_n_entries "3"
 
-  _disk_manifest_all_command mocked_disk_all_command
+  _disk_manifest_command_all mocked_disk_all_command
 
   mocked_disk_all_command.mock.assert_count_is "3"
   mocked_disk_all_command.mock.assert_call_n_is "1" ""
@@ -97,11 +97,11 @@ test_disk_manifest_all_command______encrypted__3_manifest_entries__calls_command
   mocked_disk_all_command.mock.assert_call_n_is "3" ""
 }
 
-test_disk_manifest_all_command______encrypted__3_manifest_entries__sets_environment_3_times() {
+test_disk_manifest_command_all______encrypted__3_manifest_entries__sets_environment_3_times() {
   _is_disk_encrypted.mock.set.rc "0"
   _disk_manifest_load.mock.set.subcommand fake_manifest_n_entries "3"
 
-  _capture.stdout _disk_manifest_all_command _disk_manifest_line_log
+  _capture.stdout _disk_manifest_command_all _disk_manifest_line_log
 
   assert_equals \
     "RPI_DISK_UUID='UUID0'
