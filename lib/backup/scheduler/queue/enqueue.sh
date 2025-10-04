@@ -37,12 +37,12 @@ _backup_scheduler_queue_enqueue_group() {
   # $1: the group of backup jobs to schedule
 
   _cli_log_warning "BACKUP SCHEDULER: Scheduling the '${1}' group of backup jobs ..."
-  _backup_manifest_all_command "_backup_manifest_write_jobs_all" "${1}"
+  _backup_manifest_command_all "_backup_manifest_command_write_job" "${1}"
 }
 
 _backup_scheduler_queue_enqueue_name() {
   # $1: the name of the backup job to schedule
 
   _cli_log_warning "BACKUP SCHEDULER: Scheduling the '${1}' backup job ..."
-  _backup_manifest_all_command "_backup_manifest_write_jobs_all" "" "${1}"
+  _backup_manifest_command_all "_backup_manifest_command_write_job" "" "${1}"
 }

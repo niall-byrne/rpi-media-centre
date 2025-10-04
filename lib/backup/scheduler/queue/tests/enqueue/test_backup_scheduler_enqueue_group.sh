@@ -2,7 +2,7 @@
 
 setup() {
   _mock.create _cli_log_warning
-  _mock.create _backup_manifest_all_command
+  _mock.create _backup_manifest_command_all
 }
 
 @parametrize_with_group_names() {
@@ -22,7 +22,7 @@ test_backup_scheduler_queue_enqueue_group__@vary__calls_dependencies_in_correct_
 
   _mock.sequence.assert_is \
     "_cli_log_warning" \
-    "_backup_manifest_all_command"
+    "_backup_manifest_command_all"
 }
 
 @parametrize_with_group_names \
@@ -41,8 +41,8 @@ test_backup_scheduler_queue_enqueue_group__@vary__logs_warning_message() {
 test_backup_scheduler_queue_enqueue_group__@vary__calls_manifest_all_command_with_correct_args() {
   _backup_scheduler_queue_enqueue_group "${TEST_GROUP_NAME}"
 
-  _backup_manifest_all_command.mock.assert_called_once_with \
-    "1(_backup_manifest_write_jobs_all) 2(${TEST_GROUP_NAME})"
+  _backup_manifest_command_all.mock.assert_called_once_with \
+    "1(_backup_manifest_command_write_job) 2(${TEST_GROUP_NAME})"
 }
 
 @parametrize_with_group_names \
