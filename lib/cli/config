@@ -6,19 +6,18 @@ pictl [SUBCOMMAND]
 account|provision a service account
 backup [SUBCOMMAND]|manage the backup service
 compile [SUBCOMMAND]|manage the compiler service
+config [SUBCOMMAND|manage the pictl configuration
 disk [SUBCOMMAND]|manage the local disks
 help|displays this message
 install|run the installer
-manifest [SUBCOMMAND]|manage the service manifest files
 service [SUBCOMMAND]|manage the provided services
 =
 account||_security_account_provision_service_account
 backup||_backup_cli
 compile||_compile_cli
+config||_config_cli
 disk||_disk_cli
-debug||_configuration_pictl_debug
 install||_installer_cli
-manifest||_manifest_cli
 service||_service_cli
 =
 
@@ -27,16 +26,64 @@ backup
 -- rpi-media-centre backup manager --
 Usage:
 pictl backup [SUBCOMMAND]
+help|displays this message
 keyfile-s3 (FILENAME)|generate a new encryption keyfile for s3
+manifest [SUBCOMMAND]|manage the backup service manifest
 queue [SUBCOMMAND]|manage the backup job queue
 recover (NAME) (PATH)|copy the named remote backup to a local path
 schedule (GROUP)|schedule a group of backup jobs
 =
 keyfile-s3||
+manifest||_backup_cli_manifest_cli
 queue||_backup_cli_queue_cli
 recover||
 service|_backup_cli_service_cli_--restricted--|_backup_cli_service_cli
 schedule||
+=
+
+backup_cli_manifest
+=
+-- rpi-media-centre backup manifest manager --
+Usage:
+pictl backup manifest [SUBCOMMAND]
+check|check the backup manifest file for errors
+edit|edit the backup manifest file
+details|display details for the backup manifest file
+help|displays this message
+=
+check||
+details||
+edit||
+=
+
+backup_cli_queue
+=
+-- rpi-media-centre backup queue manager --
+Usage:
+pictl backup queue [SUBCOMMAND]
+help|displays this message
+remove (NAME)|remove the named backup job from the queue
+remove-all|remove all currently queued backup jobs
+show|display all currently queued backup jobs
+=
+remove||
+remove-all||
+show||
+=
+
+backup_cli_service
+=
+-- rpi-media-centre backup service manager --
+Usage:
+pictl backup service [SUBCOMMAND]
+help|displays this message
+job (CONFIGURATION)|execute the given backup job
+start|start the backup scheduler service
+=
+>_backup_cli_service_cli_before_all
+job||
+start||
+show||
 =
 
 backup_job
@@ -58,34 +105,6 @@ tarball||_backup_job_task_tarball
 upload||_backup_job_task_upload
 =
 
-backup_cli_queue
-=
--- rpi-media-centre backup queue manager --
-Usage:
-pictl backup queue [SUBCOMMAND]
-remove (NAME)|remove the named backup job from the queue
-remove-all|remove all currently queued backup jobs
-show|display all currently queued backup jobs
-=
-remove||
-remove-all||
-show||
-=
-
-backup_cli_service
-=
--- rpi-media-centre backup service manager --
-Usage:
-pictl backup service [SUBCOMMAND]
-job (CONFIGURATION)|execute the given backup job
-start|start the backup scheduler service
-=
->_backup_cli_service_cli_before_all
-job||
-start||
-show||
-=
-
 compile
 =
 -- rpi-media-centre compilation manager --
@@ -93,9 +112,27 @@ Usage:
 pictl compile [SUBCOMMAND]
 cli|compile the pictl cli
 completion|compile the pictl bash completion
+help|displays this message
 =
 cli||_cli_bootstrap "1"
 completion||_cli_completion
+=
+
+config
+=
+-- rpi-media-centre configuration manager --
+Usage:
+pictl config [SUBCOMMAND]
+debug|show the current running configuration
+details|display details for the configuration file
+check|check the configuration file for errors
+edit|edit the configuration file
+help|displays this message
+=
+check||
+debug||
+details||
+edit||
 =
 
 disk
@@ -105,66 +142,27 @@ Usage:
 pictl disk [SUBCOMMAND]
 filesystem|display filesystem details
 hardware|display hardware details
+help|displays this message
+manifest [SUBCOMMAND]|manage the disk service manifest
 =
 filesystem||
 hardware||
+manifest||_disk_cli_manifest_cli
 =
 
-manifest
+disk_cli_manifest
 =
--- rpi-media-centre manifest manager --
+-- rpi-media-centre disk manifest manager --
 Usage:
-pictl manifest [SUBCOMMAND]
-check [MANIFEST]|check the specified manifest file for errors
-details [MANIFEST]|get details on the specified manifest file format
-edit [MANIFEST]|edit the specified manifest file
+pictl disk manifest [SUBCOMMAND]
+check|check the disk manifest file for errors
+details|display details for the disk manifest file
+edit|edit the disk manifest file
+help|displays this message
 =
-check||_manifest_cli_check_cli
-details||_manifest_cli_details_cli
-edit||_manifest_cli_edit_cli
-=
-
-manifest_cli_check
-=
--- rpi-media-centre manifest checker --
-Usage:
-pictl manifest check [MANIFEST]
-backup|check the backup manifest file for errors
-config|check the config manifest file for errors
-crypt|check the crypt manifest file for errors
-=
-backup||_manifest_cli_check_backup
-config||_manifest_cli_check_config
-crypt||_manifest_cli_check_crypt
-=
-
-manifest_cli_details
-=
--- rpi-media-centre manifest details --
-Usage:
-pictl manifest details [MANIFEST]
-backup|display details for the backup manifest file
-config|display details for the config manifest file
-crypt|display details for the crypt manifest file
-=
-backup||_manifest_cli_details_backup
-config||_manifest_cli_details_config
-crypt||_manifest_cli_details_crypt
-=
-
-manifest_cli_edit
-=
--- rpi-media-centre manifest editor --
-Usage:
-pictl manifest edit [MANIFEST]
-backup|edit the backup manifest file
-config|edit the config manifest file
-crypt|edit the crypt manifest file
-=
->_dependencies_requirement_manifest_editor
-backup||_manifest_cli_edit_backup
-config||_manifest_cli_edit_config
-crypt||_manifest_cli_edit_crypt
+check||
+details||
+edit||
 =
 
 service
@@ -172,6 +170,7 @@ service
 -- rpi-media-centre service manager --
 Usage:
 pictl service [SUBCOMMAND]
+help|displays this message
 kill|kill all services immediately (unmounts encrypted disks)
 logs|tail the service logs
 pause|pause all services
