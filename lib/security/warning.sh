@@ -11,7 +11,7 @@ _security_warning_single_user_mode() {
     [[ "${RPI_DISABLE_SINGLE_USER_MODE_WARNING_BOOLEAN}" != "1" ]]; then
     _cli_log_warning "SECURITY: pictl is running in single user mode"
     _cli_log_warning "  Concurrent user access is not supported."
-    _cli_log_info "Consider appending the following to your /etc/rpi/config file:"
+    _cli_log_info "Consider appending the following to your ${RPI_MANIFEST_CONFIG} file:"
     _cli_log_info '  RPI_SVC_USERNAME="service_account_username"'
     _cli_log_info "Please see the documentation for further details or to learn how to silence this warning."
   fi

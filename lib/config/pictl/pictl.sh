@@ -7,7 +7,7 @@ set -eo pipefail
 _config_pictl() {
   local RPI_CONFIGURATION_QUIET_LOAD=0
 
-  _config_pictl_secure_load source /etc/rpi/config
+  _config_pictl_secure_load source "${RPI_MANIFEST_CONFIG}"
 }
 
 _config_pictl_check() {
@@ -15,7 +15,7 @@ _config_pictl_check() {
 
   # KCOV_EXCLUDE_BEGIN
   _config_pictl_secure_load env -i bash -c "
-  source /etc/rpi/config &&
+  source ${RPI_MANIFEST_CONFIG} &&
   declare -p | \
       grep '^declare -. RPI_' |
       sed 's/^declare -. //g' |
@@ -54,11 +54,11 @@ _config_pictl_help() {
 _config_pictl_secure_load() {
   # $@: the commands to execute after loading the config
 
-  if stdlib.io.path.query.is_file /etc/rpi/config; then
+  if stdlib.io.path.query.is_file "${RPI_MANIFEST_CONFIG}"; then
     if [[ "${RPI_CONFIGURATION_QUIET_LOAD}" -ne "1" ]]; then
-      _cli_log_notice "-- loading /etc/rpi/config file ... --"
+      _cli_log_notice "-- loading ${RPI_MANIFEST_CONFIG} file ... --"
     fi
-    stdlib.security.path.assert.is_secure /etc/rpi/config "root" "root" "600"
+    stdlib.security.path.assert.is_secure "${RPI_MANIFEST_CONFIG}" "root" "root" "600"
     "$@"
   fi
 }
