@@ -34,8 +34,6 @@ source "${RPI_WORKING_DIRECTORY}/lib/event.sh"
 source "${RPI_WORKING_DIRECTORY}/lib/filesystem.sh"
 # shellcheck source=lib/installer/cli.sh
 source "${RPI_WORKING_DIRECTORY}/lib/installer/cli.sh"
-# shellcheck source=lib/manifest.sh
-source "${RPI_WORKING_DIRECTORY}/lib/manifest.sh"
 # shellcheck source=lib/security/__all__.sh
 source "${RPI_WORKING_DIRECTORY}/lib/security/__all__.sh"
 # shellcheck source=lib/service/__all__.sh
