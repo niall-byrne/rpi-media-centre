@@ -31,9 +31,9 @@ setup() {
   @parametrize \
     "${1}" \
     "RPI_MANIFEST_CRYPT;TEST_MANIFEST_LENGTH;EXPECTED_UUID_SET;EXPECTED_NAME_SET;EXPECTED_CRYPT_GROUP_SET;EXPECTED_MOUNT_POINT_SET" \
-    "simple________manifest;${RPI_WORKING_DIRECTORY}/lib/disk/tests/manifest/__fixtures__/manifest1;1;UUID0;mocked_disk0;crypt_group0;/mnt/mocked/path0" \
-    "comment_in____manifest;${RPI_WORKING_DIRECTORY}/lib/disk/tests/manifest/__fixtures__/manifest2;2;UUID0|UUID1;mocked_disk0|mocked_disk1;crypt_group0|crypt_group1;/mnt/mocked/path0|/mnt/mocked/path1" \
-    "blank_line_in_manifest;${RPI_WORKING_DIRECTORY}/lib/disk/tests/manifest/__fixtures__/manifest3;3;UUID0|UUID1|UUID2;mocked_disk0|mocked_disk1|mocked_disk2;crypt_group0|crypt_group1|crypt_group2;/mnt/mocked/path0|/mnt/mocked/path1|/mnt/mocked/path2"
+    "simple________manifest;${RPI_WORKING_DIRECTORY}/lib/disk/manifest/tests/__fixtures__/manifest1;1;UUID0;mocked_disk0;crypt_group0;/mnt/mocked/path0" \
+    "comment_in____manifest;${RPI_WORKING_DIRECTORY}/lib/disk/manifest/tests/__fixtures__/manifest2;2;UUID0|UUID1;mocked_disk0|mocked_disk1;crypt_group0|crypt_group1;/mnt/mocked/path0|/mnt/mocked/path1" \
+    "blank_line_in_manifest;${RPI_WORKING_DIRECTORY}/lib/disk/manifest/tests/__fixtures__/manifest3;3;UUID0|UUID1|UUID2;mocked_disk0|mocked_disk1|mocked_disk2;crypt_group0|crypt_group1|crypt_group2;/mnt/mocked/path0|/mnt/mocked/path1|/mnt/mocked/path2"
 }
 
 @parametrize_with_each_env_var() {
@@ -113,7 +113,7 @@ test_disk_manifest_load__@vary__@vary__is_correctly_populated() {
   @parametrize_with_each_env_var
 
 test_disk_manifest_load__manifest_with_duplicate_names__calls_disk_manifest_line_invalid() {
-  RPI_MANIFEST_CRYPT="${ORIGINAL_RPI_WORKING_DIRECTORY}/lib/disk/tests/manifest/__fixtures__/manifest-duplicate-names"
+  RPI_MANIFEST_CRYPT="${ORIGINAL_RPI_WORKING_DIRECTORY}/lib/disk/manifest/tests/__fixtures__/manifest-duplicate-names"
 
   _disk_manifest_load
 
@@ -121,7 +121,7 @@ test_disk_manifest_load__manifest_with_duplicate_names__calls_disk_manifest_line
 }
 
 test_disk_manifest_load__manifest_with_duplicate_names__logs_an_error() {
-  RPI_MANIFEST_CRYPT="${ORIGINAL_RPI_WORKING_DIRECTORY}/lib/disk/tests/manifest/__fixtures__/manifest-duplicate-names"
+  RPI_MANIFEST_CRYPT="${ORIGINAL_RPI_WORKING_DIRECTORY}/lib/disk/manifest/tests/__fixtures__/manifest-duplicate-names"
 
   _disk_manifest_load
 
