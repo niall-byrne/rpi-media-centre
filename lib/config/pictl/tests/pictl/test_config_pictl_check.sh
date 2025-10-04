@@ -10,7 +10,7 @@ test_config_pictl_check__calls_secure_load_with_correct_args() {
   local expected_command
 
   expected_command="
-  source /etc/rpi/config &&
+  source ${RPI_MANIFEST_CONFIG} &&
   declare -p | \
       grep '^declare -. RPI_' |
       sed 's/^declare -. //g' |

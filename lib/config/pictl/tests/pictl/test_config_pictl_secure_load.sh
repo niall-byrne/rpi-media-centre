@@ -38,6 +38,7 @@ test_config_pictl_secure_load__config_exists__________quiet_mode____@vary__does_
 # shellcheck disable=SC2034
 test_config_pictl_secure_load__config_exists__________verbose_mode__@vary__logs_notice_message() {
   local RPI_CONFIGURATION_QUIET_LOAD=""
+  local RPI_MANIFEST_CONFIG="/mock/path"
   local command_args=()
 
   stdlib.io.path.query.is_file.mock.set.rc 0
@@ -46,7 +47,7 @@ test_config_pictl_secure_load__config_exists__________verbose_mode__@vary__logs_
   _config_pictl_secure_load _test_mock "${command_args[@]}"
 
   _cli_log_notice.mock.assert_called_once_with \
-    "1(-- loading /etc/rpi/config file ... --)"
+    "1(-- loading ${RPI_MANIFEST_CONFIG} file ... --)"
 }
 
 @parametrize_with_args \
@@ -87,6 +88,7 @@ test_config_pictl_secure_load__config_does_not_exist__verbose_mode__@vary__does_
 # shellcheck disable=SC2034
 test_config_pictl_secure_load__config_exists__________quiet_mode____@vary__does_not_secure_config_file() {
   local RPI_CONFIGURATION_QUIET_LOAD="1"
+  local RPI_MANIFEST_CONFIG="/mock/path"
   local command_args=()
 
   stdlib.io.path.query.is_file.mock.set.rc 0
@@ -95,7 +97,7 @@ test_config_pictl_secure_load__config_exists__________quiet_mode____@vary__does_
   _config_pictl_secure_load _test_mock "${command_args[@]}"
 
   stdlib.security.path.assert.is_secure.mock.assert_called_once_with \
-    "1(/etc/rpi/config) 2(root) 3(root) 4(600)"
+    "1(${RPI_MANIFEST_CONFIG}) 2(root) 3(root) 4(600)"
 }
 
 @parametrize_with_args \
@@ -104,6 +106,7 @@ test_config_pictl_secure_load__config_exists__________quiet_mode____@vary__does_
 # shellcheck disable=SC2034
 test_config_pictl_secure_load__config_exists__________verbose_mode__@vary__secures_config_file() {
   local RPI_CONFIGURATION_QUIET_LOAD=""
+  local RPI_MANIFEST_CONFIG="/mock/path"
   local command_args=()
 
   stdlib.io.path.query.is_file.mock.set.rc 0
@@ -112,7 +115,7 @@ test_config_pictl_secure_load__config_exists__________verbose_mode__@vary__secur
   _config_pictl_secure_load _test_mock "${command_args[@]}"
 
   stdlib.security.path.assert.is_secure.mock.assert_called_once_with \
-    "1(/etc/rpi/config) 2(root) 3(root) 4(600)"
+    "1(${RPI_MANIFEST_CONFIG}) 2(root) 3(root) 4(600)"
 }
 
 @parametrize_with_args \

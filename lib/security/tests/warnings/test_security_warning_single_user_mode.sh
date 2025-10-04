@@ -37,12 +37,13 @@ test_security_warning_single_user_mode__@vary__@vary__calls_security_defaults_se
   @parametrize_with_sum_warning_bypass
 
 test_security_warning_single_user_mode__sum_warning_________@vary__logs_warning_messages() {
+  local RPI_MANIFEST_CONFIG="/mock/path"
   local EXPECTED_WARNING_MESSAGES=(
     "1(SECURITY: pictl is running in single user mode)"
     "1(  Concurrent user access is not supported.)"
   )
   local EXPECTED_INFO_MESSAGES=(
-    "1(Consider appending the following to your /etc/rpi/config file:)"
+    "1(Consider appending the following to your ${RPI_MANIFEST_CONFIG} file:)"
     '1(  RPI_SVC_USERNAME="service_account_username")'
     "1(Please see the documentation for further details or to learn how to silence this warning.)"
   )
