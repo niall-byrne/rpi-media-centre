@@ -5,13 +5,12 @@
 set -eo pipefail
 
 # TODO: you need to re-template the cron and service files when you change users
-# TODO: move the account command under a "installer cli"
 
-_security_account_provision_service_account() {
+_install_account() {
 
   if [[ -z "${RPI_SVC_USERNAME}" ]] ||
     [[ "${RPI_SVC_USERNAME}" == "${SUDO_USER}" ]]; then
-    _cli_log_error "SECURITY: You must specify the RPI_SVC_USERNAME to provision a service account."
+    _cli_log_error "INSTALL: You must specify the RPI_SVC_USERNAME to provision a service account."
     return 127
   fi
 
@@ -25,19 +24,19 @@ _security_account_provision_service_account() {
     fi
   fi
 
-  _security_account_provision_service_account_group "${RPI_SVC_GROUPNAME}"
-  _security_account_provision_service_account_username "${RPI_SVC_USERNAME}"
+  _install_account_provision_service_account_group "${RPI_SVC_GROUPNAME}"
+  _install_account_provision_service_account_username "${RPI_SVC_USERNAME}"
 
-  _cli_log_success "SECURITY: The service account has been successfully provisioned."
+  _cli_log_success "INSTALL: The service account has been successfully provisioned."
   _cli_log_info "If this is the service account you wish to use it must be able to read your media file."
   _cli_log_info "Please consider: sudo chown -R ${RPI_SVC_USERNAME}:${RPI_SVC_GROUPNAME} ${RPI_ROOT}/shared/media"
 }
 
-_security_account_provision_service_account_group() {
+_install_account_provision_service_account_group() {
   # $1: the group to create
 
   if ! getent group "${1}" > /dev/null; then
-    _cli_log_warning "SECURITY: Adding the service account group '${1}' ..."
+    _cli_log_warning "INSTALL: Adding the service account group '${1}' ..."
 
     stdlib.io.stdin.confirmation
 
@@ -51,19 +50,19 @@ _security_account_provision_service_account_group() {
     fi
 
     _security_defaults_set_gid
-    _cli_log_success "SECURITY: The service account group '${1}' has been created with gid '${RPI_SVC_GID}' !"
+    _cli_log_success "INSTALL: The service account group '${1}' has been created with gid '${RPI_SVC_GID}' !"
 
   else
-    _cli_log_notice "SECURITY: The group '${1}' already exists, nothing to do."
+    _cli_log_notice "INSTALL: The group '${1}' already exists, nothing to do."
     _security_defaults_set_gid
   fi
 }
 
-_security_account_provision_service_account_username() {
+_install_account_provision_service_account_username() {
   # $1: the user to create
 
   if ! getent passwd "${1}" > /dev/null; then
-    _cli_log_warning "SECURITY: Adding the service account user '${1}' ..."
+    _cli_log_warning "INSTALL: Adding the service account user '${1}' ..."
 
     stdlib.io.stdin.confirmation
 
@@ -82,10 +81,10 @@ _security_account_provision_service_account_username() {
     fi
 
     _security_defaults_set_uid
-    _cli_log_success "SECURITY: The service account user '${1}' has been created with uid '${RPI_SVC_UID}' !"
+    _cli_log_success "INSTALL: The service account user '${1}' has been created with uid '${RPI_SVC_UID}' !"
 
   else
-    _cli_log_notice "SECURITY: The user '${1}' already exists, nothing to do."
+    _cli_log_notice "INSTALL: The user '${1}' already exists, nothing to do."
     _security_defaults_set_uid
   fi
 }

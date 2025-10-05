@@ -48,7 +48,7 @@ test_security_validation_ids_relationship__valid_arguments___optional_set____req
     "1(The config cannot specify TEST_OPTIONAL without a value for TEST_REQUIRED:)"
   _cli_log_info.mock.assert_count_is "2"
   _cli_log_info.mock.assert_call_n_is "1" \
-    "1( - TEST_OPTIONAL may be used with the 'account' command to provision a new TEST_ENTITY)"
+    "1( - TEST_OPTIONAL may be used with the 'install account' command to provision a new TEST_ENTITY)"
   _cli_log_info.mock.assert_call_n_is "2" \
     "1( - TEST_REQUIRED may be used to specify an existing TEST_ENTITY)"
 }

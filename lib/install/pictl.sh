@@ -1,17 +1,11 @@
 #!/bin/bash
 
-# pictl installer cli library
+# pictl install pictl library
 
 set -eo pipefail
 
-_installer_cli() {
-  # $@: the installer cli args
-
-  _installer_cli_ephemeral_installer "$@"
-}
-
-_installer_cli_ephemeral_installer() {
-  # $@: the installer cli args
+_install_pictl_ephemeral_installer() {
+  # $@: the install cli args
 
   local RPI_EPHEMERAL_INSTALLER
 
@@ -22,12 +16,12 @@ _installer_cli_ephemeral_installer() {
     "root" \
     700
 
-  cat "${RPI_WORKING_DIRECTORY}/lib/installer/installer.sh" \
+  cat "${RPI_WORKING_DIRECTORY}/lib/install/installer.sh" \
     > "${RPI_EPHEMERAL_INSTALLER}"
   echo "_installer $*" >> "${RPI_EPHEMERAL_INSTALLER}"
 
   RPI_EXIT_CLEANUP_PATHS+=("${RPI_EPHEMERAL_INSTALLER}")
 
-  # shellcheck source=lib/installer/installer.sh
+  # shellcheck source=lib/install/installer.sh
   source "${RPI_EPHEMERAL_INSTALLER}"
 }

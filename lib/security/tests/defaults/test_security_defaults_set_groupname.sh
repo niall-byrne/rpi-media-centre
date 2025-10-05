@@ -56,5 +56,5 @@ test_security_defaults_set_groupname__groupname_set________group_does_not_exist_
   _cli_log_error.mock.assert_called_once_with \
     "1(SECURITY: The specified group 'mock_group' (RPI_SVC_GROUPNAME) does not exist!)"
   _cli_log_info.mock.assert_called_once_with \
-    "1(Please consider using the 'account' command to provision it.)"
+    "1(Please consider using the 'install account' command to provision it.)"
 }
