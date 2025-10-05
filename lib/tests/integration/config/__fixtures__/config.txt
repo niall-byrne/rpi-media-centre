@@ -1,0 +1,8 @@
+${THEME_TITLE}-- rpi-media-centre configuration manager --${THEME_NC}
+${THEME_HEADER}Usage:${THEME_NC}
+  ${THEME_HIGHLIGHT}pictl config ${THEME_BRACKETS_STYLE_2}[${THEME_BRACKETS_STYLE_2_INNER}SUBCOMMAND${THEME_BRACKETS_STYLE_2}]${THEME_NC}${THEME_NC}
+    ${THEME_ENTITY}debug                                     ${THEME_NC} - show the current running configuration
+    ${THEME_ENTITY}details                                   ${THEME_NC} - display details for the configuration file
+    ${THEME_ENTITY}check                                     ${THEME_NC} - check the configuration file for errors
+    ${THEME_ENTITY}edit                                      ${THEME_NC} - edit the configuration file
+    ${THEME_ENTITY}help                                      ${THEME_NC} - display this message

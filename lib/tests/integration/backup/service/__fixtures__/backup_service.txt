@@ -1,0 +1,6 @@
+${THEME_TITLE}-- rpi-media-centre backup service manager --${THEME_NC}
+${THEME_HEADER}Usage:${THEME_NC}
+  ${THEME_HIGHLIGHT}pictl backup service ${THEME_BRACKETS_STYLE_2}[${THEME_BRACKETS_STYLE_2_INNER}SUBCOMMAND${THEME_BRACKETS_STYLE_2}]${THEME_NC}${THEME_NC}
+    ${THEME_ENTITY}help                                      ${THEME_NC} - display this message
+    ${THEME_ENTITY}job ${THEME_BRACKETS_STYLE_2}(${THEME_BRACKETS_STYLE_2_INNER}CONFIGURATION${THEME_BRACKETS_STYLE_2})${THEME_NC}                       ${THEME_NC} - execute the given backup job
+    ${THEME_ENTITY}start                                     ${THEME_NC} - start the backup scheduler service

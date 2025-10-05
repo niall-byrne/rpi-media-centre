@@ -1,0 +1,12 @@
+${THEME_TITLE}-- rpi-media-centre service manager --${THEME_NC}
+${THEME_HEADER}Usage:${THEME_NC}
+  ${THEME_HIGHLIGHT}pictl service ${THEME_BRACKETS_STYLE_2}[${THEME_BRACKETS_STYLE_2_INNER}SUBCOMMAND${THEME_BRACKETS_STYLE_2}]${THEME_NC}${THEME_NC}
+    ${THEME_ENTITY}help                                      ${THEME_NC} - display this message
+    ${THEME_ENTITY}kill                                      ${THEME_NC} - kill all services immediately ${THEME_BRACKETS_STYLE_2}(${THEME_BRACKETS_STYLE_2_INNER}unmounts encrypted disks${THEME_BRACKETS_STYLE_2})${THEME_NC}
+    ${THEME_ENTITY}logs                                      ${THEME_NC} - tail the service logs
+    ${THEME_ENTITY}pause                                     ${THEME_NC} - pause all services
+    ${THEME_ENTITY}resume                                    ${THEME_NC} - resume all services
+    ${THEME_ENTITY}start                                     ${THEME_NC} - start all services ${THEME_BRACKETS_STYLE_2}(${THEME_BRACKETS_STYLE_2_INNER}mounts encrypted disks${THEME_BRACKETS_STYLE_2})${THEME_NC}
+    ${THEME_ENTITY}status                                    ${THEME_NC} - show all service statuses
+    ${THEME_ENTITY}stop                                      ${THEME_NC} - stops all services ${THEME_BRACKETS_STYLE_2}(${THEME_BRACKETS_STYLE_2_INNER}unmounts encrypted disks${THEME_BRACKETS_STYLE_2})${THEME_NC}
+    ${THEME_ENTITY}upgrade                                   ${THEME_NC} - performs in place upgrade ${THEME_BRACKETS_STYLE_2}(${THEME_BRACKETS_STYLE_2_INNER}services are restarted${THEME_BRACKETS_STYLE_2})${THEME_NC}

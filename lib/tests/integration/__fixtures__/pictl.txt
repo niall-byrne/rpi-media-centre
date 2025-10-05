@@ -1,0 +1,10 @@
+${THEME_TITLE}-- rpi-media-centre cli --${THEME_NC}
+${THEME_HEADER}Usage:${THEME_NC}
+  ${THEME_HIGHLIGHT}pictl ${THEME_BRACKETS_STYLE_2}[${THEME_BRACKETS_STYLE_2_INNER}SUBCOMMAND${THEME_BRACKETS_STYLE_2}]${THEME_NC}${THEME_NC}
+    ${THEME_ENTITY}backup ${THEME_BRACKETS_STYLE_2}[${THEME_BRACKETS_STYLE_2_INNER}SUBCOMMAND${THEME_BRACKETS_STYLE_2}]${THEME_NC}                       ${THEME_NC} - manage the backup service
+    ${THEME_ENTITY}compile ${THEME_BRACKETS_STYLE_2}[${THEME_BRACKETS_STYLE_2_INNER}SUBCOMMAND${THEME_BRACKETS_STYLE_2}]${THEME_NC}                      ${THEME_NC} - manage the compiler service
+    ${THEME_ENTITY}config ${THEME_BRACKETS_STYLE_2}[${THEME_BRACKETS_STYLE_2_INNER}SUBCOMMAND                        ${THEME_NC} - manage the pictl configuration
+    ${THEME_ENTITY}disk ${THEME_BRACKETS_STYLE_2}[${THEME_BRACKETS_STYLE_2_INNER}SUBCOMMAND${THEME_BRACKETS_STYLE_2}]${THEME_NC}                         ${THEME_NC} - manage the local disks
+    ${THEME_ENTITY}help                                      ${THEME_NC} - display this message
+    ${THEME_ENTITY}install ${THEME_BRACKETS_STYLE_2}[${THEME_BRACKETS_STYLE_2_INNER}SUBCOMMAND${THEME_BRACKETS_STYLE_2}]${THEME_NC}                      ${THEME_NC} - manage the pictl installer
+    ${THEME_ENTITY}service ${THEME_BRACKETS_STYLE_2}[${THEME_BRACKETS_STYLE_2_INNER}SUBCOMMAND${THEME_BRACKETS_STYLE_2}]${THEME_NC}                      ${THEME_NC} - manage the provided services

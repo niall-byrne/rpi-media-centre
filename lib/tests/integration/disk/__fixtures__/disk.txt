@@ -1,0 +1,7 @@
+${THEME_TITLE}-- rpi-media-centre disk manager --${THEME_NC}
+${THEME_HEADER}Usage:${THEME_NC}
+  ${THEME_HIGHLIGHT}pictl disk ${THEME_BRACKETS_STYLE_2}[${THEME_BRACKETS_STYLE_2_INNER}SUBCOMMAND${THEME_BRACKETS_STYLE_2}]${THEME_NC}${THEME_NC}
+    ${THEME_ENTITY}filesystem                                ${THEME_NC} - display filesystem details
+    ${THEME_ENTITY}hardware                                  ${THEME_NC} - display hardware details
+    ${THEME_ENTITY}help                                      ${THEME_NC} - display this message
+    ${THEME_ENTITY}manifest ${THEME_BRACKETS_STYLE_2}[${THEME_BRACKETS_STYLE_2_INNER}SUBCOMMAND${THEME_BRACKETS_STYLE_2}]${THEME_NC}                     ${THEME_NC} - manage the disk service manifest
