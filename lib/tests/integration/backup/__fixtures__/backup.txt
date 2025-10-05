@@ -1,0 +1,9 @@
+${THEME_TITLE}-- rpi-media-centre backup manager --${THEME_NC}
+${THEME_HEADER}Usage:${THEME_NC}
+  ${THEME_HIGHLIGHT}pictl backup ${THEME_BRACKETS_STYLE_2}[${THEME_BRACKETS_STYLE_2_INNER}SUBCOMMAND${THEME_BRACKETS_STYLE_2}]${THEME_NC}${THEME_NC}
+    ${THEME_ENTITY}help                                      ${THEME_NC} - display this message
+    ${THEME_ENTITY}keyfile-s3 ${THEME_BRACKETS_STYLE_2}(${THEME_BRACKETS_STYLE_2_INNER}FILENAME${THEME_BRACKETS_STYLE_2})${THEME_NC}                     ${THEME_NC} - generate a new encryption keyfile for s3
+    ${THEME_ENTITY}manifest ${THEME_BRACKETS_STYLE_2}[${THEME_BRACKETS_STYLE_2_INNER}SUBCOMMAND${THEME_BRACKETS_STYLE_2}]${THEME_NC}                     ${THEME_NC} - manage the backup service manifest
+    ${THEME_ENTITY}queue ${THEME_BRACKETS_STYLE_2}[${THEME_BRACKETS_STYLE_2_INNER}SUBCOMMAND${THEME_BRACKETS_STYLE_2}]${THEME_NC}                        ${THEME_NC} - manage the backup job queue
+    ${THEME_ENTITY}recover ${THEME_BRACKETS_STYLE_2}(${THEME_BRACKETS_STYLE_2_INNER}NAME${THEME_BRACKETS_STYLE_2})${THEME_NC} ${THEME_BRACKETS_STYLE_2}(${THEME_BRACKETS_STYLE_2_INNER}PATH${THEME_BRACKETS_STYLE_2})${THEME_NC}                     ${THEME_NC} - copy the named remote backup to a local path
+    ${THEME_ENTITY}schedule ${THEME_BRACKETS_STYLE_2}(${THEME_BRACKETS_STYLE_2_INNER}GROUP${THEME_BRACKETS_STYLE_2})${THEME_NC}                          ${THEME_NC} - schedule a group of backup jobs

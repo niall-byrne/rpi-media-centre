@@ -50,13 +50,15 @@ _test_runner_load_stdlib() {
 _test_runner_load_lib() {
   # shellcheck source=lib/__all__.sh
   source "${RPI_WORKING_DIRECTORY}/lib/__all__.sh"
-}
 
-_test_runner_load_fixtures() {
   # shellcheck source=lib/__all__.sh
   source "${RPI_WORKING_DIRECTORY}/lib/__fixtures__/__all__.sh"
-}
 
+  _fixture_escape_colours
+
+  RPI_CLI_MEMORY_ONLY_BOOLEAN=1 \
+    _cli_compiler_build_cli > /dev/null 2>&1
+}
 
 _test_runner_main() {
   local __RPI_TEST_RUNNER_DISCOVERED_TEST_MODULES=()
@@ -65,9 +67,6 @@ _test_runner_main() {
   _test_runner_load_stdlib
   _test_runner_load_testing_framework
   _test_runner_load_lib
-  _test_runner_load_fixtures
-
-  _fixture_escape_colours
 
   stdlib.trap.handler.exit.fn.register __mock.persistence.registry.cleanup
 
