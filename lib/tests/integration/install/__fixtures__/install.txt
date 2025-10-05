@@ -1,0 +1,6 @@
+${THEME_TITLE}-- rpi-media-centre install manager --${THEME_NC}
+${THEME_HEADER}Usage:${THEME_NC}
+  ${THEME_HIGHLIGHT}pictl install ${THEME_BRACKETS_STYLE_2}[${THEME_BRACKETS_STYLE_2_INNER}SUBCOMMAND${THEME_BRACKETS_STYLE_2}]${THEME_NC}${THEME_NC}
+    ${THEME_ENTITY}account                                   ${THEME_NC} - install the configured service account
+    ${THEME_ENTITY}help                                      ${THEME_NC} - display this message
+    ${THEME_ENTITY}pictl ${THEME_BRACKETS_STYLE_2}[${THEME_BRACKETS_STYLE_2_INNER}<optional> SHA${THEME_BRACKETS_STYLE_2}]${THEME_NC}                    ${THEME_NC} - install the latest version of pictl ${THEME_BRACKETS_STYLE_2}(${THEME_BRACKETS_STYLE_2_INNER}or a specific SHA${THEME_BRACKETS_STYLE_2})${THEME_NC}

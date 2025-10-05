@@ -1,0 +1,7 @@
+${THEME_TITLE}-- rpi-media-centre disk manifest manager --${THEME_NC}
+${THEME_HEADER}Usage:${THEME_NC}
+  ${THEME_HIGHLIGHT}pictl disk manifest ${THEME_BRACKETS_STYLE_2}[${THEME_BRACKETS_STYLE_2_INNER}SUBCOMMAND${THEME_BRACKETS_STYLE_2}]${THEME_NC}${THEME_NC}
+    ${THEME_ENTITY}check                                     ${THEME_NC} - check the disk manifest file for errors
+    ${THEME_ENTITY}details                                   ${THEME_NC} - display details for the disk manifest file
+    ${THEME_ENTITY}edit                                      ${THEME_NC} - edit the disk manifest file
+    ${THEME_ENTITY}help                                      ${THEME_NC} - display this message

@@ -1,0 +1,1 @@
+${THEME_LOGGER_ERROR}This command is restricted to the systemd backup service !${THEME_NC}
