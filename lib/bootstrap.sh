@@ -16,7 +16,7 @@ _bootstrap_configuration() {
   # shellcheck disable=SC2034
   local RPI_CONFIGURATION_VALIDATORS_DISABLED_ARRAY=()
 
-  if [[ "${1}" == "account" ]]; then
+  if [[ "${1}" == "install" ]] && [[ "${2}" == "account" ]]; then
     RPI_CONFIGURATION_VALIDATORS_DISABLED_ARRAY+=("account")
   fi
 

@@ -64,7 +64,7 @@ test_security_defaults_set_username__username_set______username_does_not_exist__
   _cli_log_error.mock.assert_called_once_with \
     "1(SECURITY: The specified user '${RPI_SVC_USERNAME}' (RPI_SVC_USERNAME) does not exist!)"
   _cli_log_info.mock.assert_called_once_with \
-    "1(Please consider using the 'account' command to provision it.)"
+    "1(Please consider using the 'install account' command to provision it.)"
 }
 
 test_security_defaults_set_username__username_set______username_does_not_exist__return_code_127() {

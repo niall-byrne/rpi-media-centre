@@ -16,7 +16,7 @@ setup() {
     "${1}" \
     "TEST_COMMAND_ARGS_DEFINITION;TEST_EXPECTED_DISABLED_VALIDATORS" \
     "non_account_command;arg1|arg2;;" \
-    "account_command____;account;'account'"
+    "account_command____;install|account;'account'"
 }
 
 test_bootstrap_configuration__@vary__checks_cli_dependencies() {

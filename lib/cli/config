@@ -3,21 +3,19 @@ pictl
 -- rpi-media-centre cli --
 Usage:
 pictl [SUBCOMMAND]
-account|provision a service account
 backup [SUBCOMMAND]|manage the backup service
 compile [SUBCOMMAND]|manage the compiler service
 config [SUBCOMMAND|manage the pictl configuration
 disk [SUBCOMMAND]|manage the local disks
 help|displays this message
-install|run the installer
+install [SUBCOMMAND]|manage the pictl installer
 service [SUBCOMMAND]|manage the provided services
 =
-account||_security_account_provision_service_account
 backup||_backup_cli
 compile||_compile_cli
 config||_config_cli
 disk||_disk_cli
-install||_installer_cli
+install||_install_cli
 service||_service_cli
 =
 
@@ -163,6 +161,19 @@ help|displays this message
 check||
 details||
 edit||
+=
+
+install
+=
+-- rpi-media-centre install manager --
+Usage:
+pictl install [SUBCOMMAND]
+account|install the configured service account
+help|display this message
+pictl [<optional> SHA]|install the latest version of pictl (or a specific SHA)
+=
+account||
+pictl||
 =
 
 service

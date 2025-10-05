@@ -32,7 +32,7 @@ _security_validation_ids_relationship() {
     [[ -z "${!2}" ]]; then
     _cli_log_error "SECURITY: invalid configuration!"
     _cli_log_error "The config cannot specify ${1} without a value for ${2}:"
-    _cli_log_info " - ${1} may be used with the 'account' command to provision a new ${3}"
+    _cli_log_info " - ${1} may be used with the 'install account' command to provision a new ${3}"
     _cli_log_info " - ${2} may be used to specify an existing ${3}"
     return 127
   fi
