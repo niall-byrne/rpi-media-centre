@@ -32,8 +32,8 @@ source "${RPI_WORKING_DIRECTORY}/lib/docker.sh"
 source "${RPI_WORKING_DIRECTORY}/lib/event.sh"
 # shellcheck source=lib/filesystem.sh
 source "${RPI_WORKING_DIRECTORY}/lib/filesystem.sh"
-# shellcheck source=lib/installer/cli.sh
-source "${RPI_WORKING_DIRECTORY}/lib/installer/cli.sh"
+# shellcheck source=lib/install/__all__.sh
+source "${RPI_WORKING_DIRECTORY}/lib/install/__all__.sh"
 # shellcheck source=lib/security/__all__.sh
 source "${RPI_WORKING_DIRECTORY}/lib/security/__all__.sh"
 # shellcheck source=lib/service/__all__.sh

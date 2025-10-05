@@ -2,8 +2,6 @@
 
 set -eo pipefail
 
-# shellcheck source=lib/security/account.sh
-source "${RPI_WORKING_DIRECTORY}/lib/security/account.sh"
 # shellcheck source=lib/security/defaults.sh
 source "${RPI_WORKING_DIRECTORY}/lib/security/defaults.sh"
 # shellcheck source=lib/security/root.sh
