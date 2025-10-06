@@ -93,6 +93,15 @@ _backup_cli_service_cli_before_all() {
   _backup_scheduler_queue_make
 }
 
+_backup_cli_service_cli_job() {
+  if [[ -z "${1}" ]]; then
+    _backup_job_usage
+    return 127
+  fi
+
+  _backup_job "${@}"
+}
+
 _backup_cli_service_cli_start() {
   _backup_scheduler_start
 }
