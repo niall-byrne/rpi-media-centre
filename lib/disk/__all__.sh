@@ -2,10 +2,8 @@
 
 set -eo pipefail
 
-# shellcheck source=lib/disk/cli.sh
-source "${RPI_WORKING_DIRECTORY}/lib/disk/cli.sh"
-# shellcheck source=lib/disk/cli/manifest/__all__.sh
-source "${RPI_WORKING_DIRECTORY}/lib/disk/cli/manifest/__all__.sh"
+# shellcheck source=lib/disk/cli/__all__.sh
+source "${RPI_WORKING_DIRECTORY}/lib/disk/cli/__all__.sh"
 # shellcheck source=lib/disk/disk.sh
 source "${RPI_WORKING_DIRECTORY}/lib/disk/disk.sh"
 # shellcheck source=lib/disk/manifest/__all__.sh
