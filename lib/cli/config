@@ -81,7 +81,7 @@ job (CONFIGURATION)|execute the given backup job
 start|start the backup scheduler service
 =
 >_backup_cli_service_cli_before_all
-job||_backup_job
+job||
 start||
 show||
 =
