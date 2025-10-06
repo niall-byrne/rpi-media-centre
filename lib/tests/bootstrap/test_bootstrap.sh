@@ -2,7 +2,7 @@
 
 setup() {
   _mock.create _bootstrap_configuration
-  _mock.create _cli_bootstrap
+  _mock.create _cli_compiler_build_cli
   _mock.create _pictl_cli
 
   _pictl_cli.mock.set.keywords "_SERVICE_REMOVE_CONTAINERS"
@@ -33,18 +33,18 @@ test_bootstrap__@vary__passes_args_to_bootstrap_configuration_correctly() {
 @parametrize_with_args \
   test_bootstrap__@vary__passes_args_to_bootstrap_configuration_correctly
 
-test_bootstrap__@vary__calls_cli_bootstrap_correctly() {
+test_bootstrap__@vary__calls_cli_compiler_build_cli_correctly() {
   local command_args=()
 
   stdlib.array.make.from_string command_args "|" "${TEST_COMMAND_ARGS_DEFINITION}"
 
   _bootstrap "${command_args[@]}"
 
-  _cli_bootstrap.mock.assert_called_once_with ""
+  _cli_compiler_build_cli.mock.assert_called_once_with ""
 }
 
 @parametrize_with_args \
-  test_bootstrap__@vary__calls_cli_bootstrap_correctly
+  test_bootstrap__@vary__calls_cli_compiler_build_cli_correctly
 
 # shellcheck disable=SC2034
 test_bootstrap__@vary__pass_args_to_the_pictl_cli() {
@@ -74,7 +74,7 @@ test_bootstrap__@vary__calls_dependencies_in_the_correct_sequence() {
 
   _mock.sequence.assert_is \
     "_bootstrap_configuration" \
-    "_cli_bootstrap" \
+    "_cli_compiler_build_cli" \
     "_pictl_cli"
 }
 

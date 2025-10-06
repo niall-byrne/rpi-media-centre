@@ -2,8 +2,8 @@
 
 set -eo pipefail
 
-# shellcheck source=lib/cli/cli.sh
-source "${RPI_WORKING_DIRECTORY}/lib/cli/cli.sh"
+# shellcheck source=lib/cli/cli/__all__.sh
+source "${RPI_WORKING_DIRECTORY}/lib/cli/cli/__all__.sh"
 # shellcheck source=lib/cli/compiler/__all__.sh
 source "${RPI_WORKING_DIRECTORY}/lib/cli/compiler/__all__.sh"
 # shellcheck source=lib/cli/logger.sh

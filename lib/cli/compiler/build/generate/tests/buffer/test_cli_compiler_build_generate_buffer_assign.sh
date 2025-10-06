@@ -10,15 +10,15 @@
 }
 
 # shellcheck disable=SC2034
-test_cli_compiler_buffer_assign__@vary__assigns_buffer_content_to_variable() {
+test_cli_compiler_build_generate_buffer_assign__@vary__assigns_buffer_content_to_variable() {
   local RPI_CLI_COMPILER_BUFFER="${TEST_BUFFER_CONTENT_RAW//<br>/$'\n'}"
   local my_variable
   local TEST_EXPECTED_VALUE="${TEST_EXPECTED_VALUE//<br>/$'\n'}"
 
-  _cli_compiler_buffer_assign my_variable
+  _cli_compiler_build_generate_buffer_assign my_variable
 
   assert_equals "${TEST_EXPECTED_VALUE}" "${my_variable}"
 }
 
 @parametrize_with_assign_scenarios \
-  test_cli_compiler_buffer_assign__@vary__assigns_buffer_content_to_variable
+  test_cli_compiler_build_generate_buffer_assign__@vary__assigns_buffer_content_to_variable

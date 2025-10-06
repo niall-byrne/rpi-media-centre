@@ -4,37 +4,37 @@
 
 set -eo pipefail
 
-_cli_compiler_completion() {
+_cli_compiler_build_generate_target_completion() {
   _cli_log_warning "CLI: Compiling ..."
-  time _cli_compiler_configuration_load_to_buffer "_cli_compiler_completion_dispatcher"
+  time _cli_compiler_build_generate_configuration_load_to_buffer "_cli_compiler_build_generate_target_completion_dispatcher"
   _cli_log_success "CLI: Ready to go!"
 }
 
-_cli_compiler_completion_dispatcher() {
+_cli_compiler_build_generate_target_completion_dispatcher() {
   case "${RPI_COMPILER_STAGE}" in
     0)
-      _cli_compiler_complete_write_file_header
-      _cli_compiler_completion_bash_completion_case_begin
+      _cli_compiler_build_generate_target_completion_write_file_header
+      _cli_compiler_build_generate_target_completion_bash_completion_case_begin
       ;;
     1)
-      _cli_compiler_buffer_assign "RPI_CLI_COMPILER_HEADER"
+      _cli_compiler_build_generate_buffer_assign "RPI_CLI_COMPILER_HEADER"
       ;;
     2)
-      _cli_compiler_buffer_assign "RPI_CLI_COMPILER_USAGE_STRING"
-      _cli_compiler_completion_bash_completion
+      _cli_compiler_build_generate_buffer_assign "RPI_CLI_COMPILER_USAGE_STRING"
+      _cli_compiler_build_generate_target_completion_bash_completion
       echo "  PICTL: Compiled ${RPI_CLI_COMPILER_HEADER}"
       ;;
     3) ;; # KCOV_EXCLUDE_LINE
     4)
-      _cli_compiler_completion_bash_completion_case_condition_wildcard
-      _cli_compiler_completion_bash_completion_case_end
-      _cli_compiler_complete_write_file_footer
+      _cli_compiler_build_generate_target_completion_bash_completion_case_condition_wildcard
+      _cli_compiler_build_generate_target_completion_bash_completion_case_end
+      _cli_compiler_build_generate_target_completion_write_file_footer
       echo -en "$RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE" > "${RPI_PATH_COMPILED_COMPLETION}"
       ;;
   esac
 }
 
-_cli_compiler_completion_bash_completion() {
+_cli_compiler_build_generate_target_completion_bash_completion() {
   local RPI_CLI_COMPILER_COMPLETION_COMMAND_NAME=""
   local RPI_CLI_COMPILER_COMPLETION_SUBCOMMANDS=()
   local RPI_CLI_COMPILER_USAGE_LINE_INDEX=0
@@ -43,19 +43,19 @@ _cli_compiler_completion_bash_completion() {
     case "${RPI_CLI_COMPILER_USAGE_LINE_INDEX}" in
       0 | 1) ;; # KCOV_EXCLUDE_LINE
       2)
-        _cli_compiler_completion_bash_completion_command_name
+        _cli_compiler_build_generate_target_completion_bash_completion_command_name
         ;;
       *)
-        _cli_compiler_completion_bash_completion_subcommands
+        _cli_compiler_build_generate_target_completion_bash_completion_subcommands
         ;;
     esac
     ((RPI_CLI_COMPILER_USAGE_LINE_INDEX += 1))
   done <<< "${RPI_CLI_COMPILER_USAGE_STRING}"
 
-  _cli_compiler_completion_bash_completion_case_condition_subcommand
+  _cli_compiler_build_generate_target_completion_bash_completion_case_condition_subcommand
 }
 
-_cli_compiler_completion_bash_completion_command_name() {
+_cli_compiler_build_generate_target_completion_bash_completion_command_name() {
   local RPI_CLI_COMPILER_COMPLETION_COMMAND_WORD=""
   local RPI_CLI_COMPILER_COMPLETION_COMMAND_WORDS
 
@@ -73,7 +73,7 @@ _cli_compiler_completion_bash_completion_command_name() {
   RPI_CLI_COMPILER_COMPLETION_COMMAND_NAME="${RPI_CLI_COMPILER_COMPLETION_COMMAND_NAME:1}"
 }
 
-_cli_compiler_completion_bash_completion_subcommands() {
+_cli_compiler_build_generate_target_completion_bash_completion_subcommands() {
   local RPI_CLI_COMPILER_USAGE_SUBCOMMAND
   local RPI_CLI_COMPILER_USAGE_UNUSED
 
@@ -92,33 +92,33 @@ _cli_compiler_completion_bash_completion_subcommands() {
   RPI_CLI_COMPILER_COMPLETION_SUBCOMMANDS+=("${RPI_CLI_COMPILER_USAGE_SUBCOMMAND_NAME}")
 }
 
-_cli_compiler_completion_bash_completion_case_begin() {
+_cli_compiler_build_generate_target_completion_bash_completion_case_begin() {
   RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="  case \"\${1}\" in\n"
 }
 
-_cli_compiler_completion_bash_completion_case_end() {
+_cli_compiler_build_generate_target_completion_bash_completion_case_end() {
   RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="  esac\n"
   RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="}\n"
 }
 
-_cli_compiler_completion_bash_completion_case_condition_subcommand() {
+_cli_compiler_build_generate_target_completion_bash_completion_case_condition_subcommand() {
   RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="    *'${RPI_CLI_COMPILER_COMPLETION_COMMAND_NAME}')\n"
   RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="      echo '${RPI_CLI_COMPILER_COMPLETION_SUBCOMMANDS[*]}'\n"
   RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="      ;;\n"
 }
 
-_cli_compiler_completion_bash_completion_case_condition_wildcard() {
+_cli_compiler_build_generate_target_completion_bash_completion_case_condition_wildcard() {
   RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="    *)\n"
   RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="      return 1\n"
   RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="      ;;\n"
 }
 
-_cli_compiler_complete_write_file_footer() {
+_cli_compiler_build_generate_target_completion_write_file_footer() {
   RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="\n"
   RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="complete -F _rpi_bash_completion pictl\n"
 }
 
-_cli_compiler_complete_write_file_header() {
+_cli_compiler_build_generate_target_completion_write_file_header() {
   local FILE_LINE
 
   RPI_CLI_COMPILER_COMPLETION_GENERATED_CODE+="#!/bin/bash\n"

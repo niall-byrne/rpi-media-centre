@@ -7,7 +7,7 @@ set -eo pipefail
 _bootstrap() {
   _bootstrap_configuration "$@"
 
-  _cli_bootstrap
+  _cli_compiler_build_cli
 
   _pictl_cli "$@"
 }
