@@ -1,7 +1,7 @@
 #!/bin/bash
 
-_testing.load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/cli/__fixtures__/disk_cli_hardware.sh"
-_testing.load "${RPI_WORKING_DIRECTORY}/lib/disk/tests/__fakes__/block_devices.sh"
+_testing.load "${RPI_WORKING_DIRECTORY}/lib/disk/cli/tests/cli/__fixtures__/disk_cli_hardware.sh"
+_testing.load "${RPI_WORKING_DIRECTORY}/lib/disk/cli/tests/cli/__fakes__/block_devices.sh"
 
 setup() {
   _fixture_disk_cli_hardware

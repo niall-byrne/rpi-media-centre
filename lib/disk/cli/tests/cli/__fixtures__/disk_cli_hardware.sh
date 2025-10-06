@@ -3,7 +3,7 @@
 _fixture_disk_cli_hardware() {
   local LSBLK_DATA
 
-  LSBLK_DATA="$(cat "${RPI_WORKING_DIRECTORY}"/lib/disk/tests/cli/__fixtures__/lsblk.txt)"
+  LSBLK_DATA="$(cat "${RPI_WORKING_DIRECTORY}"/lib/disk/cli/tests/cli/__fixtures__/lsblk.txt)"
 
   _mock.create _dependencies_group_disks_cli_hardware
 
