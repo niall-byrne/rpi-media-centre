@@ -16,14 +16,14 @@ setup() {
 }
 
 # shellcheck disable=SC2034
-test_cli_make_build_folder__@vary__creates_directory_with_correct_parameters() {
+test_cli_compiler_build_make_target_folder__@vary__creates_directory_with_correct_parameters() {
   local RPI_PATH_COMPILED_ROOT="${TEST_PATH}"
 
-  _cli_make_build_folder
+  _cli_compiler_build_make_target_folder
 
   stdlib.security.path.make.dir.mock.assert_called_once_with \
     "1(${TEST_PATH}) 2(root) 3(root) 4(755)"
 }
 
 @parametrize_with_paths \
-  test_cli_make_build_folder__@vary__creates_directory_with_correct_parameters
+  test_cli_compiler_build_make_target_folder__@vary__creates_directory_with_correct_parameters

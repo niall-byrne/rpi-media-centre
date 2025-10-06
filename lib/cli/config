@@ -112,8 +112,8 @@ cli|compile the pictl cli
 completion|compile the pictl bash completion
 help|displays this message
 =
-cli||_cli_bootstrap "1"
-completion||_cli_completion
+cli||
+completion||
 =
 
 config

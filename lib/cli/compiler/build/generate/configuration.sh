@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# pictl cli compiler configuration library
+# pictl cli compiler generate configuration library
 
 set -eo pipefail
 
@@ -11,7 +11,7 @@ RPI_CLI_COMPILER_BEFORE_ALL_COMMAND_MARKER=">"
 RPI_CLI_COMPILER_FIELD_SEPERATOR="|"
 RPI_CLI_COMPILER_SECTION_SEPERATOR="="
 
-_cli_compiler_configuration_load_to_buffer() {
+_cli_compiler_build_generate_configuration_load_to_buffer() {
   # $1: the compilation dispatcher to call for each section
 
   local FILE_LINE
@@ -27,16 +27,16 @@ _cli_compiler_configuration_load_to_buffer() {
 
     case "${FILE_LINE}" in
       "")
-        _cli_compiler_configuration_load_to_buffer_reset_state
-        _cli_compiler_buffer_clear
+        _cli_compiler_build_generate_configuration_reset_state
+        _cli_compiler_build_generate_buffer_clear
         ;;
       "${RPI_CLI_COMPILER_SECTION_SEPERATOR}")
         ((RPI_COMPILER_STAGE += 1))
         "${1}"
-        _cli_compiler_buffer_clear
+        _cli_compiler_build_generate_buffer_clear
         ;;
       *)
-        _cli_compiler_buffer_append
+        _cli_compiler_build_generate_buffer_append
         ;;
     esac
 
@@ -46,7 +46,7 @@ _cli_compiler_configuration_load_to_buffer() {
   "${1}"
 }
 
-_cli_compiler_configuration_load_to_buffer_reset_state() {
+_cli_compiler_build_generate_configuration_reset_state() {
   RPI_COMPILER_STAGE=0
   # shellcheck disable=SC2034
   RPI_CLI_COMPILER_HEADER=""

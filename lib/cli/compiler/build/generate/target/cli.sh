@@ -9,14 +9,14 @@ RPI_CLI_COLUMN_WIDTH="42"
 # shellcheck disable=SC2034
 RPI_CLI_COLUMN_ALIGNMENT_WITHOUT_TAB="$((RPI_CLI_COLUMN_WIDTH + 5))"
 
-_cli_compiler_cli() {
+_cli_compiler_build_generate_target_cli() {
   _cli_log_warning "CLI: Compiling ..."
 
   if ! _cli_compiler_query_is_compilation_memory_only; then
     _io_colours_escape
   fi
 
-  time _cli_compiler_configuration_load_to_buffer "_cli_compiler_cli_dispatcher"
+  time _cli_compiler_build_generate_configuration_load_to_buffer "_cli_compiler_build_generate_target_cli_dispatcher"
 
   if ! _cli_compiler_query_is_compilation_memory_only; then
     _io_colours_unescape
@@ -25,34 +25,34 @@ _cli_compiler_cli() {
   _cli_log_success "CLI: Ready to go!"
 }
 
-_cli_compiler_cli_dispatcher() {
+_cli_compiler_build_generate_target_cli_dispatcher() {
   case "${RPI_COMPILER_STAGE}" in
     0)
-      _cli_compiler_cli_reset_file
-      _cli_compiler_cli_write_file_header
-      _cli_compiler_cli_process_generated_code "${RPI_CLI_COMPILER_GENERATED_CODE}"
+      _cli_compiler_build_generate_target_cli_reset_file
+      _cli_compiler_build_generate_target_cli_write_file_header
+      _cli_compiler_build_generate_target_cli_process_generated_code "${RPI_CLI_COMPILER_GENERATED_CODE}"
       RPI_CLI_COMPILER_GENERATED_CODE=""
       ;;
     1)
-      _cli_compiler_buffer_assign "RPI_CLI_COMPILER_HEADER"
+      _cli_compiler_build_generate_buffer_assign "RPI_CLI_COMPILER_HEADER"
       ;;
     2)
-      _cli_compiler_buffer_assign "RPI_CLI_COMPILER_USAGE_STRING"
-      _cli_compiler_cli_function_usage
-      _cli_compiler_cli_function_usage_error
-      _cli_compiler_cli_process_generated_code "${RPI_CLI_COMPILER_GENERATED_CODE}"
+      _cli_compiler_build_generate_buffer_assign "RPI_CLI_COMPILER_USAGE_STRING"
+      _cli_compiler_build_generate_target_cli_function_usage
+      _cli_compiler_build_generate_target_cli_function_usage_error
+      _cli_compiler_build_generate_target_cli_process_generated_code "${RPI_CLI_COMPILER_GENERATED_CODE}"
       RPI_CLI_COMPILER_GENERATED_CODE=""
       ;;
     3)
-      _cli_compiler_cli_function_command
-      _cli_compiler_cli_process_generated_code "${RPI_CLI_COMPILER_GENERATED_CODE}"
+      _cli_compiler_build_generate_target_cli_function_command
+      _cli_compiler_build_generate_target_cli_process_generated_code "${RPI_CLI_COMPILER_GENERATED_CODE}"
       RPI_CLI_COMPILER_GENERATED_CODE=""
       echo "  PICTL: Compiled ${RPI_CLI_COMPILER_HEADER}"
       ;;
   esac
 }
 
-_cli_compiler_cli_function_command() {
+_cli_compiler_build_generate_target_cli_function_command() {
   local RPI_CLI_COMPILER_COMMAND_NAME=""
   local RPI_CLI_COMPILER_FUNCTION_CALL=""
   local RPI_CLI_COMPILER_FUNCTION_CALL_BEFORE=""
@@ -60,7 +60,7 @@ _cli_compiler_cli_function_command() {
 
   RPI_CLI_COMPILER_GENERATED_CODE+="_${RPI_CLI_COMPILER_HEADER}_cli() {\n"
 
-  _cli_compiler_cli_function_command_case_begin
+  _cli_compiler_build_generate_target_cli_function_command_case_begin
 
   while IFS= read -r FILE_LINE; do
 
@@ -80,19 +80,19 @@ _cli_compiler_cli_function_command() {
       RPI_CLI_COMPILER_FUNCTION_CALL \
       <<< "$FILE_LINE"
 
-    _cli_compiler_cli_function_command_case_condition_subcommand
+    _cli_compiler_build_generate_target_cli_function_command_case_condition_subcommand
 
   done <<< "${RPI_CLI_COMPILER_BUFFER}"
 
-  _cli_compiler_cli_function_command_case_condition_help
-  _cli_compiler_cli_function_command_case_end
+  _cli_compiler_build_generate_target_cli_function_command_case_condition_help
+  _cli_compiler_build_generate_target_cli_function_command_case_end
 }
 
-_cli_compiler_cli_function_command_case_begin() {
+_cli_compiler_build_generate_target_cli_function_command_case_begin() {
   RPI_CLI_COMPILER_GENERATED_CODE+="  case \"\${1}\" in\n"
 }
 
-_cli_compiler_cli_function_command_case_condition_subcommand() {
+_cli_compiler_build_generate_target_cli_function_command_case_condition_subcommand() {
   RPI_CLI_COMPILER_FUNCTION_CALL="${RPI_CLI_COMPILER_FUNCTION_CALL:-"_${RPI_CLI_COMPILER_HEADER}_cli_${RPI_CLI_COMPILER_COMMAND_NAME}"}"
 
   RPI_CLI_COMPILER_GENERATED_CODE+="    ${RPI_CLI_COMPILER_COMMAND_NAME})\n"
@@ -110,7 +110,7 @@ _cli_compiler_cli_function_command_case_condition_subcommand() {
   RPI_CLI_COMPILER_GENERATED_CODE+="      ;;\n"
 }
 
-_cli_compiler_cli_function_command_case_condition_help() {
+_cli_compiler_build_generate_target_cli_function_command_case_condition_help() {
   RPI_CLI_COMPILER_FUNCTION_CALL="_${RPI_CLI_COMPILER_HEADER}_cli_usage"
 
   RPI_CLI_COMPILER_GENERATED_CODE+="    help)\n"
@@ -123,12 +123,12 @@ _cli_compiler_cli_function_command_case_condition_help() {
   RPI_CLI_COMPILER_GENERATED_CODE+="      ;;\n"
 }
 
-_cli_compiler_cli_function_command_case_end() {
+_cli_compiler_build_generate_target_cli_function_command_case_end() {
   RPI_CLI_COMPILER_GENERATED_CODE+="  esac\n"
   RPI_CLI_COMPILER_GENERATED_CODE+="}\n"
 }
 
-_cli_compiler_cli_function_usage() {
+_cli_compiler_build_generate_target_cli_function_usage() {
 
   local RPI_CLI_COMPILER_USAGE_LINE_INDEX="0"
   local RPI_CLI_COMPILER_USAGE_SUBCOMMAND=""
@@ -141,16 +141,16 @@ _cli_compiler_cli_function_usage() {
   while IFS= read -r FILE_LINE; do
     case "${RPI_CLI_COMPILER_USAGE_LINE_INDEX}" in
       0)
-        _cli_compiler_cli_function_usage_decorate_title
+        _cli_compiler_build_generate_target_cli_function_usage_decorate_title
         ;;
       1)
-        _cli_compiler_cli_function_usage_decorate_header
+        _cli_compiler_build_generate_target_cli_function_usage_decorate_header
         ;;
       2)
-        _cli_compiler_cli_function_usage_decorate_command_arguments
+        _cli_compiler_build_generate_target_cli_function_usage_decorate_command_arguments
         ;;
       *)
-        _cli_compiler_cli_function_usage_decorate_command_argument_list
+        _cli_compiler_build_generate_target_cli_function_usage_decorate_command_argument_list
         ;;
     esac
 
@@ -162,20 +162,20 @@ _cli_compiler_cli_function_usage() {
   RPI_CLI_COMPILER_GENERATED_CODE+="\n"
 }
 
-_cli_compiler_cli_function_usage_decorate_title() {
+_cli_compiler_build_generate_target_cli_function_usage_decorate_title() {
   FILE_LINE="$(_cli_pretty_title "${FILE_LINE}")"
 }
 
-_cli_compiler_cli_function_usage_decorate_header() {
+_cli_compiler_build_generate_target_cli_function_usage_decorate_header() {
   FILE_LINE="$(_cli_pretty_header "${FILE_LINE}")"
 }
 
-_cli_compiler_cli_function_usage_decorate_command_arguments() {
+_cli_compiler_build_generate_target_cli_function_usage_decorate_command_arguments() {
   FILE_LINE="$(_cli_pretty_brackets_style_2 "${FILE_LINE}")"
   FILE_LINE="  $(_cli_pretty_highlight "${FILE_LINE}")"
 }
 
-_cli_compiler_cli_function_usage_decorate_command_argument_list() {
+_cli_compiler_build_generate_target_cli_function_usage_decorate_command_argument_list() {
   IFS="${RPI_CLI_COMPILER_FIELD_SEPERATOR}" read -r \
     RPI_CLI_COMPILER_USAGE_SUBCOMMAND \
     RPI_CLI_COMPILER_USAGE_SUBCOMMAND_HELP \
@@ -188,13 +188,13 @@ _cli_compiler_cli_function_usage_decorate_command_argument_list() {
     <<< "${RPI_CLI_COMPILER_USAGE_SUBCOMMAND}"
 
   if [[ -n "${RPI_CLI_COMPILER_USAGE_SUBCOMMAND_HELP}" ]]; then
-    _cli_compiler_cli_function_usage_decorate_command_argument_list_parameter
+    _cli_compiler_build_generate_target_cli_function_usage_decorate_command_argument_list_parameter
   else
-    _cli_compiler_cli_function_usage_decorate_command_argument_list_switch
+    _cli_compiler_build_generate_target_cli_function_usage_decorate_command_argument_list_switch
   fi
 }
 
-_cli_compiler_cli_function_usage_decorate_command_argument_list_parameter() {
+_cli_compiler_build_generate_target_cli_function_usage_decorate_command_argument_list_parameter() {
   stdlib.string.justify.left_var "${RPI_CLI_COLUMN_WIDTH}" "RPI_CLI_COMPILER_USAGE_SUBCOMMAND"
   RPI_CLI_COMPILER_USAGE_SUBCOMMAND="$(_cli_pretty_brackets_style_2 "${RPI_CLI_COMPILER_USAGE_SUBCOMMAND}")"
   RPI_CLI_COMPILER_USAGE_SUBCOMMAND="${THEME_ENTITY}${RPI_CLI_COMPILER_USAGE_SUBCOMMAND}${THEME_NC}"
@@ -202,7 +202,7 @@ _cli_compiler_cli_function_usage_decorate_command_argument_list_parameter() {
   FILE_LINE="    ${RPI_CLI_COMPILER_USAGE_SUBCOMMAND} - ${RPI_CLI_COMPILER_USAGE_SUBCOMMAND_HELP}"
 }
 
-_cli_compiler_cli_function_usage_decorate_command_argument_list_switch() {
+_cli_compiler_build_generate_target_cli_function_usage_decorate_command_argument_list_switch() {
   FILE_LINE="   ${THEME_ENTITY}${RPI_CLI_COMPILER_USAGE_SUBCOMMAND:0:2}${THEME_NC} "
   FILE_LINE+="$(
     _cli_pretty_brackets_style_1 "${RPI_CLI_COMPILER_USAGE_SUBCOMMAND:3}" |
@@ -210,7 +210,7 @@ _cli_compiler_cli_function_usage_decorate_command_argument_list_switch() {
   )"
 }
 
-_cli_compiler_cli_function_usage_error() {
+_cli_compiler_build_generate_target_cli_function_usage_error() {
   RPI_CLI_COMPILER_GENERATED_CODE+="_${RPI_CLI_COMPILER_HEADER}_cli_usage_error() {\n"
   RPI_CLI_COMPILER_GENERATED_CODE+="  {\n"
   RPI_CLI_COMPILER_GENERATED_CODE+="    _${RPI_CLI_COMPILER_HEADER}_cli_usage\n"
@@ -219,7 +219,7 @@ _cli_compiler_cli_function_usage_error() {
   RPI_CLI_COMPILER_GENERATED_CODE+="}\n"
 }
 
-_cli_compiler_cli_process_generated_code() {
+_cli_compiler_build_generate_target_cli_process_generated_code() {
   # $1: the raw compiled bash code
 
   if _cli_compiler_query_is_compilation_memory_only; then
@@ -229,13 +229,13 @@ _cli_compiler_cli_process_generated_code() {
   fi
 }
 
-_cli_compiler_cli_reset_file() {
+_cli_compiler_build_generate_target_cli_reset_file() {
   if ! _cli_compiler_query_is_compilation_memory_only; then
     echo -n "" > "${RPI_PATH_COMPILED_CLI}"
   fi
 }
 
-_cli_compiler_cli_write_file_header() {
+_cli_compiler_build_generate_target_cli_write_file_header() {
   RPI_CLI_COMPILER_GENERATED_CODE+="#!/bin/bash\n"
   RPI_CLI_COMPILER_GENERATED_CODE+="\n"
   RPI_CLI_COMPILER_GENERATED_CODE+="# Automatically generated by pictl on $(date)\n"
