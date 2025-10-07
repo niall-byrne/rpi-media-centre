@@ -9,4 +9,3 @@ test_pictl_cli__integration__service_upgrade__calls_target_function_correctly() 
 
   _service_cli_upgrade.mock.assert_called_once_with ""
 }
-

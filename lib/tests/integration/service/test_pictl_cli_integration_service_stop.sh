@@ -9,4 +9,3 @@ test_pictl_cli__integration__service_stop__calls_target_function_correctly() {
 
   _service_cli_stop.mock.assert_called_once_with ""
 }
-
