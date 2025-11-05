@@ -82,16 +82,18 @@ test_backup_scheduler_queue_enqueue__@vary__calls_the_correct_enqueue_command() 
 @parametrize_with_entities \
   test_backup_scheduler_queue_enqueue__@vary__calls_the_correct_enqueue_command
 
-test_backup_scheduler_queue_enqueue__@vary__disables_file_validation_when_enqueing() {
-  "${TEST_EXPECTED_COMMAND}".mock.set.keywords "RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY"
+test_backup_scheduler_queue_enqueue__@vary__disables_validators_when_enqueing() {
+  "${TEST_EXPECTED_COMMAND}".mock.set.keywords \
+    "RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY" \
+    "RPI_DISK_MANIFEST_VALIDATORS_DISABLED_ARRAY"
   _backup_scheduler_queue_enqueue "${TEST_ENTITY_TYPE}" "${TEST_ENTITY_VALUE}"
 
   "${TEST_EXPECTED_COMMAND}".mock.assert_called_once_with \
-    "1(${TEST_ENTITY_VALUE}) RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY('filesystem')"
+    "1(${TEST_ENTITY_VALUE}) RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY('filesystem') RPI_DISK_MANIFEST_VALIDATORS_DISABLED_ARRAY('device' 'filesystem')"
 }
 
 @parametrize_with_entities \
-  test_backup_scheduler_queue_enqueue__@vary__disables_file_validation_when_enqueing
+  test_backup_scheduler_queue_enqueue__@vary__disables_validators_when_enqueing
 
 test_backup_scheduler_queue_enqueue__@vary__logs_success_message() {
   _backup_scheduler_queue_enqueue "${TEST_ENTITY_TYPE}" "${TEST_ENTITY_VALUE}"
