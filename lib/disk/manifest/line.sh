@@ -30,27 +30,8 @@ _disk_manifest_line_log_all() {
 _disk_manifest_line_validate() {
   # $1: the help function to call in the event that the line is invalid
 
-  if ! stdlib.io.path.assert.is_folder "${RPI_DISK_MOUNT_POINT}"; then
+  _disk_manifest_validation || {
     "${1}"
     return 127
-  fi
-
-  if [[ "${RPI_RUNTIME_ENVIRONMENT}" != "service" ]]; then
-    # TODO: investigate a better way of handling service mode for these exceptions
-    if ! stdlib.security.path.query.is_secure "${RPI_DISK_MOUNT_POINT}" "${RPI_SVC_USERNAME}" "${RPI_SVC_GROUPNAME}" "700"; then
-      "${1}"
-      return 127
-    fi
-  fi
-
-  if [[ -z "${RPI_DISK_UUID}" ]] ||
-    [[ -z "${RPI_DISK_NAME}" ]] ||
-    [[ -z "${RPI_DISK_MOUNT_POINT}" ]]; then
-    "${1}"
-    return 127
-  fi
-
-  if ! blkid | grep "${RPI_DISK_UUID}" > /dev/null; then
-    _cli_log_warning "DISK: UUID '${RPI_DISK_UUID}' could not be found."
-  fi
+  }
 }

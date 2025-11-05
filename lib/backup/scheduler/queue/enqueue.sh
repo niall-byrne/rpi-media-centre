@@ -10,6 +10,8 @@ _backup_scheduler_queue_enqueue() {
 
   # shellcheck disable=SC2034
   local RPI_BACKUP_JOB_VALIDATORS_DISABLED_ARRAY=("filesystem")
+  # shellcheck disable=SC2034
+  local RPI_DISK_MANIFEST_VALIDATORS_DISABLED_ARRAY=("filesystem")
 
   local enqueue_entity_command
 
