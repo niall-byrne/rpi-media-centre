@@ -59,11 +59,11 @@ This project combines the following software:
     - `$ sudo blkid`
 4. Create a `/etc/rpi/crypt` file inside the cloned repository containing this UUID:
     - `$ sudo mkdir -p /etc/rpi`
-    - `$ sudo ./pictl manifest edit crypt`
+    - `$ sudo ./pictl disk manifest edit`
     - Create a line in the file that looks something like:
        >  uuid_value_from_blkid,media_disk,media_disk_group,/mnt/media
 5. Start the software:
-    - `$ sudo ./pictl start`
+    - `$ sudo ./pictl service start`
 6. Enter the disk encryption password and Samba credentials.
 7. Listen to some music already.
 
@@ -79,7 +79,7 @@ This project combines the following software:
 5. Test your fstab mounts the disk:
    - `$ sudo mount -a`
 6. Start the software:
-   - `$ sudo ./pictl start`
+   - `$ sudo ./pictl service start`
 7. Since the disk is already mounted at the expected mount-point, there is no decryption prompt.  The service can be used immediately.
 8. Listen to some music already.
 
@@ -128,10 +128,6 @@ The `android` user provides read-only access to your media, just to prevent any 
    - `$ chmod -R g+rX,g-w,o-rwx /mnt/media/shared/media`
 
 To *keep* this user read-only, avoid creating directories with 'other writable' permissions on your USB disk.  (This includes the infamous `777` permission!)
-
-## The Backup System
-
-TODO
 
 ## Configuration
 
@@ -250,10 +246,6 @@ This service is *not* enabled by default.  To use it, add it to an `RPI_SERVICES
   RPI_SERVICES=("pihole" "plex" "samba")
   ```
 
-#### Backup Service Configuration
-
-TODO
-
 #### Plex Configuration
 
 Plex is generally configured through its web interface, but some settings are able for customization.
@@ -339,3 +331,73 @@ This service is *not* enabled by default.  To use it, add it to an `RPI_SERVICES
   ```bash
   RPI_SERVICES=("plex" "samba" "syncthing")
   ```
+
+### Backup System Configuration
+
+A comprehensive backup system is also included, and can be configured to make periodic backups of data stored on your disks.
+
+This involves the creation of a backup manifest file, which groups lists of backup jobs by their frequency.
+
+Some settings can be stored in the `/etc/rpi/config` file to make this service more convenient to use.
+
+| Variable                          | Value                                                                                                                                                                                                                  |
+|-----------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `RPI_BACKUP_SCHEDULER_END_TIME`   | defaults to `06:00:00` (6 AM)<br />-  this is the time (on a 24 hour clock) when no further backup jobs are able to be started (any leftover jobs will instead be run the next time the backup scheduler window opens) |
+| `RPI_BACKUP_SCHEDULER_START_TIME` | defaults to `00:00:00` (midnight)<br />-  this is the time (on a 24 hour clock) each day that the backup job scheduler starts executing jobs                                                                           |
+| `RPI_BACKUP_SCHEDULING_HOUR`      | defaults to `12` (noon)<br />- this is the hour (on a 24 hour clock), (NOT A COMPLETE TIME) each day when backup jobs are scheduled by checking the manifest                                                           |
+
+#### Backup System Installation
+
+In order to use the backup system, you absolutely **must** complete the `pictl` install process:
+- `$ sudo ./pictl install pictl`
+
+This process will:
+- clone an independent *centralized* copy of `pictl` to `/var/local/rpi/source`
+- install a system-wide start shim to `/usr/local/sbin/pictl` (which is normally already present in PATH)
+- install two backup related systemd services, and a scheduling crontab
+
+This tends to make for a more secure, cleaner and simpler to manage installation.  It's also prudent to remove the existing local copy of the repository to eliminate duplication.
+
+The new centrally installed CLI can be accessed by executing:
+- `$ sudo pictl`
+
+To *update* an existing installation, just run this process again:
+- `$ sudo pictl install pictl`
+
+#### Supported Backup Job Tasks
+
+Each backup job will perform one or more backup tasks.
+
+| Type    | Description                                                                                               |
+|---------|-----------------------------------------------------------------------------------------------------------|
+| rsync   | duplicate data between two file system locations locally                                                  |
+| tarball | create local tar archives of data                                                                         |
+| upload  | upload local tar archives to cloud storage (currently only [S3](https://aws.amazon.com/s3/) is supported) |
+
+#### Supported Backup Job Frequencies
+
+Backup jobs are all designed to executed at the same time, which is configured by the `RPI_BACKUP_SCHEDULER_START_TIME` environment variable.  The days each specific job are executed is controlled by their frequency group in the backup manifest file.
+
+| Frequency  | Description                                                                            |
+|------------|----------------------------------------------------------------------------------------|
+| daily      | performed each day                                                                     |
+| even       | performed on even days of the year (1-325/6)                                           |
+| odd        | performed on odd days of the year (1-325/6)                                            |
+| SUN…SAT    | performed on the specified day (identified by it's 3 character abbreviation) each week |
+| biweekly   | performed on both Monday and Thursday every week                                       |
+| monthly    | performed on the 1st of each month                                                     |
+| bimonthly  | performed on both the 1st and 15th of each month                                       |
+| quarterly  | performed every 3 months, on the 1st of the month                                      |
+| biannually | performed every 6 months, on the 1st of the month                                      |
+
+#### The Backup Manifest File
+
+The backup manifest file is stored at `/etc/rpi/backup`, and has locked down permissions to avoid tampering.
+
+To create backup jobs, it's best to use the `pictl` CLI itself to edit the manifest file, as it's quite complicated, and the CLI provides both validation and ensures file permissions are handled securely.  It's recommended to execute:
+- `$ sudo pictl backup manifest edit`
+
+The file itself is admittedly a bit cumbersome as it's still just a comma separated text file.  (YAML might be a preferable future improvement.)
+
+The CLI is also the best source of details for how to structure each job (which may include 1 or more backup tasks).  For full details it's recommended to execute:
+- `$ sudo pictl backup manifest details`
